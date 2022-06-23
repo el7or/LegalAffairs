@@ -1,0 +1,30 @@
+<h3 mat-dialog-title class="modal-title">
+حذف المذكرة
+</h3>
+
+<div mat-dialog-content>
+    <form (submit)="onSubmit()" [formGroup]="form">
+        <div fxLayout="row wrap" fxFlexAlign="center" class="row">
+            <div fxFlex.gt-sm="95" fxFlex="95" class="p-10">
+                <!-- <ckeditor [editor]="Editor" formControlName="deletionReason" [config]="config">
+                </ckeditor> -->
+                <mat-form-field>
+                    <textarea matInput [value]="form.controls['deletionReason'].value | replaceLineBreaks" formControlName="deletionReason" placeholder="سبب الحذف" rows="3"
+                        maxlength="500" #deletionReason></textarea>
+                    <!-- <mat-hint>عدد الاحرف يجب ان لا يزيد عن 500 حرف</mat-hint> -->
+                    <mat-hint>500/{{deletionReason.value?.length || 0}}</mat-hint>
+                    <mat-error
+                        *ngIf="form.controls['deletionReason'].hasError('required') && form.controls['deletionReason'].touched"
+                        class="text-danger "> سبب الحذف مطلوب</mat-error>
+                </mat-form-field>
+            </div>
+        </div>
+        <section class="screen-actions">
+            <div class="button-row">
+                <button mat-raised-button type="submit" color="primary" [disabled]="!form.valid">حفظ</button>
+                &nbsp;
+                <button mat-raised-button type="button" (click)="onCancel()">إلغاء</button>
+            </div>
+        </section>
+    </form>
+</div>

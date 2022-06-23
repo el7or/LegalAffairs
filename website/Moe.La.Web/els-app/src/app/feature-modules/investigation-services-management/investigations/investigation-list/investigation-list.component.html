@@ -1,0 +1,135 @@
+<mat-card>
+  <mat-card-content>
+    <section class="screen">
+      <section class="screen-header">
+        <div fxFlex="50">
+          <button mat-raised-button color="primary"
+            *ngIf="isInvestigatorManager"
+            [routerLink]="['/investigations/new']" routerLinkActive="router-link-active">
+            إضافة تحقيق
+          </button>
+        </div>
+        <div fxFlex="50" fxLayoutAlign="end center">
+          <button mat-stroked-button color="primary" [matMenuTriggerFor]="menu">
+            تصدير
+            <mat-icon>expand_more</mat-icon>
+          </button>
+          <mat-menu #menu="matMenu">
+            <button mat-menu-item (click)="onExportExcel()">
+              <mat-icon>description</mat-icon>
+              ملف اكسل
+            </button>
+            <button mat-menu-item (click)="onExportPdf()">
+              <mat-icon>picture_as_pdf</mat-icon>
+              ملف PDF
+            </button>
+          </mat-menu>
+        </div>
+      </section>
+
+      <section class="screen-table responsive-table extendable">
+        <div fxLayout="row wrap" fxLayoutAlign="space-between center">
+          <div fxLayout="row" fxFlex.gt-sm="50" fxFlex="100">
+            <div class="free-search">
+              <mat-form-field appearance="outline" [hideRequiredMarker]="true" floatLabel="always">
+                <span matPrefix>
+                  <mat-icon>search</mat-icon>
+                </span>
+                <input matInput placeholder="بحث" [(ngModel)]="searchText" name="searchText" (keyup.enter)="onSearch()"
+                  matTooltip="اكتب النص واضغط Enter للبحث" matTooltipPosition="above" autocomplete="off">
+              </mat-form-field>
+            </div>
+
+          </div>
+          <div fxFlex.gt-sm="50" fxFlex="100" fxHide.sm fxHide.xs>
+            <mat-paginator #paginator [length]="totalItems" [pageIndex]="queryObject.page - 1" showFirstLastButtons
+              [pageSize]="queryObject.pageSize" (page)="onPageChange($event.pageIndex)" hidePageSize="true">
+            </mat-paginator>
+          </div>
+        </div>
+
+        <table mat-table [dataSource]="dataSource" multiTemplateDataRows class="mat-elevation-z0" matSort
+          matSortActive="investigationNumber" matSortDirection="asc" matSortDisableClear>
+          <ng-container matColumnDef="position">
+            <th mat-header-cell *matHeaderCellDef>#</th>
+            <td mat-cell *matCellDef="let element; let i = dataIndex" class="nowrap">
+              <div>
+                {{(i + 1 + queryObject.pageSize * ((queryObject.page || 1) -1))}}
+              </div>
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="investigationNumber">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>رقم التحقيق</th>
+            <td mat-cell *matCellDef="let element">
+              {{ element.investigationNumber}}
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="startDate">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>تاريخ ووقت بداية التحقيق</th>
+            <td mat-cell *matCellDef="let element" class="nowrap">
+              {{element.startDate | date : 'yyyy-MM-dd'}}
+              {{element.startDate |arDayOfWeek}}
+              {{ element.startDateHigri  }}
+              &nbsp; {{ element.startTime  }}
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="subject">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>موضوع التحقيق</th>
+            <td mat-cell *matCellDef="let element">
+              {{ element.subject }}
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="investigator">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>المحقق / رئيس مجموعة التحقيق</th>
+            <td mat-cell *matCellDef="let element">
+              {{ element.investigatorFullName }}
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="investigationStatus">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>حالة التحقيق</th>
+            <td mat-cell *matCellDef="let element">
+              {{ element.investigationStatus }}
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="isHasCriminalSide">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>له شق جنائي</th>
+            <td mat-cell *matCellDef="let element">
+              {{ element.isHasCriminalSide ? "نعم" : "لا" }}
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="actions">
+            <th mat-header-cell *matHeaderCellDef></th>
+            <td mat-cell *matCellDef="let element">
+              <button mat-icon-button [matMenuTriggerFor]="menu" aria-label="Example icon-button with a menu">
+                <mat-icon>more_vert</mat-icon>
+              </button>
+              <mat-menu #menu="matMenu">
+                <button type="menu" mat-menu-item
+                  [routerLink]="['/investigation-records']" routerLinkActive="router-link-active">
+                  <span>محاضر التحقيق</span>
+                </button>
+              </mat-menu>
+            </td>
+          </ng-container>
+
+          <tr mat-header-row *matHeaderRowDef="columnsToDisplay"></tr>
+          <tr mat-row *matRowDef="let element; columns: columnsToDisplay"></tr>
+          <tr class="mat-row" *matNoDataRow>
+            <td class="mat-cell" colspan="8" style="text-align: center;">لا يوجد نتائج للبيانات.</td>
+          </tr>
+        </table>
+
+        <mat-paginator #paginator [length]="totalItems" [pageIndex]="queryObject.page - 1" showFirstLastButtons
+          [pageSize]="queryObject.pageSize" (page)="onPageChange($event.pageIndex)" hidePageSize="true">
+        </mat-paginator>
+      </section>
+    </section>
+  </mat-card-content>
+</mat-card>

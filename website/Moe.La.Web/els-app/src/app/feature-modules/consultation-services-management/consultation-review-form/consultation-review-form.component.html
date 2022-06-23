@@ -1,0 +1,30 @@
+<h3 mat-dialog-title class="modal-title">
+ إعادة الصياغة
+</h3>
+
+<div mat-dialog-content>
+    <form (submit)="onSubmit()" [formGroup]="form">
+        <div fxLayout="row wrap" fxFlexAlign="center" class="row">
+            <div fxFlex.gt-sm="100" fxFlex="100" class="p-10">
+                <mat-form-field>
+                    <mat-label>
+                        ملاحظات إعادة الصياغة
+                    </mat-label>
+                    <textarea [value]="form.controls['departmentVision'].value | replaceLineBreaks" matInput formControlName="departmentVision" type="text" maxlength="400"
+                    #departmentVision></textarea>
+                    <!-- <mat-hint>عدد الاحرف يجب ان لا يزيد عن 400 حرف</mat-hint> -->
+                    <mat-hint>400/{{departmentVision.value?.length || 0}}</mat-hint>
+                    <mat-error *ngIf="form.controls['departmentVision'].hasError('required')">ملاحظات إعادة الصياغة مطلوبة
+                    </mat-error>
+                </mat-form-field>
+            </div>
+        </div>
+        <section class="screen-actions">
+            <div class="button-row">
+                <button mat-raised-button type="submit" color="primary" [disabled]="!form.valid">حفظ</button>
+                &nbsp;
+                <button mat-raised-button type="button" (click)="onCancel()">إلغاء</button>
+            </div>
+        </section>
+    </form>
+</div>

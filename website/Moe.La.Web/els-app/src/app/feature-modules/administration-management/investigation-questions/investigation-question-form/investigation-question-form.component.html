@@ -1,0 +1,32 @@
+<h3 mat-dialog-title *ngIf="questionId">
+  تعديل
+</h3>
+<h3 mat-dialog-title *ngIf="!questionId">
+  إضافة
+</h3>
+<div mat-dialog-content>
+  <form [formGroup]="form">
+    <div fxLayout="row wrap" fxFlexAlign="center" class="row">
+      <div fxFlex.gt-sm="100" fxFlex="100" class="p-10">
+        <mat-form-field>
+          <textarea [value]="form.controls['question'].value | replaceLineBreaks" matInput formControlName="question" placeholder="السؤال" rows="3" maxlength="500"
+            #question></textarea>
+          <!-- <mat-hint>عدد الاحرف يجب ان لا يزيد عن 500 حرف</mat-hint> -->
+          <mat-hint>500/{{question.value?.length || 0}}</mat-hint>
+          <mat-error *ngIf="form.controls['question'].hasError('required')"> السؤال مطلوب</mat-error>
+          <mat-hint *ngIf="form.controls['name'].status === 'PENDING'">جاري التحقق...</mat-hint>
+          <mat-error *ngIf="form.controls['name'].hasError('uniqueName')"> السؤال موجود مسبقاً</mat-error>
+        </mat-form-field>
+      </div>
+    </div>
+  </form>
+</div>
+<div mat-dialog-actions>
+  <button mat-raised-button color="primary" [disabled]="!form.valid || form.pristine" (click)="onSubmit()">
+    <span *ngIf="!questionId">إضافة</span>
+    <span *ngIf="questionId"> تعديل</span>
+  </button>
+  <button type="button" mat-raised-button (click)="onCancel()">
+    إلغاء
+  </button>
+</div>

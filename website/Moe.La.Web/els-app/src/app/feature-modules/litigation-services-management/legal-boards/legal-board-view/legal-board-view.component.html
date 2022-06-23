@@ -1,0 +1,87 @@
+<mat-card>
+    <mat-card-content>
+        <section class="screen" *ngIf="boardDetails">
+            <section class="screen-header">
+                <div fxFlex="50"></div>
+                <div fxFlex="50" fxLayoutAlign="end center">
+                    <button mat-button color="primary" (click)="onBack()">
+                        العودة
+                    </button>
+                </div>
+            </section>
+            <div fxLayout="row wrap" fxFlexAlign="center" class="entity-details p-10">
+                <div fxLayout="column" fxFlex.gt-sm="50" fxFlex="100">
+                    <span>اسم اللجنة</span>
+                    <span>{{boardDetails.name}} </span>
+                </div>
+                <div fxLayout="column" fxFlex.gt-sm="50" fxFlex="100">
+                    <span>حالة اللجنة</span>
+                    <span>{{boardDetails.status}} </span>
+                </div>
+                <div fxLayout="column" fxFlex.gt-sm="50" fxFlex="100">
+                    <span>نوع اللجنة</span>
+                    <span>{{boardDetails.type}} </span>
+                </div>
+                <div fxLayout="column" fxFlex.gt-sm="50" fxFlex="100">
+                    <span>امين اللجنة</span>
+                    <span>{{boardHead}} </span>
+                </div>
+            </div>
+            <div>
+                <h2 class="btn float-right">
+                    أعضاء اللجنة
+                </h2>
+            </div>
+
+            <div class="responsive-table screen-table" style="overflow: visible;">
+                <table mat-table [dataSource]="boardDetails.legalBoardMembers">
+                    <ng-container matColumnDef="name">
+                        <th mat-header-cell *matHeaderCellDef>
+                            اسم العضو
+                        </th>
+                        <td mat-cell *matCellDef="let member"> {{member.userName}} </td>
+                    </ng-container>
+                    <ng-container matColumnDef="adjective">
+                        <th mat-header-cell *matHeaderCellDef>
+                            صفة العضو
+                        </th>
+                        <td mat-cell *matCellDef="let member">
+                            <span *ngIf="member.membershipType.id==LegalBoardMemberType.Head">أمين لجنة</span>
+                            <span *ngIf="member.membershipType.id==LegalBoardMemberType.Member">عضو لجنة</span>
+                        </td>
+                    </ng-container>
+                    <ng-container matColumnDef="status">
+                        <th mat-header-cell class="sort" *matHeaderCellDef>
+                            حالة العضو
+                        </th>
+                        <td mat-cell *matCellDef="let member">
+                            <span *ngIf="member.isActive">مفعل</span>
+                            <span *ngIf="!member.isActive">معطل</span>
+                        </td>
+                    </ng-container>
+                    <ng-container matColumnDef="startDate">
+                        <th mat-header-cell *matHeaderCellDef>
+                            تاريخ انضمام العضو
+                        </th>
+                        <td mat-cell *matCellDef="let member">
+                            {{member.startDate | date : 'yyyy-MM-dd'}}
+                            {{member.startDate | arDayOfWeek}}
+                            {{member.startDateHigri}}</td>
+                    </ng-container>
+                    <ng-container matColumnDef="boardHead">
+                        <th mat-header-cell *matHeaderCellDef>
+                            أمين لجنة
+                        </th>
+                        <td mat-cell *matCellDef="let member">
+                            <mat-radio-button disabled [checked]="member.membershipType.id==LegalBoardMemberType.Head"
+                                [value]="member.membershipType.id==LegalBoardMemberType.Head" color="primary" class="tp-margin  center">
+                            </mat-radio-button>
+                        </td>
+                    </ng-container>
+                    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+                </table>
+            </div>
+        </section>
+    </mat-card-content>
+</mat-card>

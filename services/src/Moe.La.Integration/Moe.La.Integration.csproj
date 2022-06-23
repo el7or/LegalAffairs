@@ -1,0 +1,29 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>net5.0</TargetFramework>
+    <Description>This project responsible for managing the communication with the external services.</Description>
+    <Authors>Smart Fingers</Authors>
+    <Company>Smart Fingers</Company>
+    <ProjectGuid>B957535B-7319-4C17-AD14-765AE1A32824</ProjectGuid>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.Http.Abstractions" Version="2.2.0" />
+    <PackageReference Include="System.DirectoryServices" Version="5.0.0" />
+    <PackageReference Include="System.ServiceModel.Duplex" Version="4.8.1" />
+    <PackageReference Include="System.ServiceModel.Http" Version="4.8.1" />
+    <PackageReference Include="System.ServiceModel.NetTcp" Version="4.8.1" />
+    <PackageReference Include="System.ServiceModel.Security" Version="4.8.1" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Moe.La.Core\Moe.La.Core.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="System.ServiceModel" />
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadata Include="Connected Services" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Models\MoeSmsModels\" />
+  </ItemGroup>
+</Project>

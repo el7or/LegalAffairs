@@ -1,0 +1,71 @@
+<div fxFlex.gt-sm="100" fxFlex="100" class="p-10">
+    <strong>الاسئلة</strong>
+    <form class="basic-form" [formGroup]="questionForm">
+        <div fxFlex.gt-sm="40" fxFlex="100" class="p-10">
+            <mat-form-field>
+                <input matInput type="text" placeholder="نص السؤال" aria-label="Number" formControlName="question"
+                    [matAutocomplete]="auto">
+                <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayQuestionName">
+                    <mat-option *ngFor="let question of filteredQuestions$ | async" [value]="question"
+                        style="text-align: right  !important;">
+                        {{question.question}}
+                    </mat-option>
+                </mat-autocomplete>
+            </mat-form-field>
+        </div>
+        <div fxFlex.gt-sm="40" fxFlex="100" class="p-10">
+            <mat-form-field>
+                <input matInput placeholder="نص الإجابة" minlength="1" formControlName="answer" />
+            </mat-form-field>
+        </div>
+        <div fxFlex.gt-sm="40" fxFlex="100" class="p-10">
+            <mat-form-field>
+                <mat-select matInput  placeholder="موجه إلى" formControlName="assignedTo">
+                    <mat-option value="">--اختر--</mat-option>
+                    <mat-option *ngFor="let item of parties" [value]="item">
+                    {{ item.partyName }}
+                    </mat-option>
+                </mat-select>
+            </mat-form-field>
+        </div>
+        <div fxFlex.gt-sm="20" fxFlex="100" class="p-10" style="text-align: left;">
+            <button mat-raised-button color="primary" type="button" (click)="addQuestion()"
+                [disabled]="!(questionForm.value.question&&questionForm.value.answer&&questionForm.value.assignedTo)">
+                إضافة
+            </button>
+        </div>
+    </form>
+    <div class="responsive-table screen-table">
+        <table mat-table [dataSource]="questionsDataSource">
+            <ng-container matColumnDef="question">
+                <th mat-header-cell *matHeaderCellDef> السؤال </th>
+                <td mat-cell *matCellDef="let item"> {{item.question}} </td>
+            </ng-container>
+
+            <ng-container matColumnDef="answer">
+                <th mat-header-cell *matHeaderCellDef> الإجابة </th>
+                <td mat-cell *matCellDef="let item"> {{item.answer}} </td>
+            </ng-container>
+
+            <ng-container matColumnDef="assignedTo">
+                <th mat-header-cell *matHeaderCellDef>موجه إلى </th>
+                <td mat-cell *matCellDef="let item"> {{item.assignedTo?.partyName}} </td>
+            </ng-container>
+
+            <ng-container matColumnDef="actions">
+                <th mat-header-cell *matHeaderCellDef> </th>
+                <td mat-cell *matCellDef="let item; let i = index">
+                    <button mat-icon-button class="m-r-5" color="warn" (click)="removeQuestion(i)" type="button">
+                        <mat-icon>clear</mat-icon>
+                    </button>
+
+                </td>
+            </ng-container>
+
+            <tr mat-header-row *matHeaderRowDef="displayedQuestionsColumns"></tr>
+            <tr mat-row *matRowDef="let row; columns: displayedQuestionsColumns;"></tr>
+            <tr class="mat-row" *matNoDataRow>
+                <td class="mat-cell" colspan="5" style="text-align: center;">لا يوجد نتائج للبيانات.</td>
+            </tr>
+        </table>
+    </div>

@@ -1,0 +1,45 @@
+<button class="add-btn m-b-10" mat-raised-button color="primary" class="float-left" type="button" (click)="onAdd()"
+  *ngIf="!readOnly">
+  إضافة
+</button>
+
+<div class="responsive-table screen-table">
+  <table mat-table [dataSource]="partiesDataSource" multiTemplateDataRows class="mat-elevation-z0">
+    <ng-container matColumnDef="name">
+      <th mat-header-cell *matHeaderCellDef> الاسم </th>
+      <td mat-cell *matCellDef="let caseParty"> {{(caseParty.party.name != '' || caseParty.party.name != null) ?
+        caseParty.party.name : ""}} {{caseParty.party.organizationName != null ? caseParty.party.organizationName :
+        ""}} {{(caseParty.party.companyName == '' || caseParty.party.companyName != '') ? caseParty.party.companyName
+        : ""}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="partyType">
+      <th mat-header-cell *matHeaderCellDef> نوع الطرف </th>
+      <td mat-cell *matCellDef="let caseParty">
+        {{caseParty.party.partyTypeName}}
+      </td>
+    </ng-container>
+    <ng-container matColumnDef="actions">
+      <th mat-header-cell *matHeaderCellDef> </th>
+      <td mat-cell *matCellDef="let party; let i = index">
+        <button [matMenuTriggerFor]="profile" mat-icon-button type="button" class="m-r-5" *ngIf="!readOnly">
+          <mat-icon>more_vert</mat-icon>
+        </button>
+        <mat-menu #profile="matMenu" class="mymegamenu">
+          <button mat-menu-item type="button" (click)="onDelete(i)">
+           حذف
+          </button>
+          <button mat-menu-item type="button" (click)="onEdit(party, i)">
+            تعديل
+          </button>
+        </mat-menu>
+      </td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+    <tr class="mat-row" *matNoDataRow>
+      <td class="mat-cell" colspan="4" style="text-align: center;">يجب إدخال الأطراف.</td>
+    </tr>
+  </table>
+</div>

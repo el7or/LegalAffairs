@@ -1,0 +1,7 @@
+mat-form-field ::ng-deep .mat-form-field-infix{
+  padding: 0 !important;
+}
+
+.subFlex{
+  padding: 6px 10px 0px 10px;
+}

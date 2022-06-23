@@ -1,0 +1,127 @@
+<fieldset *ngIf="request&&request.request.requestType.id!=RequestTypes.RequestAttachedLetter">
+  <h2 class="heading">بيانات طلب مستندات داعمة</h2>
+
+  <div fxLayout="row wrap" fxFlexAlign="center" class="entity-details p-10">
+    <div fxLayout="column" fxFlex="50">
+      <b>رقم القضية:</b>
+      <span>{{request.caseId}}</span>
+    </div>
+    <div fxLayout="column" fxFlex="50">
+      <b>الإدارة الموجه لها الطلب:</b>
+      <span>{{request.consigneeDepartment?.name}}</span>
+    </div>
+
+    <div fxLayout="column" fxFlex="100">
+      <b>رقم المعاملة فى الاتصالات الادارية:</b>
+      <span
+        *ngIf="request.transactionNumberInAdministrativeCommunications">{{request.transactionNumberInAdministrativeCommunications}}</span>
+      <span *ngIf="!request.transactionNumberInAdministrativeCommunications">-----</span>
+    </div>
+
+    <div fxLayout="column" fxFlex="100">
+      <b>النموذج :</b>
+      <div [innerHtml]="request.request?.letter?.text" class="word-break"></div>
+    </div>
+
+    <div fxLayout="column" fxFlex="100">
+      <b>قائمة المستندات:</b>
+      <span>
+        <ul>
+          <li *ngFor="let doc of  request.documents">{{doc.name}}</li>
+        </ul>
+      </span>
+    </div>
+  </div>
+
+</fieldset>
+
+<fieldset *ngIf="request && request.request.requestType.id==RequestTypes.RequestAttachedLetter">
+  <h2 class="heading">بيانات طلب خطاب إلحاقى</h2>
+
+  <div fxLayout="row wrap" fxFlexAlign="center" class="entity-details p-10">
+    <div fxLayout="column" fxFlex="100">
+      <b>الإدارة الموجه لها الطلب:</b>
+      <span>{{request.consigneeDepartment?.name}}</span>
+    </div>
+
+    <div fxLayout="column" fxFlex="100">
+      <b>النموذج :</b>
+      <div [innerHtml]="request.request?.letter?.text" class="word-break"></div>
+    </div>
+
+    <div fxLayout="column" fxFlex="100">
+      <b>رقم المعاملة فى الاتصالات الادارية:</b>
+      <span
+        *ngIf="request.transactionNumberInAdministrativeCommunications">{{request.transactionNumberInAdministrativeCommunications}}</span>
+      <span *ngIf="!request.transactionNumberInAdministrativeCommunications">-----</span>
+    </div>
+  </div>
+
+</fieldset>
+<section class="screen-actions"
+  *ngIf="!readOnly && request && (request.request.requestType.id==RequestTypes.RequestSupportingDocuments||request.request.requestType.id==RequestTypes.RequestAttachedLetter)">
+  <button mat-raised-button color="primary" type="button" (click)="ReplyDocumentRequest(RequestStatus.Returned)" *ngIf="((request.request.requestStatus.id==RequestStatus.Modified || request.request.requestStatus.id==RequestStatus.New)  &&  isConsultant)
+  || (request.request.requestStatus.id==RequestStatus.AcceptedFromConsultant  &&  isLitigationManager)
+    ||  (request.request.requestStatus.id==RequestStatus.AcceptedFromLitigationManager && isGeneralSupervisor)">
+    إعادة الصياغة
+  </button>
+  <button mat-raised-button color="primary" type="submit"
+    (click)="ReplyDocumentRequest(RequestStatus.AcceptedFromConsultant)"
+    *ngIf="((request.request.requestStatus.id==RequestStatus.Modified || request.request.requestStatus.id==RequestStatus.New)  &&  isConsultant)">
+    <span> قبول ورفع لمدير الترافع</span>
+  </button>
+  <button mat-raised-button color="primary" type="submit"
+    (click)="ReplyDocumentRequest(RequestStatus.AcceptedFromLitigationManager)"
+    *ngIf="(request.request.requestStatus.id==RequestStatus.AcceptedFromConsultant  &&  isLitigationManager)">
+    <span>قبول و رفع للمشرف العام </span>
+  </button>
+  <button mat-raised-button color="primary" type="submit" (click)="ReplyDocumentRequest(RequestStatus.Approved)"
+    *ngIf="(request.request.requestStatus.id==RequestStatus.AcceptedFromLitigationManager && isGeneralSupervisor)">
+    <span>اعتماد الطلب</span>
+  </button>
+  <button mat-raised-button color="primary" type="button" (click)="ReplyDocumentRequest(RequestStatus.Rejected)"
+    *ngIf="request.request.requestStatus.id==RequestStatus.AcceptedFromLitigationManager && isGeneralSupervisor">
+    رفض
+  </button>
+  <button type="button" mat-raised-button color="primary" (click)="exportRequest(request.id)"
+    *ngIf=" authService.checkRole(AppRole.AdministrativeCommunicationSpecialist) && request.request.requestStatus.id == RequestStatus.Approved">
+    <span>تصدير الطلب</span>
+  </button>
+  <button mat-raised-button color="primary" type="button" [routerLink]="['/requests/attached-letter',request.id]"
+    *ngIf="request.request.requestType.id==RequestTypes.RequestSupportingDocuments&&(request.request.requestStatus.id==RequestStatus.Approved||request.request.requestStatus.id==RequestStatus.Exported) && isResearcher  && !request.attachedLetterRequestCount">
+    إضافة خطاب إلحاقي
+  </button>
+
+  <button mat-raised-button color="primary" type="button"
+    [routerLink]="['/requests/view', request.attachedLetterRequestId, RequestTypes.RequestAttachedLetter]"
+    *ngIf="request.attachedLetterRequestCount && (request.attachedLetterRequestStatus == RequestStatus.Approved || request.attachedLetterRequestStatus == RequestStatus.Rejected)">
+    تفاصيل الطلب الإلحاقي
+  </button>
+  <button mat-raised-button color="primary" type="button" [routerLink]="['/requests/edit-attached-letter',request.id]"
+    *ngIf="request?.request?.requestType.id==RequestTypes.RequestAttachedLetter &&
+  request.request.requestStatus.id==RequestStatus.Returned && isResearcher">
+    إعادة صياغة الخطاب الإلحاقى
+  </button>
+</section>
+
+<!-- <section class="screen-actions"
+  *ngIf="!readOnly && request && request.request.requestType.id==RequestTypes.RequestAttachedLetter">
+  <button mat-raised-button color="primary" type="button" (click)="ReplyDocumentRequest(RequestStatus.Returned)"
+    *ngIf="((request.request.requestStatus.id==RequestStatus.Modified || request.request.requestStatus.id==RequestStatus.New)  &&  authService.checkRole(AppRole.GeneralSupervisor))">
+    إعادة الصياغة
+  </button>
+  &nbsp;
+  <button mat-raised-button color="primary" type="submit" (click)="ReplyDocumentRequest(RequestStatus.Approved)"
+    *ngIf="((request.request.requestStatus.id==RequestStatus.Modified || request.request.requestStatus.id==RequestStatus.New) && authService.checkRole(AppRole.GeneralSupervisor))">
+    <span>اعتماد الطلب</span>
+  </button>
+  <button mat-raised-button color="primary" type="button" (click)="ReplyDocumentRequest(RequestStatus.Rejected)" *ngIf="((request.request.requestStatus.id==RequestStatus.Modified || request.request.requestStatus.id==RequestStatus.New)  &&  authService.checkRole(AppRole.GeneralSupervisor))
+    ">
+    رفض
+  </button>
+  <button mat-raised-button color="primary" type="button" [routerLink]="['/requests/edit-attached-letter',request.id]"
+    *ngIf="!readOnly && request?.request?.requestType.id==RequestTypes.RequestAttachedLetter &&
+    request.request.requestStatus.id==RequestStatus.Returned && isResearcher">
+    إعادة صياغة الخطاب الإلحاقى
+  </button>
+</section> -->

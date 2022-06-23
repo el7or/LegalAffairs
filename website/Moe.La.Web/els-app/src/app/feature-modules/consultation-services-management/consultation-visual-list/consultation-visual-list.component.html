@@ -1,0 +1,61 @@
+<!-- *ngIf="consultation?.consultationTransactions?.length > 0" -->
+<h4>المرئيات</h4>
+<div class="screen-table responsive-table p-10">
+  <table mat-table [dataSource]="consultationVisuals" class="mat-elevation-z0">
+    <ng-container matColumnDef="position">
+      <th mat-header-cell *matHeaderCellDef> #</th>
+      <td mat-cell *matCellDef="let visual; let i = index">
+        {{(i+1)}}
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="material">
+      <th mat-header-cell *matHeaderCellDef>
+        المادة
+      </th>
+
+      <td mat-cell *matCellDef="let visual" class="note-text">
+        {{ visual.material | sliceWords : 5 : visual }}
+        <a mat-button color="primary" *ngIf="visual.isWithViewMore"
+          (click)="visual.showViewMore = !visual.showViewMore;">
+          <span *ngIf="visual.showViewMore">المزيد</span>
+          <span *ngIf="!visual.showViewMore">أقل</span>
+        </a>
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="visuals">
+      <th mat-header-cell *matHeaderCellDef>
+        المرئيات
+      </th>
+
+      <td mat-cell *matCellDef="let visual" class="note-text">
+        {{ visual.visuals | sliceWords : 5 : visual }}
+        <a mat-button color="primary" *ngIf="visual.isWithViewMore"
+          (click)="visual.showViewMore = !visual.showViewMore;">
+          <span *ngIf="visual.showViewMore">المزيد</span>
+          <span *ngIf="!visual.showViewMore">أقل</span>
+        </a>
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="actions">
+      <th mat-header-cell *matHeaderCellDef></th>
+      <td mat-cell *matCellDef="let element">
+        <button mat-icon-button color="warn" type="button" (click)="onDelete(element.id)">
+          <mat-icon>clear</mat-icon>
+        </button>
+      </td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="visualsDisplayedColumns"></tr>
+
+    <tr mat-row *matRowDef="let row; columns: visualsDisplayedColumns;"></tr>
+
+    <tr class="mat-row no-data" *matNoDataRow>
+      <td class="mat-cell" [colSpan]="visualsDisplayedColumns.length">
+        لا يوجد نتائج .
+      </td>
+    </tr>
+  </table>
+</div>

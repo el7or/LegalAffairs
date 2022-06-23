@@ -1,0 +1,54 @@
+<div class="screen">
+  <h3 mat-dialog-title>
+ إضافة خطوة سير عمل
+  </h3>
+  <div mat-dialog-content>
+    <div fxLayout="row wrap">
+      <div fxFlex.gt-sm="100" fxFlex="100">
+        <form class="basic-form" [formGroup]="form">
+          <div fxLayout="row wrap" fxFlexAlign="center" class="row">
+            <div fxFlex.gt-sm="50" fxFlex="100" class="p-10">
+              <mat-form-field>
+                <mat-select matInput formControlName="workflowStepCategoryId" placeholder="نوع خطوة سير العمل">
+                  <mat-option value="">--اختر--</mat-option>
+                  <mat-option *ngFor="let workflowStepCategory of workflowStepCategories"
+                    [value]="workflowStepCategory.value">
+                    {{ workflowStepCategory.nameAr }}</mat-option>
+                </mat-select>
+                <mat-error *ngIf="form.controls['workflowStepCategoryId'].hasError('required')"> نوع خطوة سير العمل
+                  مطلوبة</mat-error>
+              </mat-form-field>
+            </div>
+            <div fxFlex.gt-sm="50" fxFlex="100" class="p-10">
+              <mat-form-field>
+                <input matInput formControlName="stepArName" placeholder="الاسم" autocomplete="off" required>
+                <mat-error *ngIf="form.controls['stepArName'].hasError('required')">إسم الخطوة مطلوب</mat-error>
+              </mat-form-field>
+            </div>
+            <div fxFlex.gt-sm="50" fxFlex="100" class="p-10">
+              <mat-form-field>
+                <mat-select formControlName="roles" multiple required placeholder="الصلاحيات">
+                  <mat-option *ngFor="let role of allRoles" [value]="role.name">
+                    {{ role.nameAr }}</mat-option>
+                </mat-select>
+                <mat-error *ngIf="form.controls['roles'].hasError('required')">الصلاحية مطلوبة</mat-error>
+              </mat-form-field>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+  <div mat-dialog-actions>
+    <section class="screen-actions">
+      <div class="button-row">
+        <button mat-raised-button color="primary" (click)="onSave()">
+          <span>حفظ</span>
+        </button>
+        <button type="button" mat-raised-button (click)="onCancel()">
+          إلغاء
+        </button>
+      </div>
+    </section>
+  </div>
+</div>

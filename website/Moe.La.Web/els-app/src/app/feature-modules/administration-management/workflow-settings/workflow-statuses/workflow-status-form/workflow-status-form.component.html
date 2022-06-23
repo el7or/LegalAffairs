@@ -1,0 +1,34 @@
+<div fxLayout="row wrap" class="screen">
+  <div fxFlex.gt-sm="100" fxFlex="100">
+    <mat-card>
+      <mat-card-content>
+        <form class="basic-form" [formGroup]="form" (ngSubmit)="onSave()">
+          <div fxLayout="row wrap" fxFlexAlign="center" class="row">
+            <div fxFlex.gt-sm="50" fxFlex="100" class="p-10">
+              <mat-form-field>
+                <input matInput formControlName="statusArName" placeholder="الاسم (ع)" autocomplete="off" required>
+                <mat-error *ngIf="form.controls['statusArName'].hasError('required')">الاسم مطلوب</mat-error>
+              </mat-form-field>
+            </div>
+            <div fxFlex.gt-sm="50" fxFlex="100" class="p-10">
+              <mat-form-field>
+                <input matInput formControlName="statusEnName" placeholder="الاسم (En)" autocomplete="off" required>
+                <mat-error *ngIf="form.controls['statusEnName'].hasError('required')">الاسم مطلوب</mat-error>
+              </mat-form-field>
+            </div>
+          </div>
+          <section class="screen-actions">
+            <div class="button-row">
+              <button mat-raised-button color="primary" [disabled]="!form.valid">
+                <span>حفظ</span>
+              </button>
+              <button type="button" mat-raised-button [routerLink]="['/workflow-settings/workflow-statuses']">
+                إلغاء
+              </button>
+            </div>
+          </section>
+        </form>
+      </mat-card-content>
+    </mat-card>
+  </div>
+</div>

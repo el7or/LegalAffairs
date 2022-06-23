@@ -1,0 +1,110 @@
+<mat-card>
+  <mat-card-content>
+    <section class="screen" *ngIf="consultation">
+      <app-consultation-moamala-details *ngIf="moamala" [moamalaId]="moamala.id"></app-consultation-moamala-details>
+      <div>
+        <h4>بيانات النموذج</h4>
+        <div fxLayout="row wrap" fxFlexAlign="center" class="entity-details p-10">
+
+          <div fxLayout="column" fxFlex.gt-sm="100" fxFlex="100">
+            <span>الموضوع</span>
+            <span>{{ consultation.subject }}</span>
+          </div>
+
+          <div *ngIf="isRegulationsAndLawsDepartment" fxLayout="column" fxFlex.gt-sm="50" fxFlex="100">
+            <span>الرقم</span>
+            <span>{{ moamala?.moamalaNumber }}</span>
+          </div>
+
+          <div *ngIf="isRegulationsAndLawsDepartment" fxLayout="column" fxFlex.gt-sm="50" fxFlex="100">
+            <span>التاريخ</span>
+            <span>{{ consultation.consultationDate | date: "yyyy-MM-dd" }} &nbsp;
+              {{ consultation.consultationDateHigri }}</span>
+          </div>
+
+          <div *ngIf="isRegulationsAndLawsDepartment" fxLayout="column" fxFlex.gt-sm="50" fxFlex="100">
+            <span>الدراسة التحليلية</span>
+            <span>{{ consultation.legalAnalysis }}</span>
+          </div>
+
+          <div *ngIf="isRegulationsAndLawsDepartment" fxLayout="column" fxFlex.gt-sm="50" fxFlex="100">
+            <span>أهم العناصر</span>
+            <span>لا يوجد ما يسمى فباهم العناصر</span>
+          </div>
+
+          <div *ngIf="isRegulationsAndLawsDepartment" fxLayout="column" fxFlex.gt-sm="50" fxFlex="100">
+            <span>هل توجد ملاحظات</span>
+            <span>لا يوجد ما يسمى ملاحظات</span>
+          </div>
+
+          <div *ngIf="!isRegulationsAndLawsDepartment" fxLayout="column" fxFlex.gt-sm="100" fxFlex="100">
+            <app-consultation-merits-list [consultation]="consultation"></app-consultation-merits-list>
+          </div>
+          <div *ngIf="!isRegulationsAndLawsDepartment" fxLayout="column" fxFlex.gt-sm="100" fxFlex="100">
+            <app-consultation-grounds-list [consultation]="consultation"></app-consultation-grounds-list>
+          </div>
+
+          <div *ngIf="!isRegulationsAndLawsDepartment" fxLayout="column" fxFlex.gt-sm="100" fxFlex="100">
+            <span> التحليل القانونى</span>
+            <span [innerHTML]="consultation.legalAnalysis.replaceAll('\n', '<br>')"></span>
+          </div>
+
+        </div>
+      </div>
+
+      <app-consultation-visual-list *ngIf=" isRegulationsAndLawsDepartment" [consultationVisuals]="consultation">
+      </app-consultation-visual-list>
+
+      <section class="screen-content row" fxLayout="row wrap" fxFlexAlign="center">
+        <div fxLayout="column" fxFlex.gt-sm="100" fxFlex="100">
+          <span class="section-head">جدول المعاملات المرتبطة</span>
+          <section class="responsive-table screen-table">
+
+            <app-related-moamalat-list *ngIf="moamala" [dataSource]="relatedMoamalatDataSource"
+              style="overflow: overlay;">
+            </app-related-moamalat-list>
+          </section>
+        </div>
+      </section>
+
+
+      <app-consultation-transaction-list [consultation]="consultation">
+      </app-consultation-transaction-list>
+    </section>
+    <section class="screen-actions">
+      <button mat-raised-button color="primary" type="button"
+        *ngIf="(consultationId && !consultationSupportingDocument?.request?.id)&& (consultation?.status?.id == ConsultationStatus.Returned || consultation?.status?.id == ConsultationStatus.Draft)"
+        [routerLink]="['/requests/consultation-request', consultationId, consultation.moamalaId ]">
+        طلب نواقص
+      </button>
+      <button mat-raised-button color="primary" type="button"
+        *ngIf="(consultationId && consultationSupportingDocument?.request?.id) && (consultation?.status?.id == ConsultationStatus.Returned || consultation?.status?.id == ConsultationStatus.Draft)"
+        [routerLink]="['/requests/consultation-request/reformulate',consultationSupportingDocument.request.id]">
+        عرض طلب نواقص
+      </button>
+      <button mat-raised-button color="primary" type="button"
+        *ngIf="(consultationId && consultationSupportingDocument?.request?.id) && !(consultation?.status?.id == ConsultationStatus.Returned || consultation?.status?.id == ConsultationStatus.Draft)"
+        [routerLink]="['/requests/view', consultationSupportingDocument.request.id,consultationSupportingDocument.request.requestType]">
+        عرض طلب نواقص
+      </button>
+      <button mat-raised-button color="primary" aria-label="Edit" class="m-r-10"
+        (click)="changeConsultationStatus(ConsultationStatus.Accepted)" routerLinkActive="router-link-active"
+        *ngIf="accepted">
+         قبول
+      </button>
+      <button mat-raised-button color="primary" aria-label="Edit" class="m-r-10"
+        (click)="changeConsultationStatus(ConsultationStatus.Approved)" routerLinkActive="router-link-active"
+        *ngIf="approved">
+         اعتماد
+      </button>
+      <button mat-raised-button color="primary" aria-label="Edit" class="m-r-10"
+        (click)="changeConsultationStatus(ConsultationStatus.Returned)" routerLinkActive="router-link-active"
+        *ngIf="returned">
+         إعادة الصياغة
+      </button>
+      <button mat-raised-button color="accent" (click)="onBack()" class="float-left">
+        العودة
+      </button>
+    </section>
+  </mat-card-content>
+</mat-card>

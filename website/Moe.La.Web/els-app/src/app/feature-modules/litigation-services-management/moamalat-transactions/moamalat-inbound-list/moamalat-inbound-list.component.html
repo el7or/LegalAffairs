@@ -1,0 +1,166 @@
+<div fxLayout="row wrap" class="screen">
+  <div fxFlex.gt-sm="100" fxFlex.gt-xs="100" fxFlex="100">
+    <mat-card>
+      <mat-card-content>
+
+        <div class="responsive-table screen-table extendable">
+          <div fxLayout="row" fxLayoutAlign="space-between stretch">
+            <div class="filter-results" fxFlex="15" fxLayout="row" fxLayoutAlign="center center">
+              <button mat-flat-button (click)="onShowFilter()">
+                <span *ngIf="!showFilter">
+                  تصفية النتائج
+                </span>
+                <span *ngIf="showFilter">
+                  اخفاء التصفية
+                </span>
+              </button>
+            </div>
+            <div class="free-search" fxFlex="25" fxLayout="row" fxLayoutAlign="center center">
+              <mat-form-field appearance="outline" [hideRequiredMarker]="true" floatLabel="always">
+                <span matPrefix>
+                  <mat-icon>search</mat-icon>
+                </span>
+                <input matInput placeholder="بحث" [(ngModel)]="searchText" name="searchText" (keyup.enter)="onSearch()"
+                  autocomplete="off">
+              </mat-form-field>
+            </div>
+            <mat-paginator #paginator [length]="totalItems" [pageIndex]="queryObject.page - 1" showFirstLastButtons
+              [pageSize]="queryObject.pageSize" (page)="onPageChange($event.pageIndex)" hidePageSize="true" fxFlex="60">
+            </mat-paginator>
+          </div>
+          <div *ngIf="showFilter" fxLayout="row wrap">
+            <div fxFlex.gt-sm="100" fxFlex="100">
+              <form class="basic-form" [formGroup]="searchForm" (submit)="onFilter()">
+                <div class="row filter-container" fxLayout="row wrap" fxFlexAlign="center">
+
+                  <div fxFlex.gt-sm="30" fxFlex="100" class="p-10">
+                    <mat-form-field>
+                      <input matInput formControlName="subject" placeholder="عنوان المعاملة" autocomplete="off" />
+                    </mat-form-field>
+                  </div>
+                  <div fxFlex.gt-sm="30" fxFlex="100" class="p-10">
+                    <mat-form-field>
+                      <input matInput formControlName="referenceNo" placeholder="رقم القيد" autocomplete="off" />
+                    </mat-form-field>
+                  </div>
+                  <div fxFlex.gt-sm="30" fxFlex="100" class="p-10">
+                    <mat-form-field>
+                      <input matInput formControlName="unifiedNo" placeholder="الرقم الموحد" autocomplete="off" />
+                    </mat-form-field>
+                  </div>
+                  <div fxFlex.gt-sm="100" fxFlex="100" class="p-10 text-center screen-actions">
+                    <button color="accent" type="submit" mat-raised-button>
+                      تصفية
+                    </button>
+                    <button type="button" mat-raised-button (click)="onClearFilter()">
+                      مسح التصفية
+                    </button>
+                  </div>
+                </div>
+              </form>
+            </div>
+          </div>
+
+          <table mat-table [dataSource]="dataSource" multiTemplateDataRows class="mat-elevation-z0" matSort
+            matSortActive="createdOn" matSortDirection="asc" matSortDisableClear>
+            <ng-container matColumnDef="position">
+              <th mat-header-cell *matHeaderCellDef style="width:100px;">#</th>
+              <td mat-cell *matCellDef="let element; let i = dataIndex">
+                <div>
+                  {{(i + 1 + queryObject.pageSize * ((queryObject.page || 1) -1))}}
+                  <button mat-icon-button (click)="onClickRow(i)">
+                    <mat-icon color="primary">
+                      {{ expandedIndexes.includes(i) ? 'keyboard_arrow_down': 'keyboard_arrow_left'}}
+                    </mat-icon>
+                  </button>
+                </div>
+              </td>
+            </ng-container>
+
+            <ng-container matColumnDef="subject">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header>عنوان المعاملة</th>
+              <td mat-cell *matCellDef="let element">
+                {{ element.subject}}
+              </td>
+            </ng-container>
+
+            <ng-container matColumnDef="referenceNo">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header>
+                رقم القيد
+              </th>
+              <td mat-cell *matCellDef="let element">
+                {{ element.referenceNo }}
+              </td>
+            </ng-container>
+
+            <ng-container matColumnDef="unifiedNo">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header>
+                الرقم الموحد
+              </th>
+              <td mat-cell *matCellDef="let element">
+                {{ element.unifiedNo }}
+              </td>
+            </ng-container>
+
+            <ng-container matColumnDef="sendingDepartment">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header>الجهة المرسلة</th>
+              <td mat-cell *matCellDef="let element">
+                {{ element.sendingDepartment }}
+              </td>
+            </ng-container>
+
+            <ng-container matColumnDef="actions">
+              <th mat-header-cell *matHeaderCellDef></th>
+              <td mat-cell *matCellDef="let element">
+                <button mat-icon-button [matMenuTriggerFor]="menu" aria-label="Example icon-button with a menu">
+                  <mat-icon>more_vert</mat-icon>
+                </button>
+                <mat-menu #menu="matMenu">
+                  <button type="button" mat-menu-item [routerLink]="['/cases/new']" *ngIf="isLitigationManager">
+                    <span>إنشاء القضية</span>
+                  </button>
+
+                </mat-menu>
+              </td>
+            </ng-container>
+
+            <!-- Expanded Content Column - The detail row is made up of this one column that spans across all columns -->
+            <ng-container matColumnDef="moamalatDetails">
+              <td mat-cell *matCellDef="let element" class="borderless-td" [attr.colspan]="columnsToDisplay.length">
+                <div fxLayout="row wrap" fxFlexAlign="center" class="row filter-container">
+
+                  <div fxFlex.gt-sm="90" fxFlex="90" class="p-10">
+                    <div class="sub-body text-right">
+                      <div class="sub-header">تفاصيل المعاملة:</div>
+                      <span [innerHTML]="element.description | sliceWords : 5 : element">
+                      </span>
+                      <a mat-button color="primary" *ngIf="element.isWithViewMore"
+                        (click)="element.showViewMore = !element.showViewMore;">
+                        <span *ngIf="element.showViewMore">المزيد</span>
+                        <span *ngIf="!element.showViewMore">أقل</span>
+                      </a>
+                    </div>
+
+                  </div>
+                </div>
+              </td>
+            </ng-container>
+
+            <tr mat-header-row *matHeaderRowDef="columnsToDisplay"></tr>
+            <tr mat-row *matRowDef="let element; columns: columnsToDisplay"></tr>
+            <tr mat-row *matRowDef="let element; let i = dataIndex; columns: expandedDetail"
+              [class.shrink-row]="expandedIndexes.length == 0 || !expandedIndexes.includes(i)" class="expanded-row">
+            </tr>
+            <tr class="mat-row" *matNoDataRow>
+              <td class="mat-cell" colspan="6" style="text-align: center;">لا يوجد نتائج للبيانات.</td>
+            </tr>
+          </table>
+
+          <mat-paginator #paginator [length]="totalItems" [pageIndex]="queryObject.page - 1" showFirstLastButtons
+            [pageSize]="queryObject.pageSize" (page)="onPageChange($event.pageIndex)" hidePageSize="true">
+          </mat-paginator>
+        </div>
+      </mat-card-content>
+    </mat-card>
+  </div>
+</div>

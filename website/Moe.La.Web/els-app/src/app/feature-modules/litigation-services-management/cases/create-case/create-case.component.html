@@ -1,0 +1,113 @@
+<mat-card>
+  <mat-card-content>
+    <section fxLayout="row wrap" class="screen">
+      <section fxFlex="100" class="screen-header">
+        <div fxFlex="50"><b>بيانات القضية</b></div>
+        <div fxFlex="50" fxLayoutAlign="end center">
+          <button mat-button color="primary" (click)="location.back()">
+            العودة إلى القائمة
+          </button>
+        </div>
+      </section>
+      <mat-horizontal-stepper (selectionChange)="onStepChange($event)" labelPosition="bottom" [linear]="true"
+        #stepper="matHorizontalStepper" [class]="!caseId || !isGroundsCompleted ? 'disable-stepper-header': ''">
+
+        <mat-step label="البيانات الأساسية" state="basic" [stepControl]="basicForm">
+          <app-basic-case-form (onAddCase)="onAddCase($event);" [case]="caseDetails" [form]="basicForm">
+          </app-basic-case-form>
+        </mat-step>
+
+        <mat-step label="أطراف القضية" [completed]="partiesLength > 0" state="basic">
+          <app-party-case-form (onAddParty)="onAddParty($event)" *ngIf="caseId" [case]="caseDetails">
+          </app-party-case-form>
+          <section class="screen-actions pull-left">
+            <button mat-raised-button matStepperPrevious>
+              السابق
+            </button>
+            <button mat-raised-button [disabled]="!partiesLength" (click)="isPartiesCompleted=true; stepper.next();">
+              التالي
+            </button>
+          </section>
+        </mat-step>
+
+        <!-- <mat-step label="معاملات القضية" [completed]="isPartiesCompleted && partiesLength > 0 ? true : null"
+          state="basic">
+          <app-case-moamala-form *ngIf="caseId" [case]="caseDetails">
+          </app-case-moamala-form>
+          <br>
+          <section class="screen-actions float-left">
+            <button mat-raised-button matStepperPrevious>
+              السابق
+            </button>
+            <button mat-raised-button (click)="isMoamalatCompleted=true; stepper.next();">
+              التالي
+            </button>
+          </section>
+        </mat-step> -->
+
+        <mat-step label="أسانيد القضية"
+          [completed]="isPartiesCompleted && partiesLength > 0 ? true : null" state="basic">
+          <app-case-grounds-list *ngIf="caseId" [case]="caseDetails"></app-case-grounds-list>
+          <br>
+          <section class="screen-actions float-left">
+            <button mat-raised-button matStepperPrevious>
+              السابق
+            </button>
+            <button mat-raised-button (click)="isGroundsCompleted=true; stepper.next();">
+              التالي
+            </button>
+          </section>
+        </mat-step>
+
+        <mat-step label="المرفقات"
+          [completed]="isPartiesCompleted && partiesLength > 0 && isGroundsCompleted ? true : null"
+          state="basic">
+          <app-attachments *ngIf="caseId" (set-attachments-list)="onSubmitAttachments($event)" [isTypeRequired]="false"
+            [groupName]="GroupNames.Case" [attachmentsToUpdate]="attachments">
+          </app-attachments>
+          <section class="screen-actions float-left">
+            <button mat-raised-button matStepperPrevious>
+              السابق
+            </button>
+            <button mat-raised-button matStepperNext>
+              التالي
+            </button>
+          </section>
+        </mat-step>
+
+        <mat-step label="بيانات الجلسة الأولى" [completed]="caseDetails?.hearings.length > 0 ? true : null"
+          *ngIf="!caseId || (caseId && (caseDetails?.status.id == CaseStatus.Draft || caseDetails?.status.id == CaseStatus.ReceivedByLitigationManager))"
+          state="basic" [stepControl]="hearingForm">
+          <app-hearing-case-form *ngIf="caseId" [caseId]="caseId" [case]="caseDetails" [form]="hearingForm"
+          (onAddHearing)="onAddHearing($event);">
+          </app-hearing-case-form>
+        </mat-step>
+
+        <mat-step label="عرض بيانات القضية" [completed]="caseId && caseDetails?.hearings.length > 0 ? true : null"
+          state="basic">
+          <app-case-summary *ngIf="caseId" [caseId]="caseId" [case]="caseDetails"></app-case-summary>
+          <section class="screen-actions">
+            <button mat-raised-button color="primary" *ngIf="caseId && caseDetails?.status.id == CaseStatus.Draft"
+              (click)="onSendToLitigationManager()">
+              حفظ وإنهاء
+            </button>
+            <div class="float-left">
+              <button mat-raised-button matStepperPrevious>
+                السابق
+              </button>
+              <button mat-raised-button (click)="location.back()">
+                خروج
+              </button>
+            </div>
+          </section>
+        </mat-step>
+
+        <!-- Icon overrides. -->
+        <ng-template matStepperIcon="basic">
+          <mat-icon>done</mat-icon>
+        </ng-template>
+      </mat-horizontal-stepper>
+    </section>
+
+  </mat-card-content>
+</mat-card>

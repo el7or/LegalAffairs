@@ -1,0 +1,109 @@
+<mat-card *ngIf="user">
+  <mat-card-header>
+    <h4 class="card-header">الملف الشخصى</h4>
+  </mat-card-header>
+  <hr>
+  <mat-card-content>
+    <section style="padding-right: 2rem; padding-bottom: 2rem;" class="row" fxLayout="row wrap" fxFlexAlign="center">
+      <div fxFlex.gt-sm="15" fxFlex="100" class="p-10">
+        <!-- <img class="e2e-trusted-url" [src]="baseUrl+imagePath" style="border-radius: 1rem; border-color: orange;"
+        onerror="this.src='assets/images/users/user profile.png';" style="width:10rem;height:10rem;"> -->
+      </div>
+      <br>
+      <div fxFlex.gt-sm="85" fxFlex="100" class="p-10">
+        <div class="row" fxLayout="row wrap" fxFlexAlign="center">
+          <div fxFlex.gt-sm="15" fxFlex="100" class="p-10">
+            <strong class="user-title">البيانات الاساسية</strong>
+          </div>
+        </div>
+        <div fxLayout="row wrap" fxFlexAlign="center" class="entity-details p-10">
+          <div fxLayout="column" fxFlex.gt-sm="30" fxFlex="100">
+            <span class="user-title"> الاسم الأول </span>
+            <span>{{user.firstName}}</span>
+          </div>
+          <div fxLayout="column" fxFlex.gt-sm="30" fxFlex="100">
+            <span class="user-title"> الاسم الأخير</span>
+            <span>{{user.lastName}}</span>
+          </div>
+          <div fxLayout="column" fxFlex.gt-sm="30" fxFlex="100">
+            <span class="user-title">اسم المستخدم </span>
+            <span>{{user.userName}}</span>
+          </div>
+        </div>
+        <div fxLayout="row wrap" fxFlexAlign="center" class="entity-details p-10">
+          <div fxLayout="column" fxFlex.gt-sm="30" fxFlex="100">
+            <span class="user-title"> البريد الالكترونى </span>
+            <span>{{user.email}}</span>
+          </div>
+          <div fxLayout="column" fxFlex.gt-sm="30" fxFlex="100">
+            <span class="user-title">رقم الجوال</span>
+            <span>{{ user.phoneNumber || 'لا يوجد'}}</span>
+          </div>
+          <div *ngIf="user.branch" fxLayout="column" fxFlex.gt-sm="30" fxFlex="100">
+            <span class="user-title">الفرع </span>
+            <span>{{ user.branch.name }}</span>
+          </div>
+        </div>
+      </div>
+      <br>
+    </section>
+
+    <div class="background">
+      <div fxFlex.gt-sm="18" fxFlex="100" class="p-10">
+      </div>
+      <br>
+      <div fxFlex.gt-sm="85" fxFlex="100" class="p-10">
+        <div class="row" fxLayout="row wrap" fxFlexAlign="center">
+          <div fxFlex.gt-sm="15" fxFlex="100" class="p-10">
+            <strong class="user-title">الصلاحيات</strong>
+          </div>
+        </div>
+        <div fxLayout="row wrap" fxFlexAlign="center" class="entity-details p-10">
+          <div *ngFor="let roleDept of user.userRoleDepartments" fxLayout="column" fxFlex.gt-sm="50"
+            fxFlex="100">
+            <span>
+              <mat-icon class="checked-role">checked</mat-icon>
+              <b>{{roleDept.roleNameAr}}</b>:
+              {{roleDept.departmentName}}
+              <!-- <span *ngFor="let role of user.roles">
+                <b>{{role.nameAr }}</b>
+              </span> -->
+            </span>
+            <br />
+
+          </div>
+          <div *ngFor="let role of user.roles" fxLayout="column" fxFlex.gt-sm="50" fxFlex="100">
+            <span>
+              <mat-icon class="checked-role">checked</mat-icon>
+              <b>{{role.nameAr }}</b>
+            </span>
+            <br />
+
+          </div>
+        </div>
+      </div>
+      <br>
+    </div>
+
+    <section style="padding-right: 2rem; padding-bottom: 2rem;" class="row" fxLayout="row wrap" fxFlexAlign="center">
+      <div fxFlex.gt-sm="15" fxFlex="100" class="p-10">
+      </div>
+      <br>
+      <div fxFlex.gt-sm="85" fxFlex="100" class="p-10">
+        <div class="row" fxLayout="row wrap" fxFlexAlign="center">
+          <div fxFlex.gt-sm="15" fxFlex="100" class="p-10">
+            <strong class="user-title">صورة التوقيع</strong>
+          </div>
+        </div>
+        <div fxLayout="row wrap" fxFlexAlign="center" class="entity-details p-10">
+          <div fxLayout="column" fxFlex.gt-sm="30" fxFlex="100">
+            <img class="e2e-trusted-url" [src]="signaturePath" style="border-radius: 1rem; border-color: orange;"
+              onError="this.src='../../../../../assets/images/empty.png';" style="width:30rem;height:10rem;">
+          </div>
+        </div>
+      </div>
+      <br>
+    </section>
+
+  </mat-card-content>
+</mat-card>

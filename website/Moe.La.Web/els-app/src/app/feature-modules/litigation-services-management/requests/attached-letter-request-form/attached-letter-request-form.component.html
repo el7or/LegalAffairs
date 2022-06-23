@@ -1,0 +1,46 @@
+<div fxLayout="row wrap" class="screen">
+  <div fxFlex.gt-sm="100" fxFlex="100" style="margin-bottom: 1em;">
+    <mat-card>
+      <mat-card-content>
+        <app-request-details [request]='parentRequest?.request'></app-request-details>
+      </mat-card-content>
+    </mat-card>
+  </div>
+  <div fxFlex.gt-sm="100" fxFlex="100">
+    <mat-card>
+      <mat-card-content>
+        <section class="screen-content">
+          <form [formGroup]="form">
+            <div fxLayout="row wrap" fxFlexAlign="center" class="row">
+              <div fxLayout="row" fxLayoutWrap>
+                <div *ngFor="let item of letterTemplates" class="card">
+                  <img mat-card-image (click)="openImageDialog(item.name, baseUrl + item.thumbnail)" class="letterimg"
+                    src="{{baseUrl + item.thumbnail}}">
+                  <div>
+                    <a class="m-5"> {{ item.name }}</a>
+                    <button mat-button type="button" (click)="getContent(item.id)" class="m-5">
+                      اختر
+                    </button>
+                  </div>
+                </div>
+              </div>
+              <div fxFlex.gt-sm="100" fxFlex="100" class="p-10">
+                <ckeditor formControlName="text" [editor]="Editor" style="height: 400px;" maxlength="2000"
+                  [config]="config">
+                </ckeditor>
+              </div>
+            </div>
+          </form>
+        </section>
+        <section class="screen-actions">
+          <button mat-raised-button color="primary" type="button" (click)="onSubmit()" [disabled]="!form.valid">
+            حفظ
+          </button>
+          <button mat-raised-button type="button" (click)="location.back()">
+            إلغاء
+          </button>
+        </section>
+      </mat-card-content>
+    </mat-card>
+  </div>
+</div>

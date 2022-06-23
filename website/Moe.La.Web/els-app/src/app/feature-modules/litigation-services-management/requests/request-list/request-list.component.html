@@ -1,0 +1,202 @@
+<mat-card>
+  <mat-card-content>
+    <section class="screen">
+      <section class="screen-header">
+        <div fxFlex="50">
+          <button mat-raised-button color="primary" *ngIf="isLitigationManagerInLitigation || isAdministrativeCommunicationSpecialist"
+            [routerLink]="['/requests/export-case-judgment-request']" routerLinkActive="router-link-active">
+            طلب تصدير نموذج الحكم للجهة المعنية
+          </button>
+        </div>
+      </section>
+      <section class="screen-table responsive-table extendable">
+        <div fxLayout="row" fxLayoutAlign="space-between stretch">
+          <div class="free-search" fxFlex="25" fxLayout="row" fxLayoutAlign="start center">
+            <form [formGroup]="searchForm">
+              <mat-form-field appearance="outline" [hideRequiredMarker]="true" floatLabel="always">
+                <span matPrefix>
+                  <mat-icon>search</mat-icon>
+                </span>
+                <input matInput placeholder="بحث" formControlName="searchText" (keyup)="applyFilter()"
+                  autocomplete="off">
+              </mat-form-field>
+            </form>
+          </div>
+          <mat-paginator #paginator [length]="dataSource.filteredData.length" [pageIndex]="currentPage"
+            showFirstLastButtons [pageSize]="PAGE_SIZE" (page)="onPageChange($event.pageIndex)" hidePageSize="true">
+          </mat-paginator>
+        </div>
+
+        <table mat-table multiTemplateDataRows
+          [dataSource]="dataSource.filteredData | getPageData :PAGE_SIZE:currentPage" matSort matSortActive="parent"
+          matSortDirection="asc" matSortDisableClear class="mat-elevation-z0">
+
+          <!-- <ng-container matColumnDef="position">
+            <th mat-header-cell *matHeaderCellDef> #</th>
+            <td mat-cell *matCellDef="let department; let i = index">
+              {{(i + 1 + PAGE_SIZE * (currentPage))}}
+            </td>
+          </ng-container> -->
+          <ng-container matColumnDef="id">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>رقم الطلب</th>
+            <td mat-cell *matCellDef="let element; let i = dataIndex;" class="nowrap">
+              <div>
+                {{ element.id }}
+                <button mat-icon-button (click)="onClickRow(i,element.requestType.id,element.id)">
+                  <mat-icon>
+                    {{ expandedIndexes.includes(i) ? 'keyboard_arrow_down': 'keyboard_arrow_left'}}
+                  </mat-icon>
+                </button>
+              </div>
+            </td>
+          </ng-container>
+          <ng-container matColumnDef="requestType">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>نوع الطلب</th>
+            <td mat-cell *matCellDef="let element">
+              {{ element.requestType.name }}
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="requestStatus">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>حالة الطلب</th>
+            <td mat-cell *matCellDef="let element">
+              {{ element.requestStatus.name }}
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="createdOn">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>تاريخ تقديم الطلب</th>
+            <td mat-cell *matCellDef="let element">
+              {{ element.createdOn | date : 'yyyy-MM-dd' }}
+              {{ element.createdOn | arDayOfWeek }}
+              {{element.createdOnHigri}}
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="lastTransactionDate">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>تاريخ اخر حركة في الطلب</th>
+            <td mat-cell *matCellDef="let element">
+              <span
+                *ngIf="element.requestType.id==RequestTypes.RequestAttachedLetter && element.requestStatus.id==RequestStatus.New">
+                {{ element.createdOn | date : 'yyyy-MM-dd' }}
+                {{ element.createdOn | arDayOfWeek }}
+                {{element.createdOnHigri}}
+              </span>
+              <span *ngIf="element.lastTransactionDate!=null">
+                {{ element.lastTransactionDate | date : 'yyyy-MM-dd' }}
+                {{ element.lastTransactionDate |arDayOfWeek }}
+                {{element.lastTransactionDateHigri}}
+              </span>
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="createdByFullName">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>اسم مقدم الطلب</th>
+            <td mat-cell *matCellDef="let element">
+              {{element.createdBy.name }}
+            </td>
+          </ng-container>
+          <ng-container matColumnDef="actions">
+            <th mat-header-cell *matHeaderCellDef></th>
+            <td mat-cell *matCellDef="let element" (click)="$event.stopPropagation()">
+              <button mat-icon-button [matMenuTriggerFor]="menu">
+                <mat-icon>more_vert</mat-icon>
+              </button>
+              <mat-menu #menu="matMenu">
+                <button type="button" mat-menu-item
+                  *ngIf="isResearcherInLitigation || ((element.requestStatus.id != RequestStatus.New && element.requestStatus.id != RequestStatus.Modified&&element.requestStatus.id != RequestStatus.AcceptedFromConsultant  && element.requestStatus.id != RequestStatus.Approved && element.requestStatus.id != RequestStatus.AcceptedFromLitigationManager) && !isResearcherInLitigation)"
+                  [routerLink]="['/requests/view', element.id,element.requestType.id]">
+                  <span>عرض</span>
+                </button>
+
+                <button type="button" mat-menu-item
+                  *ngIf="(element.requestStatus.id == RequestStatus.New || element.requestStatus.id == RequestStatus.Modified||element.requestStatus.id == RequestStatus.AcceptedFromConsultant  || element.requestStatus.id == RequestStatus.Approved || element.requestStatus.id == RequestStatus.AcceptedFromLitigationManager) && !isResearcherInLitigation"
+                  [routerLink]="['/requests/review', element.id,element.requestType.id]">
+                  <span>مراجعة الطلب</span>
+                </button>
+
+                <button type="button" mat-menu-item
+                  [routerLink]="['/requests/objection-request-form/reformulate',element.id]"
+                  *ngIf="isResearcherInLitigation  && element.requestType.id ==  RequestTypes.RequestObjection &&(element.requestStatus.id == RequestStatus.Returned || element.requestStatus.id == RequestStatus.Draft) ">
+                  <span>تعديل</span>
+                </button>
+
+                <button type="button" mat-menu-item [routerLink]="['/requests/document-request/edit',element.id]"
+                  *ngIf="isResearcherInLitigation  && element.requestType.id ==  RequestTypes.RequestSupportingDocuments && element.requestStatus.id == RequestStatus.Draft">
+                  <span>تعديل</span>
+                </button>
+
+                <button type="button" mat-menu-item
+                  [routerLink]="['/requests/export-case-judgment-request/edit',element.id]"
+                  *ngIf="isLitigationManagerInLitigation && element.requestType.id == RequestTypes.RequestExportCaseJudgment && element.requestStatus.id == RequestStatus.Draft ">
+                  <span>تعديل</span>
+                </button>
+
+                <button type="button" mat-menu-item [routerLink]="['/requests/document-request/reformulate',element.id]"
+                  *ngIf="isResearcherInLitigation && element.requestType.id == RequestTypes.RequestSupportingDocuments && element.requestStatus.id == RequestStatus.Returned ">
+                  <span>إعادة صياغة</span>
+                </button>
+
+                <button type="button" mat-menu-item
+                  [routerLink]="['/requests/consultation-request/reformulate',element.id]"
+                  *ngIf="isResearcherInConsulting && element.requestType.id == RequestTypes.ConsultationSupportingDocument && element.requestStatus.id == RequestStatus.Returned ">
+                  <span>إعادة صياغة</span>
+                </button>
+
+                <button type="button" mat-menu-item
+                  [routerLink]="['/requests/export-case-judgment-request/reformulate',element.id]"
+                  *ngIf="isLitigationManagerInLitigation && element.requestType.id == RequestTypes.RequestExportCaseJudgment && element.requestStatus.id == RequestStatus.Returned ">
+                  <span>إعادة صياغة</span>
+                </button>
+
+                <button mat-menu-item type="button" [routerLink]="['/requests/edit-attached-letter',element.id]"
+                  *ngIf="element.requestStatus.id==RequestStatus.Returned &&isResearcherInLitigation && element.requestType.id == RequestTypes.RequestAttachedLetter">
+                  <span>إعادة صياغة </span>
+                </button>
+
+                <button type="button" mat-menu-item type="submit" (click)="onPrint(element)"
+                  *ngIf=" authService.checkRole(AppRole.AdministrativeCommunicationSpecialist)">
+                  <span> تصدير إلى ملف pdf</span>
+                </button>
+              </mat-menu>
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="requestDetails">
+            <td mat-cell *matCellDef="let element" class="borderless-td" [attr.colspan]="displayedColumns.length">
+
+              <div fxLayout="row wrap" fxFlexAlign="center" class="p-10 filter-container">
+
+                <div fxFlex="50" class="star">
+                  <span>رقم القضية</span>
+                  <span> {{selectedCaseNumberInSource}} </span>
+
+                </div>
+
+                <div fxFlex="50" class="star">
+                  <span>مصدر القضية</span>
+                  <span> {{selectedCaseSource}} </span>
+
+                </div>
+              </div>
+            </td>
+          </ng-container>
+
+          <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+          <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+          <tr mat-row *matRowDef="let element; let i = dataIndex; columns: expandedDetail"
+            [class.shrink-row]="expandedIndexes.length == 0 || !expandedIndexes.includes(i)" class="expanded-row"></tr>
+          <!-- Row shown when there is no matching data. -->
+          <tr class="mat-row" *matNoDataRow>
+            <td class="mat-cell" colspan="12" style="text-align: center;">لا يوجد نتائج للبيانات</td>
+          </tr>
+        </table>
+
+        <mat-paginator #paginator [length]="dataSource.filteredData.length" [pageIndex]="currentPage"
+          showFirstLastButtons [pageSize]="PAGE_SIZE" (page)="onPageChange($event.pageIndex)" hidePageSize="true">
+        </mat-paginator>
+
+      </section>
+    </section>
+  </mat-card-content>
+</mat-card>

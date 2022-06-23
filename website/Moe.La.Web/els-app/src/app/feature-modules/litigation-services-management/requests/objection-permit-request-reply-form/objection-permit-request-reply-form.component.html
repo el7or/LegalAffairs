@@ -1,0 +1,42 @@
+<h3 mat-dialog-title class="modal-title">
+  <span *ngIf="requestStatus == RequestStatus.AcceptedFromLitigationManager">الموافقة على</span>
+  <span *ngIf="requestStatus == RequestStatus.Rejected">رفض</span>
+
+  <span *ngIf="suggestedOpinon.id==SuggestedOpinon.ObjectionAction">
+  طلب توجيه الاعتراض
+</span>
+
+<span *ngIf="suggestedOpinon.id==SuggestedOpinon.NoFutherAction">
+  الاكتفاء بالحكم
+</span>
+</h3>
+
+<div mat-dialog-content>
+  <form (submit)="onSubmit()" [formGroup]="form">
+    <div fxLayout="row wrap" fxFlexAlign="center" class="row">
+      <!-- <div fxFlex.gt-sm="100" fxFlex="100" class="p-10">
+        <mat-radio-group formControlName="requestStatus">
+          <mat-radio-button *ngIf="requestStatus == RequestStatus.AcceptedFromLitigationManager"
+            [value]="RequestStatus.AcceptedFromLitigationManager">موافقة</mat-radio-button>
+          &nbsp;
+          <mat-radio-button *ngIf="requestStatus == RequestStatus.Rejected" [value]="RequestStatus.Rejected">رفض
+          </mat-radio-button>
+        </mat-radio-group>
+      </div> -->
+      <div fxFlex.gt-sm="100" fxFlex="100" class="p-10">
+        <mat-form-field>
+          <textarea matInput formControlName="replyNote" [value]="form.controls['replyNote'].value | replaceLineBreaks" placeholder="ملاحظات" rows="3" maxlength="4000"
+            #replyNote></textarea>
+          <mat-hint>4000/{{replyNote.value?.length || 0}}</mat-hint>
+        </mat-form-field>
+      </div>
+    </div>
+    <section class="screen-actions">
+      <div class="button-row">
+        <button mat-raised-button type="submit" color="primary" [disabled]="!form.valid">حفظ</button>
+        &nbsp;
+        <button mat-raised-button type="button" (click)="onCancel()">إلغاء</button>
+      </div>
+    </section>
+  </form>
+</div>

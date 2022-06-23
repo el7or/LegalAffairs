@@ -1,0 +1,128 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="Moe.La.Core.Entities.Case">
+    <Position X="6" Y="11.25" Width="2.25" />
+    <TypeIdentifier>
+      <HashCode>AgJFlSAEAUCAIAEEAOBTUQAAEAAMAAtAIiAQkNDQgAE=</HashCode>
+      <FileName>Entities\Case.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Property Name="RelatedCase" />
+      <Property Name="GeneralManagement" />
+      <Property Name="WorkflowInstance" />
+      <Property Name="CaseRule" />
+      <Property Name="CaseSource" />
+      <Property Name="Status" />
+      <Property Name="Court" />
+      <Property Name="LitigationType" />
+    </ShowAsAssociation>
+    <ShowAsCollectionAssociation>
+      <Property Name="CaseGrounds" />
+      <Property Name="Hearings" />
+      <Property Name="CaseCategories" />
+      <Property Name="Parties" />
+      <Property Name="Researchers" />
+      <Property Name="CaseTransactions" />
+      <Property Name="Attachments" />
+    </ShowAsCollectionAssociation>
+  </Class>
+  <Class Name="Moe.La.Core.Entities.CaseCaseCategory">
+    <Position X="12" Y="19.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AACAAAAAAAAAAAAAAAAAAAAAAAAAACBAAAEAABAAAAE=</HashCode>
+      <FileName>Entities\CaseCaseCategory.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Moe.La.Core.Entities.Party">
+    <Position X="2.5" Y="2.75" Width="2.5" />
+    <TypeIdentifier>
+      <HashCode>BAKCUQABgEAACICoIAAAAAQCEQAAAADKMEIAQhAAKEU=</HashCode>
+      <FileName>Entities\Party.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Moe.La.Core.Entities.CaseGrounds">
+    <Position X="12" Y="8" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AACAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACBAAAAA=</HashCode>
+      <FileName>Entities\CaseGrounds.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Moe.La.Core.Entities.CaseAttachment">
+    <Position X="9.75" Y="16.75" Width="1.75" />
+    <TypeIdentifier>
+      <HashCode>AADCAAAAAAAAAAAAAAAAAAAAAAAAAAAEAAAAABAAAAA=</HashCode>
+      <FileName>Entities\Attachments\CaseAttachment.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Moe.La.Core.Entities.CaseRule">
+    <Position X="8.5" Y="4.5" Width="2.25" />
+    <TypeIdentifier>
+      <HashCode>AgAAEACAQEAQABEACAACAAAAAgBAIARCIAACAAAAAAE=</HashCode>
+      <FileName>Entities\CaseRule.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Moe.La.Core.Entities.CaseTransaction">
+    <Position X="10" Y="10.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AACAAAAAAAAAAAAAAAAAAAAAAAAAAAFAAAAAABEAAAE=</HashCode>
+      <FileName>Entities\CaseTransaction.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Moe.La.Core.Entities.GeneralManagement">
+    <Position X="9" Y="22.75" Width="2" />
+    <TypeIdentifier>
+      <HashCode>AAACAAAAAAAAAAAAAAAEQAQAAAACAAAAAgIAAAAAAAA=</HashCode>
+      <FileName>Entities\Lookups\GeneralManagement.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Moe.La.Core.Entities.Hearing">
+    <Position X="5.25" Y="20.5" Width="2.75" />
+    <TypeIdentifier>
+      <HashCode>AQDAFAAEEECAACEAAAZIBAAAIgIAAABAIQABABAACAE=</HashCode>
+      <FileName>Entities\Hearing.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Moe.La.Core.Entities.CaseResearcher">
+    <Position X="6" Y="7.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AACAAAAAAAAIAAAAAAABAAAAAAAAAABAAAAAABEAAAE=</HashCode>
+      <FileName>Entities\CaseResearchers.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Moe.La.Core.Entities.WorkflowInstance">
+    <Position X="1.5" Y="21.5" Width="2.25" />
+    <TypeIdentifier>
+      <HashCode>AAAIEAAAAEAAEAAABAIIBAAAAAAQAAJAIIIFAgAABAE=</HashCode>
+      <FileName>Entities\Workflow\WorkflowInstance.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Moe.La.Core.Entities.Court">
+    <Position X="10" Y="13.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAICEAAAAAAAAAAAAAAgAAQAAAACAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Entities\Lookups\Court.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Enum Name="Moe.La.Core.Enums.CaseSources">
+    <Position X="3" Y="12.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AgAAAAAAAAAAAAAAAAAAAAAAAAGAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Enums\CaseSources.cs</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="Moe.La.Core.Enums.CaseStatuses">
+    <Position X="3" Y="17.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>BEEAAAAAAABAgAJAAAQAAQAAEAAAQAAAAIAABAIAAAA=</HashCode>
+      <FileName>Enums\CaseStatuses.cs</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="Moe.La.Core.Enums.LitigationTypes">
+    <Position X="3" Y="14.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>ACAAAAAAAAAAAAAAAABAAAAAAAAAAAAAAAAAACAAAAA=</HashCode>
+      <FileName>Enums\LitigationTypes.cs</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>

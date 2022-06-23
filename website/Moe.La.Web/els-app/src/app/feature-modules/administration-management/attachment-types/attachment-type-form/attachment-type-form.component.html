@@ -1,0 +1,44 @@
+<h3 mat-dialog-title *ngIf="attachmentTypeId">
+   تعديل
+</h3>
+<h3 mat-dialog-title *ngIf="!attachmentTypeId">
+   إضافة
+</h3>
+<div mat-dialog-content>
+  <form [formGroup]="form">
+    <div fxLayout="row wrap" fxFlexAlign="center" class="row">
+
+      <div fxFlex.gt-sm="100" fxFlex="100" class="p-10">
+        <mat-form-field>
+          <input matInput formControlName="name" placeholder=" اسم نوع المرفق" autocomplete="off" maxlength="50"
+            required />
+          <mat-error *ngIf="form.controls['name'].hasError('required')"> اسم نوع المرفق مطلوب
+          </mat-error>
+          <mat-hint *ngIf="form.controls['name'].status === 'PENDING'">جاري التحقق...</mat-hint>
+          <mat-error *ngIf="form.controls['name'].hasError('uniqueName')"> اسم نوع المرفق موجود مسبقاً
+          </mat-error>
+        </mat-form-field>
+      </div>
+
+      <div fxFlex.gt-sm="100" fxFlex="100" class="p-10">
+        <mat-form-field>
+          <mat-select matInput formControlName="groupName" placeholder=" تابع لمجموعة" required>
+            <mat-option value="">--اختر--</mat-option>
+            <mat-option *ngFor="let item of groupNames" [value]="item.value">
+              {{ item.nameAr }}</mat-option>
+          </mat-select>
+          <mat-error *ngIf="form.controls['groupName'].hasError('required')"> تابع لمجموعة مطلوب</mat-error>
+        </mat-form-field>
+      </div>
+    </div>
+  </form>
+</div>
+<div mat-dialog-actions>
+  <button mat-raised-button color="primary" [disabled]="!form.valid || form.pristine" (click)="onSubmit()">
+    <span *ngIf="!attachmentTypeId">إضافة</span>
+    <span *ngIf="attachmentTypeId"> تعديل</span>
+  </button>
+  <button type="button" mat-raised-button (click)="onCancel()">
+    إلغاء
+  </button>
+</div>

@@ -1,0 +1,32 @@
+.panel-header {
+    background-color: #f3f4f8;
+  }
+  
+  .disable_ripple:hover {
+    background: #f3f4f8 !important;
+  }
+  .expansion-panel-header.mat-expanded {
+    background: #f3f4f8 !important;
+  }
+  
+  .mat-expansion-panel-header.mat-expanded:focus,
+  .mat-expansion-panel-header.mat-expanded:hover {
+    background-color: #f3f4f8 !important;
+  }
+  
+  .text-color {
+    color: #009081;
+    font-weight: bold;
+  }
+  
+  .width90
+  {
+    width:90%;
+  }
+  mat-icon{
+    color: #00897b !important;
+  }
+  mat-panel-title mat-icon{
+    margin-left: 1rem;
+  }
+  

@@ -1,0 +1,40 @@
+.flex-table {
+  width: 100%;
+
+  @media screen and (max-width: 768px) {
+    &-header {
+      display: none !important;
+    }
+  }
+
+  @media (min-width: 768px) {
+    &-header {
+      display: flex !important;
+      background-color: #f9f9f9;
+      font-weight: bold;
+      font-size: 10pt;
+      height: 34px;
+      padding: 4px;
+
+      div {
+        flex: 1;
+        text-align: center;
+        border-left: solid 1px #fff;
+        border-right: solid 1px #fff;
+      }
+    }
+
+    &-row {
+      display: flex;
+
+      div {
+        flex: 1;
+        text-align: center;
+
+        b {
+          display: none !important;
+        }
+      }
+    }
+  }
+}

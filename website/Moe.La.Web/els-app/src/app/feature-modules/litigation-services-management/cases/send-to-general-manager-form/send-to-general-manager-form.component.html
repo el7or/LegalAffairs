@@ -1,0 +1,38 @@
+<h3 mat-dialog-title>
+ إحالة
+</h3>
+<div mat-dialog-content>
+  <form (submit)="onSubmit()" [formGroup]="form">
+    <div fxLayout="row wrap" fxFlexAlign="center" class="row">
+      <div fxFlex.gt-sm="100" fxFlex="100" class="p-10">
+        <mat-form-field>
+          <mat-select matInput formControlName="branchId" placeholder= "الفرع المختص">
+            <mat-option value="">--اختر--</mat-option>
+            <mat-option *ngFor="let department of departments" [value]="department.id">
+              {{ department.name  }}
+            </mat-option>
+          </mat-select>
+          <mat-error *ngIf="form.controls['branchId'].hasError('required')"> الفرع المختصة مطلوبة  </mat-error>
+
+        </mat-form-field>
+
+      </div>
+      <div fxFlex.gt-sm="100" fxFlex="100" class="p-10">
+        <mat-form-field>
+          <input matInput formControlName="note" placeholder="الملاحظة" autocomplete="off" lettersOnly/>
+          <mat-error *ngIf="form.controls['note'].hasError('required')"> الملاحظة مطلوب</mat-error>
+        </mat-form-field>
+      </div>
+    </div>
+    <section class="form-actions">
+      <div class="button-row">
+        <button mat-raised-button color="primary" [disabled]="!form.valid">
+          <span>إحالة</span>
+        </button>
+        <button type="button" mat-raised-button (click)="onCancel()">
+          إلغاء
+        </button>
+      </div>
+    </section>
+  </form>
+</div>

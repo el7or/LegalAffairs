@@ -1,0 +1,64 @@
+<h3 mat-dialog-title *ngIf="caseCategoryId">
+   تعديل تصنيف
+</h3>
+<h3 mat-dialog-title *ngIf="!caseCategoryId">
+   إضافة تصنيف
+</h3>
+<div mat-dialog-content>
+  <form (submit)="onSubmit()" [formGroup]="form">
+    <div fxLayout="row wrap" fxFlexAlign="center" class="row">
+      <div fxFlex.gt-sm="100" fxFlex="100" class="p-10">
+        <mat-form-field>
+          <mat-select required matInput formControlName="caseSource" placeholder="مصدر القضية"
+            (selectionChange)="onChangeCaseSource()">
+            <mat-option value="">--اختر--</mat-option>
+            <mat-option *ngFor="let caseSource of caseSources" [value]="caseSource.value">
+              {{ caseSource.nameAr }}</mat-option>
+          </mat-select>
+          <mat-error *ngIf="form.controls['caseSource'].hasError('required')"> المصدر مطلوب</mat-error>
+        </mat-form-field>
+      </div>
+
+      <div fxFlex.gt-sm="100" fxFlex="100" class="p-10">
+        <mat-form-field>
+          <mat-select matInput formControlName="mainCategoryId" placeholder="التصنيف الرئيسي" required
+          (selectionChange)="populateFirstSubCategories()">
+            <mat-option *ngFor="let mainCategory of mainCategories" [value]="mainCategory.id">
+              {{ mainCategory.name }}</mat-option>
+          </mat-select>
+          <mat-error *ngIf="form.controls['mainCategoryId'].hasError('required')">التصنيف الرئيسي مطلوب</mat-error>
+        </mat-form-field>
+      </div>
+
+      <div fxFlex.gt-sm="100" fxFlex="100" class="p-10">
+        <mat-form-field>
+          <mat-select matInput formControlName="firstSubCategoryId" placeholder="التصنيف الفرعي الاول" required>
+            <mat-option *ngFor="let firstSubCategory of firstSubCategories" [value]="firstSubCategory.id">
+              {{ firstSubCategory.name }}</mat-option>
+          </mat-select>
+          <mat-error *ngIf="form.controls['firstSubCategoryId'].hasError('required')">التصنيف الفرعي الاول مطلوب</mat-error>
+        </mat-form-field>
+      </div>
+
+      <div fxFlex.gt-sm="100" fxFlex="100" class="p-10">
+        <mat-form-field>
+          <input matInput formControlName="name" placeholder="التصنيف الفرعي الثاني" autocomplete="off" maxlength="100"
+            required />
+          <mat-error *ngIf="form.controls['name'].hasError('required')">اسم التصنيف الفرعي الثاني مطلوب</mat-error>
+        </mat-form-field>
+
+      </div>
+
+    </div>
+  </form>
+</div>
+<div mat-dialog-actions class="screen-actions">
+  <button mat-raised-button color="primary" (click)="onSubmit()" [disabled]="!form.valid || form.pristine">
+    <span *ngIf="!caseCategoryId">إضافة</span>
+    <span *ngIf="caseCategoryId"> تعديل</span>
+  </button>
+
+  <button type="button" mat-raised-button (click)="onCancel()">
+    إلغاء
+  </button>
+</div>

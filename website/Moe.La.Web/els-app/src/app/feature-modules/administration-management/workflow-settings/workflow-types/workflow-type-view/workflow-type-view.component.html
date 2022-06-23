@@ -1,0 +1,58 @@
+<div fxFlex.gt-sm="100" fxFlex="100">
+  <mat-card>
+    <mat-card-content>
+      <div fxLayout="row wrap" class="screen">
+        <ng-container *ngIf="workflowTypeView">
+          <section fxFlex="100">
+            <fieldset>
+              <h2 class="heading">البيانات الأساسية</h2>
+              <div fxLayout="row wrap">
+                <div fxFlex.gt-sm="33" fxFlex="100" class="p-10">
+                  <div>الاسم</div>
+                  <p><b>{{ workflowTypeView.workflowType.typeArName }}</b></p>
+                </div>
+                <div fxFlex.gt-sm="33" fxFlex="100" class="p-10">
+                  <div>مدة الإستحواذ</div>
+                  <p><b>{{ workflowTypeView.workflowType.lockPeriod }}</b> ساعة</p>
+                </div>
+                <div fxFlex.gt-sm="33" fxFlex="100" class="p-10">
+                  <div>الحالة</div>
+                  <p>
+                    <b *ngIf="workflowTypeView.workflowType.isActive">مفعل</b>
+                    <b *ngIf="!workflowTypeView.workflowType.isActive">معطل</b>
+                  </p>
+                </div>
+              </div>
+            </fieldset>
+            <fieldset>
+              <h2 class="heading">الإجراءات</h2>
+              <app-workflow-actions-list [workflowActions]="workflowTypeView.workflowActions">
+              </app-workflow-actions-list>
+            </fieldset>
+            <fieldset>
+              <h2 class="heading">الخطوات</h2>
+              <app-workflow-steps-list [workflowSteps]="workflowTypeView.workflowSteps"></app-workflow-steps-list>
+            </fieldset>
+            <fieldset>
+              <h2 class="heading">تهيئة الخطوات والإجراءات</h2>
+              <app-workflow-steps-actions-list [workflowStepActions]="workflowTypeView.workflowStepsActions">
+              </app-workflow-steps-actions-list>
+            </fieldset>
+          </section>
+          <section class="screen-actions">
+            <button type="button" mat-raised-button color="primary"
+              [routerLink]="['/workflow-settings/workflow-types/edit', workflowTypeView.workflowType.id]">
+              تعديل
+            </button>
+            <button type="button" mat-raised-button>
+              عودة
+            </button>
+          </section>
+        </ng-container>
+        <ng-container *ngIf="!workflowTypeView">
+          <p>لا توجد بيانات للعرض</p>
+        </ng-container>
+      </div>
+    </mat-card-content>
+  </mat-card>
+</div>

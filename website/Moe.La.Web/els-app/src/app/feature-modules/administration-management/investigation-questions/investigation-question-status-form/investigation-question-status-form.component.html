@@ -1,0 +1,32 @@
+
+
+<h3 mat-dialog-title class="modal-title">
+     تصنيف السؤال
+</h3>
+
+<div mat-dialog-content>
+    <form (submit)="onSubmit()" [formGroup]="form">
+        <div fxLayout="row wrap" fxFlexAlign="center" class="row">
+            <div fxFlex.gt-sm="100" fxFlex="100" class="p-10">
+                <mat-form-field>
+                    <mat-select formControlName="status" placeholder="حالة السؤال" required>
+                        <mat-option value="">--اختر--</mat-option>
+                        <mat-option *ngFor="let item of questionsStatuses"
+                            [value]="item.value">
+                            {{ item.nameAr }}</mat-option>
+                    </mat-select>
+                    <mat-error *ngIf="form.controls['status'].hasError('required')"> حالة السؤال مطلوب
+                    </mat-error>
+                </mat-form-field>
+            </div>
+        </div>
+        <section class="screen-actions">
+            <div class="button-row">
+                <button mat-raised-button type="submit" color="primary" [disabled]="!form.valid">حفظ</button>
+                &nbsp;
+                <button mat-raised-button type="button" (click)="onCancel()" >إلغاء</button>
+            </div>
+        </section>
+    </form>
+</div>
+

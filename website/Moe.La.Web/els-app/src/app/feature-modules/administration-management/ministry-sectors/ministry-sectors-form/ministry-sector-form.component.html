@@ -1,0 +1,30 @@
+<h3 mat-dialog-title *ngIf="ministrySectorId">
+  تعديل
+</h3>
+<h3 mat-dialog-title *ngIf="!ministrySectorId">
+  إضافة
+</h3>
+<div mat-dialog-content>
+  <form [formGroup]="form">
+    <div fxLayout="row wrap" fxFlexAlign="center" class="row">
+      <div fxFlex.gt-sm="100" fxFlex="100" class="p-10">
+        <mat-form-field>
+          <input matInput formControlName="name" placeholder="اسم القطاع" autocomplete="off" maxlength="100" required />
+          <mat-error *ngIf="form.controls['name'].hasError('required')">اسم القطاع مطلوب</mat-error>
+          <mat-hint *ngIf="form.controls['name'].status === 'PENDING'">جاري التحقق...</mat-hint>
+          <mat-error *ngIf="form.controls['name'].hasError('uniqueName')">اسم القطاع موجود مسبقاً
+          </mat-error>
+        </mat-form-field>
+      </div>
+    </div>
+  </form>
+</div>
+<div mat-dialog-actions>
+  <button mat-raised-button color="primary" [disabled]="!form.valid || form.pristine" (click)="onSubmit()">
+    <span *ngIf="!ministrySectorId">إضافة</span>
+    <span *ngIf="ministrySectorId"> تعديل</span>
+  </button>
+  <button type="button" mat-raised-button (click)="onCancel()">
+    إلغاء
+  </button>
+</div>

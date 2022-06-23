@@ -1,0 +1,6 @@
+::ng-deep .make-beige {
+  background-color: beige !important;
+}
+table td{
+  cursor: pointer !important;
+}

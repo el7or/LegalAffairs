@@ -1,0 +1,52 @@
+<h3 mat-dialog-title>
+ إضافة عضو
+</h3>
+<div mat-dialog-content>
+  <div fxFlex.gt-sm="100" fxFlex="100">
+    <form (submit)="onSubmit()" [formGroup]="form">
+      <div fxLayout="row wrap" fxFlexAlign="center" class="row">
+
+        <div fxFlex.gt-sm="100" fxFlex="100" class="p-10">
+          <mat-form-field class="example-full-width">
+            <!-- [formControl]="userId"  -->
+            <input type="text" placeholder="اسم العضو" aria-label="Number" matInput formControlName="member"
+             [matAutocomplete]="auto" [ngClass]="
+              form.controls['member'].hasError('selectedMember')
+                ? 'mat-form-field-invalid': 'mat-form-field-valid ng-valid'">
+            <!-- autoActiveFirstOption -->
+            <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayFn">
+              <mat-option *ngFor="let option of filteredOptions | async" [value]="option"
+                style="text-align: right  !important;">
+                {{option.name}}
+              </mat-option>
+            </mat-autocomplete>
+            <mat-error  *ngIf="form.controls['member'].hasError('required')">العضو مطلوب</mat-error>
+            <mat-error  *ngIf="form.controls['member'].hasError('selectedMember')">من فضلك اختر العضو من القائمة</mat-error>
+          </mat-form-field>
+        </div>
+
+        <div fxFlex.gt-sm="100" fxFlex="100" class="p-10">
+          <mat-form-field>
+            <mat-select matInput formControlName="memberType" placeholder="الصفة">
+              <mat-option value="">--اختر--</mat-option>
+              <mat-option [value]=1 *ngIf="!isHeadMemberExist">أمين لجنة</mat-option>
+              <mat-option [value]=2>عضو لجنة</mat-option>
+            </mat-select>
+            <mat-error  *ngIf="form.controls['memberType'].hasError('required')">الصفة مطلوبة</mat-error>
+          </mat-form-field>
+        </div>
+      </div>
+      <section class="screen-actions">
+        <div class="button-row">
+          <button mat-raised-button color="primary" [disabled]="!form.valid">
+            <span>إضافة</span>
+          </button>
+
+          <button type="button" mat-raised-button (click)="onCancel()" >
+            إلغاء
+          </button>
+        </div>
+      </section>
+    </form>
+  </div>
+</div>

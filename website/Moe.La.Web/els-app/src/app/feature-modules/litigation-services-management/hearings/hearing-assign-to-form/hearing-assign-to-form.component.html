@@ -1,0 +1,42 @@
+<h3 mat-dialog-title>
+ تحديد المكلف بحضور الجلسة
+</h3>
+
+<div mat-dialog-content>
+  <form [formGroup]="form">
+    <div fxLayout="row wrap" fxFlexAlign="center" class="row">
+      <div fxFlex.gt-sm="100" fxFlex="100" class="p-10">
+        <!-- <mat-form-field>
+          <input placeholder="اسم الباحث " matInput formControlName="attendant" [matAutocomplete]="auto"
+            (keyup)="filterConsultantsAndResearchers()">
+          <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayFn">
+            <mat-option *ngFor="let attendant of filteredConsultantsAndResearchers" [value]="attendant">
+              {{attendant.firstName}} {{attendant.lastName}}
+            </mat-option>
+          </mat-autocomplete>
+          <mat-error *ngIf="form.controls['attendant'].hasError('required')">
+            اسم الباحث مطلوب
+          </mat-error>
+        </mat-form-field> -->
+        <mat-form-field>
+          <mat-select matInput formControlName="attendant" placeholder="اسم الباحث" required>
+              <mat-option *ngFor="let researcher of researchers" [value]="researcher.id">
+                  {{ researcher.name  }}</mat-option>
+          </mat-select>
+          <mat-error *ngIf="form.controls['attendant'].hasError('required')"> اسم الباحث مطلوب</mat-error>
+      </mat-form-field>
+
+      </div>
+    </div>
+    <section class="screen-actions">
+      <div class="button-row">
+        <button mat-raised-button color="primary" (click)="onSubmit()" type="submit" [disabled]="form.invalid">
+          <span>حفظ</span>
+        </button>
+        <button type="button" mat-raised-button (click)="onCancel()">
+          إلغاء
+        </button>
+      </div>
+    </section>
+  </form>
+</div>

@@ -1,0 +1,49 @@
+<h3 mat-dialog-title *ngIf="courtId">
+  تعديل
+</h3>
+<h3 mat-dialog-title *ngIf="!courtId">
+  إضافة
+</h3>
+<div mat-dialog-content>
+  <form [formGroup]="form">
+    <div fxLayout="row wrap" fxFlexAlign="center" class="row">
+      <div fxFlex.gt-sm="100" fxFlex="100" class="p-10">
+        <mat-form-field>
+          <mat-select matInput formControlName="courtCategory" placeholder="فئة المحكمة" required>
+            <mat-option value="">--اختر--</mat-option>
+            <mat-option *ngFor="let type of courtCategories" [value]="type.value">{{ type.nameAr }}</mat-option>
+          </mat-select>
+          <mat-error *ngIf="form.controls['courtCategory'].hasError('required')">فئة المحكمة مطلوبة </mat-error>
+        </mat-form-field>
+      </div>
+      <div fxFlex.gt-sm="100" fxFlex="100" class="p-10">
+        <mat-form-field>
+          <mat-select matInput formControlName="litigationType" placeholder="نوع المحكمة" required>
+            <mat-option value="">--اختر--</mat-option>
+            <mat-option *ngFor="let type of courtTypes" [value]="type.value">
+              {{ type.nameAr }}
+            </mat-option>
+          </mat-select>
+          <mat-error *ngIf="form.controls['litigationType'].hasError('required')">نوع المحكمة مطلوب</mat-error>
+        </mat-form-field>
+      </div>
+      <div fxFlex.gt-sm="100" fxFlex="100" class="p-10">
+        <mat-form-field>
+          <input matInput formControlName="name" maxlength="50" placeholder="اسم المحكمة" autocomplete="off" required />
+          <mat-error *ngIf="form.controls['name'].hasError('required')">اسم المحكمة مطلوب</mat-error>
+          <mat-hint *ngIf="form.controls['name'].status === 'PENDING'">جاري التحقق...</mat-hint>
+          <mat-error *ngIf="form.controls['name'].hasError('uniqueName')"> اسم المحكمة موجود مسبقاً</mat-error>
+        </mat-form-field>
+      </div>
+    </div>
+  </form>
+</div>
+<div mat-dialog-actions>
+  <button mat-raised-button color="primary" [disabled]="!form.valid || form.pristine" (click)="onSubmit()">
+    <span *ngIf="!courtId">إضافة</span>
+    <span *ngIf="courtId"> تعديل</span>
+  </button>
+  <button type="button" mat-raised-button (click)="onCancel()">
+    إلغاء
+  </button>
+</div>

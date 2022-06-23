@@ -1,0 +1,20 @@
+<h3 mat-dialog-title>
+ تنبيه
+</h3>
+<div mat-dialog-content>
+    <div fxLayout="row wrap" fxFlexAlign="center" class="row">
+
+      <div fxFlex.gt-sm="100" fxFlex="100" class="p-10">
+        <div *ngFor="let data of errorList">
+          {{data}}
+        </div>
+      </div>
+    </div>
+    <section class="screen-actions">
+      <div class="button-row">
+        <button type="button" mat-raised-button (click)="onCancel()" color="primary">
+          حسناً
+        </button>
+      </div>
+    </section>
+</div>

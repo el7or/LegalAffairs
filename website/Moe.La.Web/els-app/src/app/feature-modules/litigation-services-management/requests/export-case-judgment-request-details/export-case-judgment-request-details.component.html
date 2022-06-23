@@ -1,0 +1,130 @@
+<fieldset>
+  <h2 class="heading">بيانات طلب تصدير الحكم</h2>
+  <div *ngIf="request" fxLayout="row wrap" fxFlexAlign="center" class="entity-details p-10">
+    <div fxLayout="column" fxFlex.gt-sm="100" fxFlex="100">
+      <b>الملاحظات:</b>
+      <span>{{request.request.note}}</span>
+    </div>
+    <div fxLayout="column" fxFlex="100">
+      <b>النموذج :</b>
+      <div [innerHtml]="request.request?.letter?.text" class="word-break"></div>
+    </div>
+    <div fxLayout="column" fxFlex="100" *ngIf="request.request.requestStatus.id==RequestStatus.Returned">
+      <b>سبب إعادة الصياغة:</b>
+      <span>{{request.replyNote}}</span>
+    </div>
+  </div>
+
+  <div fxLayout="row wrap" fxFlexAlign="center" class="entity-details" *ngIf="caseDetails?.caseRule&&!readOnly">
+
+    <div fxLayout="column" fxFlex.gt-sm="50" fxFlex="100">
+      <span>مصدر القضية</span>
+      <span>
+        {{ caseDetails.caseSource.name }}
+      </span>
+    </div>
+    <div fxLayout="column" fxFlex.gt-sm="50" fxFlex="100">
+      <span>رقم القضية </span>
+      <span>
+        {{ caseDetails.caseNumberInSource }}
+      </span>
+    </div>
+    <div fxLayout="column" fxFlex.gt-sm="50" fxFlex="100">
+      <span>المحكمة</span>
+      <span>
+        {{ caseDetails.court.name }}
+      </span>
+    </div>
+    <div fxLayout="column" fxFlex.gt-sm="50" fxFlex="100">
+      <span>درجة الترافع</span>
+      <span>
+        {{ caseDetails.litigationType.name }}
+      </span>
+    </div>
+    <div fxLayout="column" fxFlex.gt-sm="50" fxFlex="100">
+      <span>رقم الحكم</span>
+      <span>{{caseDetails?.caseRule?.id}}</span>
+    </div>
+    <div fxLayout="column" fxFlex.gt-sm="50" fxFlex="100">
+      <span>نوع الحكم</span>
+      <span>{{caseDetails.caseRule.judgementResult.name}}</span>
+    </div>
+    <div fxLayout="column" fxFlex.gt-sm="50" fxFlex="100">
+      <span>درجة الحكم</span>
+      <span>{{caseDetails.litigationType.name}}</span>
+    </div>
+    <div fxLayout="column" fxFlex.gt-sm="50" fxFlex="100"
+      *ngIf="caseDetails.caseRule.caseRuleMinistryDepartments?.length">
+      <span>الجهة المعنية بالحكم</span>
+      <span>القطاع : {{caseDetails.caseRule?.ministrySector}}</span>
+      <span>
+        الإدارة :
+        <li *ngFor="let department of caseDetails.caseRule.caseRuleMinistryDepartments">
+
+          {{department?.name}}
+        </li>
+      </span>
+    </div>
+    <div fxLayout="column" fxFlex.gt-sm="100" fxFlex="100">
+      <span>منطوق الحكم</span>
+      <span>{{caseDetails.caseRule.judgementText}}</span>
+    </div>
+
+    <div fxLayout="column" fxFlex.gt-sm="100" fxFlex="100">
+      <span>مختصر الحكم</span>
+      <span>{{caseDetails.caseRule.judgmentBrief}}</span>
+    </div>
+
+    <div fxLayout="column" fxFlex="100">
+      <b>رقم المعاملة فى الاتصالات الادارية:</b>
+      <span
+        *ngIf="request.transactionNumberInAdministrativeCommunications">{{request.transactionNumberInAdministrativeCommunications}}</span>
+      <span *ngIf="!request.transactionNumberInAdministrativeCommunications">-----</span>
+    </div>
+    <!-- <div fxLayout="column" fxFlex.gt-sm="50" fxFlex="100">
+                                        <span>رقم المعاملة الوارد في الاتصالات الادارية</span>
+                                        <span>{{caseDetails.caseRule.importRefNo}}</span>
+                                    </div>
+
+                                    <div fxLayout="column" fxFlex.gt-sm="50" fxFlex="100">
+                                        <span>تاريخ المعاملة الوارد في الاتصالات الادارية</span>
+                                        <span *ngIf="caseDetails?.caseRule?.importRefDate">
+                                            {{caseDetails.caseRule.importRefDate | date : 'yyyy-MM-dd'}}
+                                            {{caseDetails.caseRule.importRefDate | arDayOfWeek}}
+                                            {{caseDetails.caseRule.importRefDateHigri}}</span>
+                                    </div>
+                                    <div fxLayout="column" fxFlex.gt-sm="50" fxFlex="100">
+                                        <span>رقم المعاملة الصادر في الاتصالات الادارية</span>
+                                        <span>{{caseDetails.caseRule.exportRefNo}}</span>
+                                    </div>
+
+                                    <div fxLayout="column" fxFlex.gt-sm="50" fxFlex="100">
+                                        <span>تاريخ المعاملة الصادر في الاتصالات الادارية</span>
+                                        <span *ngIf="caseDetails?.caseRule?.exportRefDate">
+                                            {{caseDetails.caseRule.exportRefDate | date : 'yyyy-MM-dd'}}
+                                            {{caseDetails.caseRule.exportRefDate |arDayOfWeek}}
+                                            {{caseDetails.caseRule.exportRefDateHigri}}</span>
+                                    </div> -->
+
+  </div>
+</fieldset>
+
+<section class="screen-actions" *ngIf="!readOnly">
+  <button mat-raised-button color="primary" type="button" (click)="replyExportCaseJudgmentRequest(RequestStatus.New)"
+    *ngIf="request.request.requestStatus.id==RequestStatus.Draft && isLitigationManager">
+    <span>تقديم الطلب</span>
+  </button>
+  <button mat-raised-button type="button" (click)="replyExportCaseJudgmentRequest(RequestStatus.Returned)"
+    *ngIf="(request.request.requestStatus.id==RequestStatus.New||request.request.requestStatus.id==RequestStatus.Modified) && authService.checkRole(AppRole.GeneralSupervisor)">
+    إعادة الصياغة
+  </button>
+  <button mat-raised-button color="primary" type="submit"
+    (click)="replyExportCaseJudgmentRequest(RequestStatus.Approved)"
+    *ngIf="(request.request.requestStatus.id==RequestStatus.Modified || request.request.requestStatus.id==RequestStatus.New) && authService.checkRole(AppRole.GeneralSupervisor)">
+    <span>اعتماد الطلب</span>
+  </button>
+  <button type="button" mat-raised-button color="primary" (click)="exportRequest()"
+    *ngIf=" authService.checkRole(AppRole.AdministrativeCommunicationSpecialist) && request.request.requestStatus.id== RequestStatus.Approved">
+    <span>تصدير الطلب</span>
+  </button>
+</section>

@@ -1,0 +1,43 @@
+<fieldset>
+  <h2 class="heading">بيانات طلب تغيير باحث</h2>
+  <div *ngIf="requestFull" fxLayout="row wrap" fxFlexAlign="center" class="entity-details p-10">
+    <div fxLayout="column" fxFlex.gt-sm="66" fxFlex="100">
+      <span>رقم القضية</span>
+      <span>{{requestFull.caseId}}</span>
+    </div>
+    <div fxLayout="column" fxFlex.gt-sm="66" fxFlex="100">
+      <span>سبب طلب التغيير</span>
+      <span>{{requestFull.request.note}}</span>
+    </div>
+    <div fxLayout="column" fxFlex.gt-sm="33" fxFlex="100">
+      <span>الباحث المراد تغييره</span>
+      <span>{{requestFull.currentResearcher.firstName +' ' + requestFull.currentResearcher.lastName}}</span>
+    </div>
+    <div fxLayout="column" fxFlex.gt-sm="66" fxFlex="100">
+      <span>ملاحظة الرد على الطلب</span>
+      <span>{{requestFull.replyNote}}</span>
+    </div>
+    <div fxLayout="column" fxFlex.gt-sm="33" fxFlex="100">
+      <span>تاريخ الرد</span>
+      <span *ngIf="requestFull.replyDate">
+        {{requestFull.replyDate | date : 'yyyy-MM-dd'}}
+        {{requestFull.replyDate | arDayOfWeek }}
+        {{requestFull.replyDateHigri}} </span>
+    </div>
+    <div fxLayout="column" fxFlex.gt-sm="33" fxFlex="100"
+    *ngIf="requestFull.request.requestStatus.id==RequestStatus.Accepted">
+      <span>الباحث المكلف</span>
+      <span>{{requestFull.newResearcher.firstName +' ' + requestFull.newResearcher.lastName}}</span>
+    </div>
+  </div>
+</fieldset>
+
+<section class="screen-actions">
+  <button mat-raised-button
+    *ngIf="requestFull.request.requestStatus.id==RequestStatus.New  &&  (isRegionsSupervisor||isLitigationManager || isBranchManager)"
+    type="button" (click)="onAccept()" color="primary">موافق</button>
+    <button mat-raised-button
+    *ngIf="requestFull.request.requestStatus.id==RequestStatus.New &&  (isRegionsSupervisor||isLitigationManager || isBranchManager)"
+    type="button" (click)="onReject()" color="primary">رفض</button>
+  <button mat-raised-button (click)="location.back()">رجوع</button>
+</section>

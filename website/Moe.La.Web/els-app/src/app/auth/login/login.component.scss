@@ -1,0 +1,189 @@
+@import '../../../assets/styles/custom-variable';
+
+.login-register .login-register-box {
+  max-width: 515px;
+  padding-top: 0px;
+}
+
+.mat-flat-button.mat-primary,
+.mat-raised-button.mat-primary,
+.mat-fab.mat-primary,
+.mat-mini-fab.mat-primary {
+  background-color: #009688;
+  border-radius: 30px;
+}
+
+.mat-card {
+  border-radius: 12px;
+  border-bottom: 5px solid $color4;
+  box-shadow: 0px 0px 50px rgba(178, 178, 178, 0.75) !important;
+  -webkit-box-shadow: 0px 0px 50px rgba(178, 178, 178, 0.75);
+  margin: 30px 15px;
+
+  .mat-card-content {
+    padding: 45px 70px 30px 70px;
+  }
+
+  h3 {
+    color: $color2;
+    font-weight: bold;
+    margin: 0px;
+  }
+
+  h4 {
+    color: #b1b1b1;
+    font-weight: 400;
+    font-size: 16px;
+  }
+}
+
+.login-register {
+  background-position: right;
+
+  .login-form {
+    direction: rtl;
+
+    .mat-form-field {
+      font-weight: 500;
+      line-height: 1.4;
+      text-align: right;
+      color: #adadad;
+    }
+  }
+}
+
+.Login-footer {
+  width: 80%;
+
+  p {
+    color: $color2;
+    font-weight: bold;
+
+    &:last-child {
+      color: $color4;
+    }
+  }
+}
+
+
+/*
+.HelpBTn{
+    background-color: #2e2e2e;
+    position: absolute;
+    right: -35px;
+    transform: rotate(-90deg);
+    color: #fff;
+    font-weight: 500;
+    font-size: 27px;
+    padding: 1px 25px 20px 25px;
+    transition: 0.2s ease-in;
+    &.minitoggle{
+        right: 240px;
+    }
+}
+.HelpDiv{
+    position: absolute;
+    
+    transition: 0.2s ease-in;
+    &.minitoggle{
+        right: 0;
+    }
+    &.maxtoggle{
+        right: -240px;
+    }
+}
+
+*/
+
+.helpCointainer {
+  display: inline-block;
+  position: fixed;
+  right: -265px;
+  top: 30%;
+  transition: .4s cubic-bezier(.25, .46, .45, .94);
+  z-index: 10;
+  text-align: center;
+
+  .HelpBTn {
+    display: inline-block;
+    vertical-align: middle;
+    top: 38%;
+    position: absolute;
+    left: -62px;
+    cursor: pointer;
+    background-color: #2e2e2e;
+    color: #fff;
+    font-weight: 500;
+    font-size: 20px;
+    padding: 0px 22px 8px 22px;
+    transform: rotate(-90deg);
+    margin: 0;
+    outline: 0;
+    height: initial;
+  }
+
+  &.is-open {
+    right: -15px;
+  }
+
+  .mat-card {
+    width: 250px;
+    border-radius: 0px;
+    border-bottom: 0px solid #f6b34f;
+    padding: 20px !important;
+    border: 1px solid #cac2c2;
+
+    .mat-raised-button {
+      background-color: #62c3b6;
+      background: linear-gradient(180deg, #62c3b6 0%, #009081 100%);
+      color: #fff;
+      font-weight: bold;
+      font-size: 16px;
+      padding: 0px 0 5px 0px;
+      margin-bottom: 10px;
+    }
+
+    a {
+      color: $color2;
+    }
+  }
+}
+
+/*-- ============================================================== 
+ Ipad & above all(768px) 
+ ============================================================== */
+
+@media(max-width:768px) {
+  .Login-footer {
+    width: 100%;
+    flex-direction: column !important;
+  }
+
+  .login-register {
+    place-content: start !important;
+
+    .login-register-box {
+      max-width: 100%;
+      padding-top: 0px;
+
+      img {
+      }
+
+      .mat-card .mat-card-content {
+        padding: 25px 25px;
+      }
+    }
+  }
+
+  .helpCointainer .HelpBTn {
+    font-size: 16px;
+    padding: 0px 15px 10px 15px;
+    line-height: 1;
+    left: -40px;
+  }
+}
+
+.img-icon-login {
+  margin: 0 auto;
+  width: 50px;
+}

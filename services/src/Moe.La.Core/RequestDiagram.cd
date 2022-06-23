@@ -1,0 +1,126 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="Moe.La.Core.Entities.Request">
+    <Position X="6.25" Y="6" Width="2" />
+    <TypeIdentifier>
+      <HashCode>AASAEAAIAEAEAAAAAAAJBAAAAAAEAERAIAAABBkIAAE=</HashCode>
+      <FileName>Entities\Requests\Request.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Property Name="Receiver" />
+      <Property Name="RelatedRequest" />
+      <Property Name="RequestStatus" />
+      <Property Name="RequestType" />
+      <Property Name="SendingType" />
+    </ShowAsAssociation>
+    <ShowAsCollectionAssociation>
+      <Property Name="RequestTransactions" />
+    </ShowAsCollectionAssociation>
+  </Class>
+  <Class Name="Moe.La.Core.Entities.AppUser" Collapsed="true">
+    <Position X="6" Y="13.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>CAQAEGgAABIQIIAAAABCABAAAgACAAgAIAAAAQAJCQk=</HashCode>
+      <FileName>Entities\AppUser.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Moe.La.Core.Entities.RequestTransaction">
+    <Position X="1" Y="6.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAgAAQAAAAAAAAAAAAAgAVAAAAAAAAAAAE=</HashCode>
+      <FileName>Entities\Requests\RequestTransaction.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Moe.La.Core.Entities.AddingLegalMemoToHearingRequest">
+    <Position X="10" Y="11" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAgAAAEAQAAAAAAAAAAAAAgAgCAIAAAAAAAAAAA=</HashCode>
+      <FileName>Entities\Requests\AddingLegalMemoToHearingRequest.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Property Name="Request" />
+    </ShowAsAssociation>
+  </Class>
+  <Class Name="Moe.La.Core.Entities.CaseClosingRequest">
+    <Position X="7" Y="11" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAACAAAAAAAEAAAAAAAAAAAAAAAAgCAIAAACAAAAAAA=</HashCode>
+      <FileName>Entities\Requests\CaseClosingRequest.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Property Name="Request" />
+    </ShowAsAssociation>
+  </Class>
+  <Class Name="Moe.La.Core.Entities.CaseSupportingDocumentRequest">
+    <Position X="9" Y="2.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAACAAACAAEAAAAAAAAgQAAAAAgAgCALAgACAQAIAAA=</HashCode>
+      <FileName>Entities\Requests\CaseSupportingDocumentRequest.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Property Name="Request" />
+    </ShowAsAssociation>
+  </Class>
+  <Class Name="Moe.La.Core.Entities.ChangeResearcherRequest">
+    <Position X="4" Y="9.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAACAAgAAAAAAAAAAAAAAAAAgAAAgCAIAAAAAEAAAIA=</HashCode>
+      <FileName>Entities\Requests\ChangeResearcherRequest.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Property Name="Request" />
+    </ShowAsAssociation>
+  </Class>
+  <Class Name="Moe.La.Core.Entities.RequestNote">
+    <Position X="4" Y="4" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAIAAAAAAAQAEAAAAAAAAAAAgABAAAAACAAAAAE=</HashCode>
+      <FileName>Entities\Requests\RequestNote.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Property Name="Request" />
+    </ShowAsAssociation>
+  </Class>
+  <Class Name="Moe.La.Core.Entities.RequestsMoamalat">
+    <Position X="9" Y="6.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>IAAAEAAAAEAAAAQAAAAAAAAAAIAAgABAIAAAAAAAAAE=</HashCode>
+      <FileName>Entities\Requests\RequestMoamalat.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Property Name="Request" />
+    </ShowAsAssociation>
+  </Class>
+  <Class Name="Moe.La.Core.Entities.ConsultationSupportingDocumentRequest">
+    <Position X="4" Y="7" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAQAAAAAIAAAAAACgAAAAAAAAQAAQAA=</HashCode>
+      <FileName>Entities\Requests\ConsultationSupportingDocumentRequest.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Property Name="Request" />
+    </ShowAsAssociation>
+  </Class>
+  <Enum Name="Moe.La.Core.Enums.RequestStatuses">
+    <Position X="12" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAQAACAAQACGAAABAAAAAAABAAAAAAAAAAAAKAAAA=</HashCode>
+      <FileName>Enums\RequestStatuses.cs</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="Moe.La.Core.Enums.RequestTypes">
+    <Position X="5.75" Y="1" Width="2.25" />
+    <TypeIdentifier>
+      <HashCode>AEBAAAAAAAAAAAAAAAAAABEAEgAAAAAAAAAAABAAAAA=</HashCode>
+      <FileName>Enums\RequestTypes.cs</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="Moe.La.Core.Enums.SendingTypes">
+    <Position X="12" Y="7.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAABAAAAAAAAAAAAEAAAAAAAEAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Enums\SendingTypes.cs</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>

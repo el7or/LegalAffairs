@@ -1,0 +1,43 @@
+<h3 mat-dialog-title *ngIf="ministryDepartmentId">
+  تعديل
+</h3>
+<h3 mat-dialog-title *ngIf="!ministryDepartmentId">
+  إضافة
+</h3>
+<div mat-dialog-content>
+  <form [formGroup]="form">
+    <div fxLayout="row wrap" fxFlexAlign="center" class="row">
+
+      <div fxFlex.gt-sm="100" fxFlex="100" class="p-10">
+        <mat-form-field>
+          <input matInput formControlName="name" placeholder="اسم الإدارة" autocomplete="off" maxlength="100"
+            required />
+          <mat-error *ngIf="form.controls['name'].hasError('required')">اسم الإدارة مطلوب</mat-error>
+          <mat-hint *ngIf="form.controls['name'].status === 'PENDING'">جاري التحقق...</mat-hint>
+          <mat-error *ngIf="form.controls['name'].hasError('uniqueName')">اسم الإدارة موجود مسبقاً
+          </mat-error>
+        </mat-form-field>
+
+      </div>
+
+      <div fxFlex.gt-sm="100" fxFlex="100" class="p-10">
+        <mat-form-field>
+          <mat-select matInput formControlName="ministrySectorId" placeholder="القطاع" required>
+            <mat-option *ngFor="let ministrySector of ministrySectors" [value]="ministrySector.id">
+              {{ ministrySector.name }}</mat-option>
+          </mat-select>
+          <mat-error *ngIf="form.controls['ministrySectorId'].hasError('required')"> القطاع مطلوب</mat-error>
+        </mat-form-field>
+      </div>
+    </div>
+  </form>
+</div>
+<div mat-dialog-actions>
+  <button mat-raised-button color="primary" [disabled]="!form.valid || form.pristine" (click)="onSubmit()">
+    <span *ngIf="!ministryDepartmentId">إضافة</span>
+    <span *ngIf="ministryDepartmentId"> تعديل</span>
+  </button>
+  <button type="button" mat-raised-button (click)="onCancel()">
+    إلغاء
+  </button>
+</div>

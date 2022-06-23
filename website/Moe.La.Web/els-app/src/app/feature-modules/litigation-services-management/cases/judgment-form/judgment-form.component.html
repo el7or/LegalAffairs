@@ -1,0 +1,86 @@
+<h3 mat-dialog-title>
+بيانات الحكم في القضية
+</h3>
+
+<div mat-dialog-content>
+  <form (submit)="onSubmit()" [formGroup]="form">
+    <div fxLayout="row wrap" fxFlexAlign="center" class="row">
+      <div fxFlex.gt-sm="50" fxFlex="100" class="p-10">
+        <mat-form-field>
+          <input matInput formControlName="refNo" placeholder="رقم المعاملة" autocomplete="off" maxlength="30"
+            digitsOnly />
+        </mat-form-field>
+      </div>
+      <div fxFlex.gt-sm="50" fxFlex="100">
+        <date-picker-dual controlName="refDate" [placeholder]="'تاريخ المعاملة'"></date-picker-dual>
+      </div>
+      <div fxFlex.gt-sm="100" fxFlex="100" class="p-10">
+        <mat-form-field>
+          <textarea [value]="form.controls['judgementText'].value | replaceLineBreaks" matInput formControlName="judgementText" placeholder="نص الحكم" maxlength="2000"
+          #judgementText></textarea>
+          <mat-hint>عدد الاحرف يجب ان لا يزيد عن 2000 حرف</mat-hint>
+          <mat-hint>2000/{{judgementText.value?.length || 0}}</mat-hint>
+          <mat-error *ngIf="form.controls['judgementText'].hasError('required')"> نص الحكم مطلوب</mat-error>
+        </mat-form-field>
+      </div>
+      <div fxFlex.gt-sm="50" fxFlex="100" class="p-10">
+        <mat-form-field>
+          <mat-select formControlName="litigationType" placeholder="نوع الحكم">
+            <mat-option value="">--اختر--</mat-option>
+            <mat-option *ngFor="let litigationType of litigationTypes" [value]="litigationType.value">
+              {{ litigationType.nameAr }}</mat-option>
+          </mat-select>
+          <mat-error *ngIf="form.controls['litigationType'].hasError('required')"> درجة الحكم مطلوب</mat-error>
+        </mat-form-field>
+      </div>
+
+      <div fxFlex.gt-sm="50" fxFlex="100" class="p-10">
+        <mat-form-field>
+          <mat-select formControlName="judgementResult" placeholder="نوع الحكم">
+            <mat-option value="">--اختر--</mat-option>
+            <mat-option *ngFor="let judgementResult of judgementResults" [value]="judgementResult.value">
+              {{ judgementResult.nameAr }}</mat-option>
+          </mat-select>
+          <mat-error *ngIf="form.controls['judgementResult'].hasError('required')"> نوع الحكم مطلوب</mat-error>
+        </mat-form-field>
+      </div>
+
+      <div fxFlex.gt-sm="50" fxFlex="100" class="p-10">
+        <mat-form-field>
+          <input matInput formControlName="judgmentBrief" placeholder="مختصر الحكم" autocomplete="off" lettersOnly />
+        </mat-form-field>
+      </div>
+
+      <div fxFlex.gt-sm="50" fxFlex="100" class="p-10">
+        <mat-form-field>
+          <mat-select formControlName="ministrySectorId" placeholder="قطاع الوزارة">
+            <mat-option *ngFor="let ministrySector of ministrySectors" [value]="ministrySector.id">
+              {{ ministrySector.name }}</mat-option>
+          </mat-select>
+          <mat-error *ngIf="form.controls['ministrySectorId'].hasError('required')"> قطاع الوزارة مطلوب</mat-error>
+        </mat-form-field>
+      </div>
+
+      <div fxFlex.gt-sm="50" fxFlex="100" class="p-10">
+        <mat-form-field>
+          <mat-select formControlName="caseRuleGeneralManagementIds" multiple placeholder="إدارة الوزارة">
+            <mat-option *ngFor="let department of departments" [value]="department.id">
+              {{ department.name }}</mat-option>
+          </mat-select>
+          <mat-error *ngIf="form.controls['caseRuleGeneralManagementIds'].hasError('required')"> إدارة مطلوب</mat-error>
+        </mat-form-field>
+      </div>
+
+    </div>
+    <section class="screen-actions">
+      <div class="button-row">
+        <button mat-raised-button color="primary" [disabled]="!form.valid">
+          <span>حفظ</span>
+        </button>
+        <button type="button" mat-raised-button (click)="onCancel()">
+          إلغاء
+        </button>
+      </div>
+    </section>
+  </form>
+</div>

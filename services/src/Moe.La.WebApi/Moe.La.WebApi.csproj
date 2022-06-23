@@ -1,0 +1,43 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+  <PropertyGroup>
+    <TargetFramework>net5.0</TargetFramework>
+    <Description>This is the RESTful services application for the web client applications.</Description>
+    <Company>Smart Fingers</Company>
+    <Authors>Smart Fingers</Authors>
+    <ProjectGuid>6A0449C2-A9D0-4629-B161-1CFB66D83215</ProjectGuid>
+    <UserSecretsId>c8f09778-1fef-48c7-ad12-e9098e116113</UserSecretsId>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="AutoMapper" Version="8.1.0" />
+    <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="3.0.1" />
+    <PackageReference Include="FluentValidation.AspNetCore" Version="10.2.1" />
+    <PackageReference Include="IronPdf" Version="2021.3.1" />
+    <PackageReference Include="IronXL.Excel" Version="2020.12.2" />
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="5.0.6" />
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="5.0.6" />
+    <PackageReference Include="Microsoft.AspNetCore.SpaServices.Extensions" Version="5.0.6" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="5.0.6">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="5.0.2" />
+    <PackageReference Include="Serilog.AspNetCore" Version="4.1.0" />
+    <PackageReference Include="Serilog.Enrichers.Environment" Version="2.1.3" />
+    <PackageReference Include="Serilog.Enrichers.Process" Version="2.0.1" />
+    <PackageReference Include="Serilog.Enrichers.Thread" Version="3.1.0" />
+    <PackageReference Include="Serilog.Settings.Configuration" Version="3.1.0" />
+    <PackageReference Include="Microsoft.Extensions.Caching.StackExchangeRedis" Version="5.0.1" />
+    <PackageReference Include="StackExchange.Redis" Version="2.2.4" />
+    <PackageReference Include="Swashbuckle.AspNetCore" Version="6.1.4" />
+    <PackageReference Include="System.Drawing.Common" Version="5.0.2" />
+    <PackageReference Include="Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore" Version="5.0.6" />
+    <PackageReference Include="Microsoft.AspNetCore.Components" Version="5.0.6" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Moe.La.Common\Moe.La.Common.csproj" />
+    <ProjectReference Include="..\Moe.La.Core\Moe.La.Core.csproj" />
+    <ProjectReference Include="..\Moe.La.Infrastructure\Moe.La.Infrastructure.csproj" />
+    <ProjectReference Include="..\Moe.La.Integration\Moe.La.Integration.csproj" />
+    <ProjectReference Include="..\Moe.La.ServiceInterface\Moe.La.ServiceInterface.csproj" />
+  </ItemGroup>
+</Project>

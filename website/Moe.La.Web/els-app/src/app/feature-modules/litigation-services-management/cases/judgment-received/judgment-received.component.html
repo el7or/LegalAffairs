@@ -1,0 +1,188 @@
+<mat-card>
+    <mat-card-content>
+      <section class="screen">
+        <form [formGroup]="form">
+          <div fxLayout="row wrap" fxFlexAlign="center" class="entity-details p-10">
+            <div fxLayout="column" fxFlex.gt-sm="50" fxFlex="100" style="border: none;">
+              <span>محكمة/لجنة</span>
+              <span> {{case.court?.name}}</span>
+            </div>
+            <div fxLayout="column" fxFlex.gt-sm="50" fxFlex="100" style="border: none;">
+              <span>الدائرة</span>
+              <span> {{case.circleNumber}}</span>
+            </div>
+            <div fxLayout="column" fxFlex.gt-sm="50" fxFlex="100" style="border: none;">
+              <span>رقم القضية في النظام</span>
+              <span> {{case.id}}</span>
+            </div>
+            <div fxLayout="column" fxFlex.gt-sm="50" fxFlex="100" style="border: none;">
+              <span>رقم القضية في المصدر</span>
+              <span> {{case.caseNumberInSource}}</span>
+            </div>
+            <div fxLayout="column" fxFlex.gt-sm="50" fxFlex="100" style="border: none;">
+              <span>مصدر القضية</span>
+              <span> {{case.caseSource.name}}</span>
+            </div>
+          </div>
+          <section class="screen-content row" fxLayout="row wrap" fxFlexAlign="center">
+            <!-- <div fxFlex.gt-sm="33" fxFlex="100" class="p-10">
+              <mat-form-field>
+                <input matInput formControlName="caseNumber" placeholder="رقم القضية" readonly>
+              </mat-form-field>
+            </div> -->
+            <div fxFlex.gt-sm="50" fxFlex="100" class="p-10">
+              <mat-form-field>
+                <input matInput formControlName="ruleNumber" placeholder="رقم الحكم" digitsOnly maxlength="30">
+              </mat-form-field>
+            </div>
+
+            <div fxFlex.gt-sm="50" fxFlex="100" class="p-10">
+              <mat-form-field>
+                <mat-select formControlName="judgementResult" placeholder="نوع الحكم" required>
+                  <mat-option value="">--اختر--</mat-option>
+                  <mat-option *ngFor="let judgementResult of judgementResults" [value]="judgementResult.value">
+                    {{ judgementResult.nameAr }}</mat-option>
+                </mat-select>
+                <mat-error *ngIf="form.controls['judgementResult'].hasError('required')"> نوع الحكم مطلوب
+                </mat-error>
+              </mat-form-field>
+            </div>
+            <div fxFlex.gt-sm="50" fxFlex="100" class="p-10">
+              <mat-form-field>
+                <textarea [value]="form.controls['judgmentBrief'].value | replaceLineBreaks" matInput formControlName="judgmentBrief" placeholder="مختصر الحكم" rows="3" maxlength="500"
+                #judgmentBrief></textarea>
+                <!-- <mat-hint>عدد الاحرف يجب ان لا يزيد عن 500 حرف</mat-hint> -->
+                <mat-hint>500/{{judgmentBrief.value?.length || 0}}</mat-hint>
+                <mat-error *ngIf="form.controls['judgmentBrief'].errors?.maxlength">مختصر الحكم يجب الا يزيد عن 500 حرف
+                </mat-error>
+              </mat-form-field>
+            </div>
+            <div fxFlex.gt-sm="50" fxFlex="100" class="p-10">
+              <mat-form-field>
+                <textarea matInput [value]="form.controls['judgmentReasons'].value | replaceLineBreaks" formControlName="judgmentReasons" placeholder="الأسباب التى بني عليها الحكم"
+                  rows="3" maxlength="500" #judgmentReasons></textarea>
+                  <!-- <mat-hint>عدد الاحرف يجب ان لا يزيد عن 500 حرف</mat-hint> -->
+                  <mat-hint>500/{{judgmentReasons.value?.length || 0}}</mat-hint>
+                  <mat-error *ngIf="form.controls['judgmentReasons'].errors?.maxlength">الأسباب التى بني عليها الحكم يجب الا
+                  يزيد عن 500 حرف
+                </mat-error>
+              </mat-form-field>
+            </div>
+            <div fxFlex.gt-sm="50" fxFlex="100" class="p-10">
+              <mat-form-field>
+                <textarea matInput [value]="form.controls['feedback'].value | replaceLineBreaks" formControlName="feedback" placeholder="التحليل و الرأي" rows="3" maxlength="500"
+                #feedback></textarea>
+                <!-- <mat-hint>عدد الاحرف يجب ان لا يزيد عن 500 حرف</mat-hint> -->
+                <mat-hint>500/{{feedback.value?.length || 0}}</mat-hint>
+                <mat-error *ngIf="form.controls['feedback'].errors?.maxlength">التحليل و الرأي يجب الا يزيد عن 500 حرف
+                </mat-error>
+              </mat-form-field>
+            </div>
+            <div fxFlex.gt-sm="50" fxFlex="100" class="p-10">
+              <mat-form-field>
+                <textarea matInput [value]="form.controls['finalConclusions'].value | replaceLineBreaks" formControlName="finalConclusions" placeholder="الاستنتاجات النهائية"
+                  rows="3" maxlength="500" #finalConclusions></textarea>
+                  <!-- <mat-hint>عدد الاحرف يجب ان لا يزيد عن 500 حرف</mat-hint> -->
+                  <mat-hint>500/{{finalConclusions.value?.length || 0}}</mat-hint>
+                  <mat-error *ngIf="form.controls['finalConclusions'].errors?.maxlength">الاستنتاجات النهائية يجب الا يزيد
+                  عن 500 حرف
+                </mat-error>
+              </mat-form-field>
+            </div>
+            <div fxFlex.gt-sm="100" fxFlex="100" class="p-10">
+              <mat-form-field>
+                <textarea matInput [value]="form.controls['judgementText'].value | replaceLineBreaks" formControlName="judgementText" required placeholder="منطوق الحكم" rows="3" maxlength="2000"
+                #judgementText></textarea>
+                <!-- <mat-hint>عدد الاحرف يجب ان لا يزيد عن 2000 حرف</mat-hint> -->
+                <mat-hint>2000/{{judgementText.value?.length || 0}}</mat-hint>
+                <mat-error *ngIf="form.controls['judgementText'].hasError('required')">
+                  منطوق الحكم مطلوب
+                </mat-error>
+                <mat-error *ngIf="form.controls['judgementText'].errors?.maxlength">منطوق الحكم يجب الا يزيد عن 2000 حرف
+                </mat-error>
+              </mat-form-field>
+            </div>
+            <div fxLayout="column" fxFlex.gt-sm="100" fxFlex="100">
+              <strong>الجهة المعنية بالحكم</strong>
+
+              <div fxLayout="row" fxFlexAlign="center" style="width: 100%;">
+                <div fxFlex.gt-sm="50" fxFlex="100" class="p-10">
+                  <mat-form-field>
+                    <mat-select formControlName="ministrySectorId" placeholder="قطاع الوزارة"
+                      (selectionChange)="onSelectMinistrySector($event.value)" required>
+                      <mat-option *ngFor="let ministrySector of ministrySectors" [value]="ministrySector.id">
+                        {{ ministrySector.name }}
+                      </mat-option>
+                    </mat-select>
+                    <mat-error *ngIf="form.controls['ministrySectorId'].hasError('required')"> قطاع الوزارة
+                      مطلوب
+                    </mat-error>
+                  </mat-form-field>
+                </div>
+                <div fxFlex.gt-sm="50" fxFlex="100" class="p-10">
+                  <mat-form-field>
+                    <mat-select formControlName="caseRuleMinistryDepartments" multiple placeholder="إدارة الوزارة"
+                      required>
+                      <mat-option *ngFor="let ministryDepartment of ministryDepartments" [value]="ministryDepartment.id">
+                        {{ ministryDepartment.name }}
+                      </mat-option>
+                    </mat-select>
+                    <mat-error *ngIf="form.controls['caseRuleMinistryDepartments'].hasError('required')"> إدارة الوزارة
+                      مطلوبة
+                    </mat-error>
+                  </mat-form-field>
+                </div>
+              </div>
+            </div>
+            <div fxFlex.gt-sm="25" fxFlex="100" class="p-10">
+              <mat-form-field>
+                <input matInput formControlName="importRefNo" placeholder="رقم المعاملة في الاتصالات الإدارية" digitsOnly
+                  maxlength="30">
+              </mat-form-field>
+            </div>
+            <div fxFlex.gt-sm="75" fxFlex="100">
+              <date-picker-dual controlName="importRefDate" [placeholder]="'تاريخ المعاملة الوارد '"></date-picker-dual>
+            </div>
+            <div fxFlex.gt-sm="25" fxFlex="100" class="p-10">
+              <mat-form-field>
+                <input matInput formControlName="exportRefNo" placeholder="رقم المعاملة الصادر " digitsOnly
+                  maxlength="30">
+              </mat-form-field>
+            </div>
+            <div fxFlex.gt-sm="75" fxFlex="100">
+              <date-picker-dual controlName="exportRefDate" [placeholder]="'تاريخ المعاملة الصادر '"></date-picker-dual>
+            </div>
+            <div fxFlex.gt-sm="100" fxFlex="100" class="p-10">
+              <strong>مرفقات الحكم <span class="mat-placeholder-required">*</span></strong>
+              <ng-template mat-tab-label>
+                الملفات المرفقة
+                &nbsp;
+                <span *ngIf="filesCount" class="label label-info" style="font-family:Arial">{{filesCount}}</span>
+              </ng-template>
+              <br />
+              <app-attachments [groupName]="GroupNames.CaseRule" (set-attachments-list)="onJudgmentAttachment($event)"
+                [attachmentsToUpdate]="attachments">
+              </app-attachments>
+            </div>
+          </section>
+          <!-- <div fxLayout="row wrap" fxFlexAlign="center" class="entity-details p-10">
+            <div fxLayout="column" fxFlex.gt-sm="100" fxFlex="100" style="border: none;">
+              <span>طلبات المدعي</span>
+              <span *ngIf="case.prosecutorRequests">لا يوجد طلبات</span>
+              <span *ngFor="let request of  case.prosecutorRequests"> {{request.prosecutorRequestSubject}}</span>
+            </div>
+          </div> -->
+        </form>
+        <section class="screen-actions">
+          <div class="button-row">
+            <button mat-raised-button color="primary" (click)="onSubmit()" type="button" [disabled]="!form.valid">
+              <span>حفظ</span>
+            </button>
+            <button mat-raised-button type="button" (click)="location.back()">
+              إلغاء
+            </button>
+          </div>
+        </section>
+      </section>
+    </mat-card-content>
+  </mat-card>

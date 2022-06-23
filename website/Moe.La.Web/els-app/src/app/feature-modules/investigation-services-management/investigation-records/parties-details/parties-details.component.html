@@ -1,0 +1,124 @@
+<h3 mat-dialog-title>
+ تفاصيل
+</h3>
+
+<div mat-dialog-content>
+    <div fxLayout="row wrap" fxFlexAlign="center" class="entity-details p-10">
+        <div fxLayout="column" fxFlex.gt-sm="50" fxFlex="100" *ngIf="party.commencementDate">
+          <span>تاريخ المباشرة</span>
+          <span>{{party.commencementDate | date:"yyyy-MM-dd"}} &nbsp; {{party.commencementDateOnHijri}}</span>
+        </div>
+        <div fxLayout="column" fxFlex.gt-sm="50" fxFlex="100" *ngIf="party.identityDate">
+          <span>تاريخ الهوية</span>
+          <span>{{party.identityDate | date:"yyyy-MM-dd"}} &nbsp; {{party.identityDateOnHijri}}</span>
+        </div>
+        <div fxLayout="column" fxFlex.gt-sm="50" fxFlex="100" *ngIf="party.identitySource">
+          <span>مصدر الهوية</span>
+          <span>{{party.identitySource}}</span>
+        </div>
+        <div fxLayout="column" fxFlex.gt-sm="50" fxFlex="100" *ngIf="party.appointmentStatus">
+          <span>حالة التعيين</span>
+          <span>{{party.appointmentStatus?.name}}</span>
+        </div>
+        <div fxLayout="column" fxFlex.gt-sm="50" fxFlex="100" *ngIf="party.lastQualificationAttained">
+          <span>آخر مؤهل حصل عليه</span>
+          <span>{{party.lastQualificationAttained}}</span>
+        </div>
+    </div>
+    <!--Evaluation-->
+    <div class="responsive-table screen-table"  *ngIf="party.evaluations.length>0">
+        <div>التقديرات</div>
+        <table mat-table [dataSource]="evaluationsDataSource">
+          <ng-container matColumnDef="position">
+            <th mat-header-cell *matHeaderCellDef> # </th>
+            <td mat-cell *matCellDef="let element; let i = index">
+                {{(i+1).toLocaleString("ar-SA")}}
+            </td>
+          </ng-container>
+          <ng-container matColumnDef="percentage">
+            <th mat-header-cell *matHeaderCellDef> التقدير </th>
+            <td mat-cell *matCellDef="let evaluation"> {{evaluation.percentage}} </td>
+          </ng-container>
+          <ng-container matColumnDef="year">
+            <th mat-header-cell *matHeaderCellDef> السنة </th>
+            <td mat-cell *matCellDef="let evaluation"> {{evaluation.year}} </td>
+          </ng-container>
+          <tr mat-header-row *matHeaderRowDef="evaluationDisplayedColumns"></tr>
+          <tr mat-row *matRowDef="let row; columns: evaluationDisplayedColumns;"></tr>
+          <tr class="mat-row" *matNoDataRow>
+            <td class="mat-cell" colspan="6" style="text-align: center;">لا يوجد نتائج للبيانات.</td>
+          </tr>
+        </table>
+    </div>
+    <!--penalities-->
+    <div class="responsive-table screen-table" *ngIf="party.investigationPartyPenalties.length>0">
+        <div>الجزاءات</div>
+        <table mat-table [dataSource]="penalitiesDataSource">
+          <ng-container matColumnDef="position">
+            <th mat-header-cell *matHeaderCellDef> # </th>
+            <td mat-cell *matCellDef="let element; let i = index">
+                {{(i+1).toLocaleString("ar-SA")}}
+            </td>
+          </ng-container>
+          <ng-container matColumnDef="penalty">
+            <th mat-header-cell *matHeaderCellDef> اسم  الجزاء </th>
+            <td mat-cell *matCellDef="let penalty"> {{penalty.penalty}} </td>
+          </ng-container>
+          <ng-container matColumnDef="reason">
+            <th mat-header-cell *matHeaderCellDef> السبب </th>
+            <td mat-cell *matCellDef="let penalty"> {{penalty.reason}} </td>
+          </ng-container>
+          <ng-container matColumnDef="decisionNumber">
+            <th mat-header-cell *matHeaderCellDef> رقم  القرار </th>
+            <td mat-cell *matCellDef="let penalty"> {{penalty.decisionNumber}} </td>
+          </ng-container>
+          <ng-container matColumnDef="date">
+            <th mat-header-cell *matHeaderCellDef> التاريخ </th>
+            <td mat-cell *matCellDef="let penalty"> {{penalty.date |date:"yyyy-MM-dd" }} &nbsp; {{penalty.dateOnHijri}}</td>
+          </ng-container>
+          <tr mat-header-row *matHeaderRowDef="penalitiesDisplayedColumns"></tr>
+          <tr mat-row *matRowDef="let row; columns: penalitiesDisplayedColumns;"></tr>
+          <tr class="mat-row" *matNoDataRow>
+            <td class="mat-cell" colspan="6" style="text-align: center;">لا يوجد نتائج للبيانات.</td>
+          </tr>
+        </table>
+    </div>
+    <!--Educational-Level-->
+    <div class="responsive-table screen-table"  *ngIf="party.educationalLevels.length>0">
+        <div>المراحل الدراسية</div>
+        <table mat-table [dataSource]="educationLevelDataSource">
+          <ng-container matColumnDef="position">
+            <th mat-header-cell *matHeaderCellDef> # </th>
+            <td mat-cell *matCellDef="let element; let i = index">
+                {{(i+1).toLocaleString("ar-SA")}}
+            </td>
+          </ng-container>
+          <ng-container matColumnDef="educationLevel">
+            <th mat-header-cell *matHeaderCellDef> المرحلة الدراسية </th>
+            <td mat-cell *matCellDef="let educationLevel"> {{educationLevel.educationLevel}} </td>
+          </ng-container>
+          <ng-container matColumnDef="class">
+            <th mat-header-cell *matHeaderCellDef> الصف </th>
+            <td mat-cell *matCellDef="let educationLevel"> {{educationLevel.class}} </td>
+          </ng-container>
+          <ng-container matColumnDef="classNumber">
+            <th mat-header-cell *matHeaderCellDef> الفصل </th>
+            <td mat-cell *matCellDef="let educationLevel"> {{educationLevel.classNumber}} </td>
+          </ng-container>
+          <ng-container matColumnDef="residenceAddress">
+            <th mat-header-cell *matHeaderCellDef> عنوان الاقامة </th>
+            <td mat-cell *matCellDef="let educationLevel"> {{educationLevel.residenceAddress}} </td>
+          </ng-container>
+          <tr mat-header-row *matHeaderRowDef="educationLevelDisplayedColumns"></tr>
+          <tr mat-row *matRowDef="let row; columns: educationLevelDisplayedColumns;"></tr>
+          <tr class="mat-row" *matNoDataRow>
+            <td class="mat-cell" colspan="6" style="text-align: center;">لا يوجد نتائج للبيانات.</td>
+          </tr>
+        </table>
+    </div>
+</div>
+<div mat-dialog-actions>
+  <button type="button" mat-raised-button (click)="onCancel()">
+    إلغاء
+  </button>
+</div>

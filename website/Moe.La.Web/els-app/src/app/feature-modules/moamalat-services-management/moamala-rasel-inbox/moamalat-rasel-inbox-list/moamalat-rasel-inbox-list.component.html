@@ -1,0 +1,170 @@
+<mat-card>
+  <mat-card-content>
+    <section class="screen">
+      <section class="screen-table responsive-table">
+
+        <div fxLayout="row wrap" fxLayoutAlign="space-between center">
+          <div fxLayout="row" fxFlex.gt-sm="50" fxFlex="100">
+            <div class="filter-results">
+              <button mat-flat-button (click)="advancedFilter()">
+                <span *ngIf="!showFilter"> تصفية النتائج </span>
+                <span *ngIf="showFilter"> اخفاء التصفية </span>
+              </button>
+            </div>
+            <div class="free-search">
+              <mat-form-field appearance="outline" [hideRequiredMarker]="true" floatLabel="always">
+                <span matPrefix>
+                  <mat-icon>search</mat-icon>
+                </span>
+                <input matInput placeholder="بحث" [(ngModel)]="searchText" name="searchText" (keyup)="onSearch()"
+                  autocomplete="off" />
+              </mat-form-field>
+            </div>
+          </div>
+          <div fxFlex.gt-sm="50" fxFlex="100" fxHide.sm fxHide.xs>
+            <mat-paginator #paginator [length]="totalItems" [pageIndex]="queryObject.page - 1" showFirstLastButtons
+              [pageSize]="queryObject.pageSize" (page)="onPageChange($event.pageIndex)" hidePageSize="true">
+            </mat-paginator>
+          </div>
+        </div>
+
+        <div *ngIf="showFilter" fxLayout="row wrap">
+          <div fxFlex.gt-sm="100" fxFlex="100">
+            <form class="basic-form" [formGroup]="searchForm" (submit)="onFilter()">
+              <div class="row filter-container" fxLayout="row wrap" fxFlexAlign="center">
+
+                <div fxFlex.gt-sm="33" fxFlex="100" class="p-10">
+                  <mat-form-field>
+                    <mat-select formControlName="status" placeholder="حالة المعاملة">
+                      <mat-option value="">--اختر--</mat-option>
+                      <mat-option [value]="0">الكل</mat-option>
+                      <mat-option [value]="MoamalaRaselStatuses.Imported"> واردة </mat-option>
+                      <mat-option [value]="MoamalaRaselStatuses.Received"> مستلمة </mat-option>
+                    </mat-select>
+                  </mat-form-field>
+                </div>
+                <div fxFlex.gt-sm="33" fxFlex="100" class="p-10">
+                  <mat-form-field>
+                    <mat-select formControlName="itemPrivacy" placeholder="السرية">
+                      <mat-option value="">--اختر--</mat-option>
+                      <mat-option [value]="0">الكل</mat-option>
+                      <mat-option [value]="ConfidentialDegrees.Normal"> عادية </mat-option>
+                      <mat-option [value]="ConfidentialDegrees.Confidential"> سرية </mat-option>
+
+                    </mat-select>
+                  </mat-form-field>
+                </div>
+                <div fxFlex.gt-sm="50" fxFlex="100">
+                  <date-picker-dual controlName="createdOnFrom" [placeholder]="'تاريخ المعاملة من'"></date-picker-dual>
+                </div>
+                <div fxFlex.gt-sm="50" fxFlex="100">
+                  <date-picker-dual controlName="createdOnTo" [placeholder]="'تاريخ المعاملة إلى'"></date-picker-dual>
+                </div>
+                <div fxFlex="100" class="p-10 screen-actions">
+                  <button color="accent" type="submit" mat-raised-button>
+                    تصفية
+                  </button>
+                  <button type="button" mat-raised-button (click)="onClearFilter()">
+                    مسح التصفية
+                  </button>
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+        <table mat-table [dataSource]="dataSource" multiTemplateDataRows class="mat-elevation-z0" matSort
+          matSortActive="gregorianCreatedDate" matSortDirection="asc" matSortDisableClear>
+
+          <ng-container matColumnDef="unifiedNumber">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>الرقم الموحد</th>
+            <td mat-cell *matCellDef="let element; let i = dataIndex">
+              {{element.unifiedNumber}}
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="itemNumber">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>رقم المعاملة</th>
+            <td mat-cell *matCellDef="let element; let i = dataIndex">
+              {{element.itemNumber}}
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="gregorianCreatedDate">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>تاريخ ووقت المعاملة</th>
+            <td mat-cell *matCellDef="let moamala; let i = dataIndex">
+              <span>{{ moamala.createdOn | date: "yyyy-MM-dd" }} &nbsp;
+                {{ moamala.hijriCreatedOn }} &nbsp;
+                {{ moamala.createdOnTime }}</span>
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="subject">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>عنوان المعاملة</th>
+            <td mat-cell *matCellDef="let element; let i = dataIndex">
+              {{element.subject}}
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="comments">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>ملاحظات المعاملة</th>
+            <td mat-cell *matCellDef="let element; let i = dataIndex" style="max-width: 25em;">
+              {{ element.comments | sliceWords : 5 : element }}
+              <a mat-button color="primary" *ngIf="element.isWithViewMore"
+                (click)="element.showViewMore = !element.showViewMore;">
+                <span *ngIf="element.showViewMore">المزيد</span>
+                <span *ngIf="!element.showViewMore">أقل</span>
+              </a>
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="itemPrivacy">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>درجة السرية</th>
+            <td mat-cell *matCellDef="let element; let i = dataIndex">
+              {{element.itemPrivacy?.name}}
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="status">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>حالة المعاملة</th>
+            <td mat-cell *matCellDef="let element; let i = dataIndex">
+              {{element.status?.name}}
+            </td>
+          </ng-container>
+          <!-- Star Column -->
+          <ng-container matColumnDef="actions">
+            <th mat-header-cell *matHeaderCellDef></th>
+            <td mat-cell *matCellDef="let element">
+              <button [matMenuTriggerFor]="profile" mat-icon-button class="m-r-5">
+                <mat-icon>more_vert</mat-icon>
+              </button>
+              <mat-menu #profile="matMenu" class="mymegamenu">
+                <button mat-menu-item color="primary" aria-label="Edit" (click)="receiveMoamalaRasel(element.id)"
+                  *ngIf="element.status.id!=MoamalaRaselStatuses.Received">
+                  <span>استلام</span>
+                </button>
+
+                <button mat-menu-item color="warn" aria-label="Delete" (click)="onDelete(element.id)">
+                  <span>حذف</span>
+                </button>
+              </mat-menu>
+            </td>
+          </ng-container>
+
+          <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+          <tr mat-row *matRowDef="let element; columns: displayedColumns" [class.unread]="element.isRead"></tr>
+
+          <!-- Row shown when there is no matching data. -->
+          <tr class="mat-row" *matNoDataRow>
+            <td class="mat-cell" colspan="9" style="text-align: center;">لا يوجد نتائج للبيانات.</td>
+          </tr>
+        </table>
+
+
+        <mat-paginator #paginator [length]="totalItems" [pageIndex]="queryObject.page - 1" showFirstLastButtons
+          [pageSize]="queryObject.pageSize" (page)="onPageChange($event.pageIndex)" hidePageSize="true">
+        </mat-paginator>
+
+      </section>
+    </section>
+  </mat-card-content>
+</mat-card>

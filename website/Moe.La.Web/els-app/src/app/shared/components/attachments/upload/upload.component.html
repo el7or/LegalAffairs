@@ -1,0 +1,28 @@
+<h3 mat-dialog-title>اختيار نوع الملف</h3>
+
+<div mat-dialog-content>
+
+  <form (submit)="onSubmit()" [formGroup]="form">
+    <div fxLayout="row wrap" fxFlexAlign="center">
+      <div fxFlex="100" class="p-10">
+        <mat-form-field>
+          <mat-select matInput formControlName="attachmentsTypeId" placeholder="نوع الملف" required>
+            <mat-option value="0">--غير مصنف--</mat-option>
+            <mat-option *ngFor="let type of attachmentsTypes" [value]="type.id">
+              {{ type.name }}</mat-option>
+          </mat-select>
+          <mat-error *ngIf="form.controls['attachmentsTypeId'].hasError('required')">نوع الملف مطلوب</mat-error>
+        </mat-form-field>
+      </div>
+    </div>
+  </form>
+</div>
+<div mat-dialog-actions class="screen-actions">
+  <button type="button" mat-raised-button color="primary" (click)="onSubmit()" [disabled]="!form.valid">
+    <span *ngIf="!id">إضافة</span>
+    <span *ngIf="id">تعديل</span>
+  </button>
+  <button type="button" mat-raised-button (click)="onCancel()">
+    إلغاء
+  </button>
+</div>

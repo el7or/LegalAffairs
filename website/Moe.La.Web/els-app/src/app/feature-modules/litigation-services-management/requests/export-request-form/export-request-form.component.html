@@ -1,0 +1,37 @@
+<h3 mat-dialog-title class="modal-title">
+    تصدير الطلب
+</h3>
+
+<section class="screen">
+    <form class="basic-form" (submit)="onSubmit()" [formGroup]="form">
+        <section class="screen-content row" fxLayout="row wrap" fxFlexAlign="center">
+            <div fxFlex.gt-sm="100" fxFlex="100" class="p-10">
+                <mat-form-field>
+                    <input matInput formControlName="transactionNumberInAdministrativeCommunications" required
+                        placeholder="رقم المعاملة">
+                </mat-form-field>
+
+                <mat-error
+                    *ngIf="form.controls['transactionNumberInAdministrativeCommunications'].hasError('required')">رقم
+                    المعاملة مطلوب
+                </mat-error>
+            </div>
+            <div fxFlex.gt-sm="100" fxFlex="100">
+                <date-picker-dual controlName="transactionDateInAdministrativeCommunications" required
+                    [placeholder]="'تاريخ المعاملة'"></date-picker-dual>
+
+                <mat-error *ngIf="form.controls['transactionDateInAdministrativeCommunications'].hasError('required')">
+                    تاريخ المعاملة مطلوب
+                </mat-error>
+            </div>
+        </section>
+
+        <section class="screen-actions">
+            <div class="button-row">
+                <button mat-raised-button type="submit" color="primary" [disabled]="!form.valid">حفظ</button>
+                &nbsp;
+                <button mat-raised-button type="button" (click)="onCancel()">إلغاء</button>
+            </div>
+        </section>
+    </form>
+</section>

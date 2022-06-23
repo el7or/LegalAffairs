@@ -1,0 +1,38 @@
+﻿@model CredentialsDto
+@{
+    ViewBag.Title = "Login";
+}
+  
+<div class="wrap-login100">
+    <span>
+        <img src="images/logo-icon.png">
+    </span>
+    <form class="login100-form validate-form" method="post" asp-controller="Account" asp-action="Login">
+        <span class="login100-form-title p-b-26">
+            إدارة عمليات النظام
+        </span>
+
+        <div class="wrap-input100">
+            <input class="input100" type="text" name="UserName" asp-for="UserName" maxlength="10" autocomplete="off">
+            <span class="focus-input100" data-placeholder="اسم المستخدم"></span>
+        </div>
+
+        <div class="wrap-input100 " data-validate="Enter password">
+            <span class="btn-show-pass">
+                <i class="zmdi zmdi-eye"></i>
+            </span>
+            <input class="input100" type="password" name="Password" asp-for="Password">
+            <span class="focus-input100" data-placeholder="كلمة المرور"></span>
+        </div>
+
+        <div class="container-login100-form-btn">
+            <div class="wrap-login100-form-btn">
+                <div class="login100-form-bgbtn"></div>
+                <button class="login100-form-btn" type="submit">
+                    دخول
+                </button>
+            </div>
+        </div>
+
+    </form>
+</div>

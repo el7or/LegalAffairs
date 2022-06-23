@@ -1,0 +1,52 @@
+<h3 mat-dialog-title>
+  <span>
+ سجل العضو
+  </span>
+  <button mat-icon-button (click)="onCancel()" style="float: left;">
+    <mat-icon>close</mat-icon>
+  </button>
+</h3>
+<br />
+<div class="responsive-table screen-table">
+  <table mat-table [dataSource]="queryResult.items" matSort>
+    <ng-container matColumnDef="startDate">
+      <th mat-header-cell *matHeaderCellDef>
+        تاريخ الإنضمام
+      </th>
+      <td mat-cell *matCellDef="let detail">
+         {{detail.startDate | date : 'yyyy-MM-dd'}}
+         {{detail.startDate | arDayOfWeek}}
+        {{detail.startDateHigri}}
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="endDate">
+      <th mat-header-cell *matHeaderCellDef>
+        تاريخ الخروج
+      </th>
+      <td mat-cell *matCellDef="let detail">
+        <span *ngIf="!detail.isActive">
+           {{detail.endDate | date : 'yyyy-MM-dd'}}
+           {{detail.endDate |arDayOfWeek}}
+           {{detail.endDateHigri}}
+          </span>
+           <span *ngIf="detail.isActive">---------
+            </span>
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="adjective">
+      <th mat-header-cell *matHeaderCellDef>
+        الصفة
+      </th>
+      <td mat-cell *matCellDef="let detail">
+        {{detail.membershipType}}
+      </td>
+    </ng-container>
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+  </table>
+  <!-- <mat-paginator #paginator [length]="queryResult.totalItems" [pageIndex]="queryObject.page - 1" showFirstLastButtons
+    [pageSize]="queryObject.pageSize" (page)="onPageChange($event.pageIndex)" hidePageSize="true">
+  </mat-paginator> -->
+</div>

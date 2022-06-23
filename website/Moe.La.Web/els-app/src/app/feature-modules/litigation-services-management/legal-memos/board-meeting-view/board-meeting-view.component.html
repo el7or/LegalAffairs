@@ -1,0 +1,72 @@
+<mat-card>
+  <mat-card-content>
+    <section fxLayout="row wrap" class="screen" *ngIf="meetingDetails">
+      <section fxFlex="100" class="screen-header">
+        <div fxFlex="50"></div>
+        <div fxFlex="50" fxLayoutAlign="end center">
+          <button mat-button color="primary" (click)="location.back()">
+            الرجوع للقائمة
+          </button>
+        </div>
+      </section>
+
+      <div fxLayout="row wrap" fxFlex="100" fxFlexAlign="center" class="entity-details p-10">
+
+        <div fxLayout="column" fxFlex.gt-sm="33" fxFlex="100">
+          <span>مكان الاجتماع</span>
+          <span>{{ meetingDetails.meetingPlace }}</span>
+        </div>
+
+        <div fxLayout="column" fxFlex.gt-sm="33" fxFlex="100">
+          <span>تاريخ الاجتماع</span>
+          <span>
+            {{ meetingDetails.meetingDate | date : 'yyyy-MM-dd' }}
+            {{ meetingDetails.meetingDate | arDayOfWeek }}
+            {{ meetingDetails.meetingDateHigri }}
+          </span>
+        </div>
+
+        <div fxLayout="column" fxFlex.gt-sm="33" fxFlex="100">
+          <span>وقت الاجتماع</span>
+          <span>
+            {{(meetingDetails.meetingDate | date: 'hh:mm a').replace('AM', 'صباحاً').replace('PM', 'مساءً')}}
+          </span>
+
+        </div>
+
+        <div fxLayout="column" fxFlex.gt-sm="33" fxFlex="100">
+          <span>اسم اللجنة</span>
+          <span>{{ meetingDetails.board }}</span>
+        </div>
+
+        <div fxLayout="column" fxFlex.gt-sm="33" fxFlex="100">
+          <span>اسم المذكرة</span>
+          <span>{{ meetingDetails.memo.name }}</span>
+        </div>
+
+        <div fxLayout="column" fxFlex.gt-sm="33" fxFlex="100">
+          <span>نوع المذكرة</span>
+          <span>{{ meetingDetails.memo.type.name }}</span>
+        </div>
+
+        <div fxLayout="column" fxFlex.gt-sm="100" fxFlex="100">
+          <span>نص المذكرة</span>
+          <div class="well">
+            <span [innerHTML]="meetingDetails.memo.text"></span>
+          </div>
+        </div>
+      </div>
+
+      <section class="screen-actions">
+        <button mat-raised-button (click)="location.back()" class="float-left">
+          العودة
+        </button>
+
+      </section>
+
+
+
+
+    </section>
+  </mat-card-content>
+</mat-card>

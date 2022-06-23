@@ -1,0 +1,30 @@
+<h3 mat-dialog-title>
+  <span *ngIf="!edit"> إضافة</span>
+  <span *ngIf="edit"> تعديل</span>
+</h3>
+<div mat-dialog-content>
+  <form (submit)="onSubmit()" [formGroup]="form">
+    <div fxLayout="row wrap" fxFlexAlign="center" class="row">
+      <div fxFlex.gt-sm="100" fxFlex="100" class="p-10">
+        <mat-form-field>
+          <input matInput formControlName="name" placeholder="اسم المستند المطلوب" autocomplete="off" maxlength="100" required
+            lettersOnly>
+          <mat-error *ngIf="form.controls['name'].hasError('required')">اسم المستند المطلوب</mat-error>
+          <mat-error *ngIf="form.controls['name'].errors?.maxlength">اسم المستند لا يزيد عن 100 حرف</mat-error>
+        </mat-form-field>
+      </div>
+    </div>
+    <section class="screen-actions">
+      <div class="button-row">
+        <button mat-raised-button color="primary" [disabled]="!form.valid">
+          <span *ngIf="!edit">إضافة</span>
+          <span *ngIf="edit">تعديل</span>
+        </button>
+
+        <button type="button" mat-raised-button (click)="onCancel()">
+          إلغاء
+        </button>
+      </div>
+    </section>
+  </form>
+</div>

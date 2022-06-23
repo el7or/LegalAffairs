@@ -1,0 +1,37 @@
+<h3 mat-dialog-title
+  *ngIf="caseStatus == CaseStatus.ReturnedToRegionsSupervisor || caseStatus == CaseStatus.ReceivedByLitigationManager">
+ إعادة
+</h3>
+<h3 mat-dialog-title *ngIf="caseStatus == CaseStatus.SentToRegionsSupervisor">
+ إحالة
+</h3>
+<div mat-dialog-content>
+  <form (submit)="onSubmit()" [formGroup]="form">
+    <div fxLayout="row wrap" fxFlexAlign="center" class="row">
+
+      <div fxFlex.gt-sm="100" fxFlex="100" class="p-10" *ngIf="caseStatus == CaseStatus.ReturnedToRegionsSupervisor || caseStatus == CaseStatus.ReceivedByLitigationManager">
+        <mat-form-field>
+          <input matInput formControlName="note" placeholder="سبب الإعادة" autocomplete="off" lettersOnly />
+          <mat-error *ngIf="form.controls['note'].hasError('required')"> سبب الإعادة مطلوب</mat-error>
+        </mat-form-field>
+      </div>
+      <div fxFlex.gt-sm="100" fxFlex="100" class="p-10"  *ngIf="caseStatus == CaseStatus.SentToRegionsSupervisor">
+        <mat-form-field>
+          <input matInput formControlName="note" placeholder="الملاحظة" autocomplete="off" />
+          <mat-error *ngIf="form.controls['note'].hasError('required')"> الملاحظة مطلوب</mat-error>
+        </mat-form-field>
+      </div>
+    </div>
+  </form>
+</div>
+
+<div mat-dialog-actions class="screen-actions">
+  <button type="button" mat-raised-button color="primary" (click)="onSubmit()" [disabled]="!form.valid">
+    <span  *ngIf="caseStatus == CaseStatus.SentToRegionsSupervisor">إحالة</span>
+    <span *ngIf="caseStatus == CaseStatus.ReturnedToRegionsSupervisor || caseStatus == CaseStatus.ReceivedByLitigationManager">إعادة</span>
+
+  </button>
+  <button type="button" mat-raised-button (click)="onCancel()">
+    إلغاء
+  </button>
+</div>

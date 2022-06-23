@@ -1,0 +1,111 @@
+<mat-tab-group>
+  <mat-tab label="بيانات المذكرة">
+    <fieldset>
+      <div fxLayout="row wrap" fxFlexAlign="center" class="entity-details p-10">
+
+        <div fxLayout="column" fxFlex.gt-sm="33" fxFlex="100">
+          <span>اسم المذكرة</span>
+          <span>{{request.legalMemo.name}}</span>
+        </div>
+
+        <div fxLayout="column" fxFlex.gt-sm="33" fxFlex="100">
+          <span>تاريخ اعتماد المذكرة</span>
+          <span>
+            {{request.legalMemo.updatedOn | date : 'yyyy-MM-dd'}}
+            {{request.legalMemo.updatedOn | arDayOfWeek}}
+            {{ request.legalMemo.updatedOnHigri }}
+          </span>
+        </div>
+
+        <div fxLayout="column" fxFlex.gt-sm="33" fxFlex="100">
+          <span>تصنيفات القضية</span>
+          <mat-chip-list aria-label="Fish selection">
+            <mat-chip>{{ request.hearing.case.subCategory?.mainCategory.name}}</mat-chip>
+            <mat-chip>{{ request.hearing.case.subCategory?.firstSubCategory.name}}</mat-chip>
+            <mat-chip>{{ request.hearing.case.subCategory?.name}}</mat-chip>
+          </mat-chip-list>
+        </div>
+
+        <div fxLayout="column" fxFlex="100">
+          <span>نص المذكرة</span>
+          <div class="well">
+            <span [innerHTML]="request.legalMemo.text"></span>
+          </div>
+        </div>
+      </div>
+    </fieldset>
+  </mat-tab>
+  <mat-tab label="بيانات القضية">
+    <fieldset>
+      <!-- <h2 class="heading">بيانات القضية الأساسية</h2> -->
+      <div fxLayout="row wrap" fxFlexAlign="center" class="entity-details p-10">
+
+        <div fxLayout="column" fxFlex.gt-sm="33" fxFlex="100">
+          <span>رقم القضية</span>
+          <span>{{request.hearing.case.caseNumberInSource}}</span>
+        </div>
+
+        <div fxLayout="column" fxFlex.gt-sm="33" fxFlex="100">
+          <span>عنوان الدعوى</span>
+          <span>{{request.hearing.case.subject}}</span>
+        </div>
+
+        <div fxLayout="column" fxFlex.gt-sm="33" fxFlex="100">
+          <span>تاريخ بداية القضية</span>
+          <span>
+            {{request.hearing.case.startDate | date : 'yyyy-MM-dd'}}
+            {{request.hearing.case.startDate | arDayOfWeek}}
+            {{request.hearing.case.startDateHigri }}
+          </span>
+        </div>
+
+        <div fxLayout="column" fxFlex.gt-sm="33" fxFlex="100">
+          <span>مصدر القضية</span>
+          <span>{{request.hearing.case.caseSource.name}}</span>
+        </div>
+      </div>
+    </fieldset>
+  </mat-tab>
+  <mat-tab label="بيانات الجلسة">
+    <fieldset>
+      <div fxLayout="row wrap" fxFlexAlign="center" class="entity-details p-10">
+
+        <div fxLayout="column" fxFlex.gt-sm="33" fxFlex="100">
+          <span>تاريخ الجلسة</span>
+          <span>
+            {{request.hearing.hearingDate | date : 'yyyy-MM-dd'}}
+            {{request.hearing.hearingDate | arDayOfWeek}}
+            {{request.hearing.hearingDateHigri }}
+          </span>
+        </div>
+
+        <div fxLayout="column" fxFlex.gt-sm="33" fxFlex="100">
+          <span>محكمة/لجنة</span>
+          <span>{{request.hearing.court.name}}</span>
+        </div>
+
+        <div fxLayout="column" fxFlex.gt-sm="33" fxFlex="100">
+          <span>الدائرة</span>
+          <span>{{request.hearing.case.circleNumber}}</span>
+        </div>
+
+        <div fxLayout="column" fxFlex.gt-sm="33" fxFlex="100">
+          <span>حالة الجلسة</span>
+          <span>{{request.hearing.status.name}}</span>
+        </div>
+
+      </div>
+    </fieldset>
+  </mat-tab>
+</mat-tab-group>
+
+<section class="screen-actions">
+  <button mat-raised-button color="primary" type="submit" (click)="ReplyHearingMemoRequest(RequestStatus.Accepted)"
+    *ngIf="(request.request.requestStatus.id==RequestStatus.Modified || request.request.requestStatus.id==RequestStatus.New) && isConsultant">
+    قبول
+  </button>
+  <button mat-raised-button color="primary" type="button" (click)="ReplyHearingMemoRequest(RequestStatus.Rejected)"
+    *ngIf="(request.request.requestStatus.id==RequestStatus.Modified || request.request.requestStatus.id==RequestStatus.New) && isConsultant">
+    رفض
+  </button>
+</section>

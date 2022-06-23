@@ -1,0 +1,16 @@
+td,
+th {
+  /* row padding */
+  padding: 10px 0;
+  /* row border */
+  border-bottom: 1px solid lightseagreen;
+  border-top: 1px solid lightseagreen;
+  border-right: 1px solid lightseagreen;
+  border-left: 1px solid lightseagreen;
+  text-align: center;
+  text-align: center;
+}
+::ng-deep  .mat-checkbox .mat-checkbox-frame {
+  border-color: lightseagreen;
+  background-color: #dddddd
+}

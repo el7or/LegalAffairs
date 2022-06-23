@@ -1,0 +1,23 @@
+h4{
+    margin: 0px;
+    margin-top: .6em;
+}
+.title{
+    background-color: grey;
+    color: white;
+    margin-right: -1.57rem;
+    margin-left: -1.57rem;
+    vertical-align: middle;
+    font-size: large;
+    cursor: pointer;
+    margin-bottom: 10px;
+}
+
+.icon-title{
+    font-size: larger;
+    font-weight: normal;
+    vertical-align: middle;
+}
+:host ::ng-deep .ck-editor__editable_inline {
+    min-height: 100px !important;
+}

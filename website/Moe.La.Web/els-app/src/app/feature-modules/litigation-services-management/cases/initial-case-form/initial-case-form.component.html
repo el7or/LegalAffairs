@@ -1,0 +1,72 @@
+<h3 mat-dialog-title>
+ إنشاء قضية
+</h3>
+
+<div mat-dialog-content>
+    <form class="basic-form" (submit)="onSubmit()" [formGroup]="form">
+        <div fxLayout="row wrap" fxFlexAlign="center" class="row">
+
+            <div fxFlex.gt-sm="100" fxFlex="100" class="p-10">
+                <mat-form-field>
+                    <mat-select required matInput formControlName="caseSource" placeholder="مصدر القضية"
+                        (selectionChange)="populateCategories()" (selectionChange)="onChangeCaseSource()">
+                        <mat-option value="">--اختر--</mat-option>
+                        <mat-option *ngFor="let caseSource of caseSources" [value]="caseSource.value">
+                            {{ caseSource.nameAr }}</mat-option>
+                    </mat-select>
+                </mat-form-field>
+            </div>
+
+            <div fxFlex.gt-sm="100" fxFlex="100" class="p-10">
+                <mat-form-field>
+                    <input required matInput formControlName="caseSourceNumber"
+                        [placeholder]="caseSourceNumberPlaceholder" autocomplete="off" maxlength="30" digitsOnly />
+                    <mat-error *ngIf="form.controls['caseSourceNumber'].hasError('required')">
+                        {{caseSourceNumberPlaceholder}}
+                        مطلوب
+                    </mat-error>
+                </mat-form-field>
+            </div>
+            <div fxFlex.gt-sm="100" fxFlex="100" class="p-10">
+                <mat-form-field class="example-chip-list">
+                    <mat-chip-list #chipList aria-label="category selection">
+                        <mat-chip *ngFor="let category of categories;let indexOfelement=index;"
+                            [selectable]="selectable" [removable]="removable" (removed)="remove(indexOfelement)">
+                            {{category.name}}
+                            <mat-icon matChipRemove *ngIf="removable">cancel</mat-icon>
+                        </mat-chip>
+                        <input placeholder="التصنيفات" #categoryInput formControlName="caseCategories"
+                            [matAutocomplete]="auto" [matChipInputFor]="chipList"
+                            [matChipInputSeparatorKeyCodes]="separatorKeysCodes" [matChipInputAddOnBlur]="true"
+                            (matChipInputTokenEnd)="add($event)">
+                    </mat-chip-list>
+                    <mat-autocomplete #auto="matAutocomplete" (optionSelected)="selected($event)">
+                        <mat-option *ngFor="let category of filteredCategories$ | async" [value]="category">
+                            {{category.name}}
+                        </mat-option>
+                    </mat-autocomplete>
+                </mat-form-field>
+
+            </div>
+
+            <div fxFlex.gt-sm="100" fxFlex="100">
+                <date-picker-dual controlName="startDate" [placeholder]="'تاريخ بداية القضية'" [required]="true">
+                </date-picker-dual>
+            </div>
+
+            <section class="screen-actions">
+                <div class="button-row">
+                    <button mat-raised-button color="primary" type="submit"
+                        [disabled]="!form.valid || categories.length==0">
+                        <span matTooltip="يجب ادخال التصنيفات" matTooltipPosition="above">
+                            <span>حفظ</span>
+                        </span>
+                    </button>
+                    <button mat-raised-button type="button" (click)="onCancel()">
+                        إلغاء
+                    </button>
+                </div>
+            </section>
+        </div>
+    </form>
+</div>

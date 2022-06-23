@@ -1,0 +1,115 @@
+<div fxLayout="row wrap" class="screen">
+    <div fxFlex.gt-sm="100" fxFlex.gt-xs="100" fxFlex="100">
+      <mat-card>
+        <mat-card-content>
+          <mat-card-title>
+          </mat-card-title>
+
+          <div class="responsive-table screen-table">
+            <div fxLayout="row" fxLayoutAlign="space-between stretch">
+              <div class="free-search" fxFlex="25" fxLayout="row" fxLayoutAlign="center center">
+                <form  [formGroup]="searchForm" >
+                <mat-form-field appearance="outline" [hideRequiredMarker]="true" floatLabel="always">
+                  <span matPrefix>
+                    <mat-icon>search</mat-icon>
+                  </span>
+                  <input matInput placeholder="بحث" formControlName="searchText" (keyup)="applyFilter()"
+                    autocomplete="off">
+                </mat-form-field>
+                </form>
+              </div>
+              <mat-paginator #paginator [length]="dataSource.filteredData.length" [pageIndex]="currentPage"
+            showFirstLastButtons [pageSize]="PAGE_SIZE" (page)="onPageChange($event.pageIndex)"
+            hidePageSize="true"></mat-paginator>
+            </div>
+            <table mat-table [dataSource]="dataSource.filteredData | getPageData :PAGE_SIZE:currentPage"
+            matSort matSortActive="researcher" matSortDirection="asc" matSortDisableClear>
+            <!-- ID Column -->
+            <ng-container matColumnDef="position">
+                <th mat-header-cell *matHeaderCellDef>#</th>
+                <td mat-cell *matCellDef="let element; let i = index">
+                  {{(i + 1 + PAGE_SIZE * (currentPage))}}
+                </td>
+              </ng-container>
+
+              <ng-container matColumnDef="id">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>
+                  رقم المذكرة
+                </th>
+                <td mat-cell *matCellDef="let memo">
+                  {{memo.id}}
+                </td>
+              </ng-container>
+
+              <ng-container matColumnDef="name">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>
+                  اسم المذكرة
+                </th>
+                <td mat-cell *matCellDef="let memo">
+                  {{memo.name}}
+                </td>
+              </ng-container>
+
+              <ng-container matColumnDef="status">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>
+                  الحالة
+                </th>
+                <td mat-cell *matCellDef="let memo"> {{memo.status.name }}</td>
+              </ng-container>
+
+              <ng-container matColumnDef="updatedOn">
+                <th mat-header-cell *matHeaderCellDef  mat-sort-header>
+                  تاريخ اخر عملية
+                </th>
+                <td mat-cell *matCellDef="let memo">
+                  <span>
+                    {{ memo.updatedOn  | date : 'yyyy-MM-dd'}}
+                    {{ memo.updatedOn  | arDayOfWeek}}
+                    {{memo.updatedOnHigri}}
+                </span>
+              </ng-container>
+
+              <ng-container matColumnDef="secondSubCategory">
+                <th mat-header-cell *matHeaderCellDef>
+                  تصنيف القضية المرتبطة
+                </th>
+                <td mat-cell *matCellDef="let memo"> {{memo.secondSubCategory}}</td>
+              </ng-container>
+
+              <!-- Star Column -->
+              <ng-container matColumnDef="actions" >
+                <th mat-header-cell *matHeaderCellDef> </th>
+                <td mat-cell *matCellDef="let memo">
+                  <button [matMenuTriggerFor]="profile" mat-icon-button class="m-r-5">
+                    <mat-icon>more_vert</mat-icon>
+                  </button>
+                  <mat-menu #profile="matMenu" class="mymegamenu">
+                    <button mat-menu-item routerLinkActive="router-link-active"  (click)="readLegalMemo(memo.id)"
+                      matTooltip="عرض"
+                      [disabled]="isResearcher && authService.currentUser?.id!=memo.createdByUser.id"
+                      matTooltipPosition="above">
+                      عرض
+                    </button>
+                  </mat-menu>
+                </td>
+              </ng-container>
+
+              <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+              <tr mat-row *matRowDef="let element; columns: displayedColumns"></tr>
+
+              <!-- Row shown when there is no matching data. -->
+              <tr class="mat-row" *matNoDataRow>
+                <td class="mat-cell" colspan="7" style="text-align: center;">لا يوجد نتائج للبيانات.</td>
+              </tr>
+            </table>
+
+            <mat-paginator #paginator [length]="dataSource.filteredData.length" [pageIndex]="currentPage"
+            showFirstLastButtons [pageSize]="PAGE_SIZE" (page)="onPageChange($event.pageIndex)"
+            hidePageSize="true"></mat-paginator>
+
+          </div>
+
+        </mat-card-content>
+      </mat-card>
+    </div>
+  </div>

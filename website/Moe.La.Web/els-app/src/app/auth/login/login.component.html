@@ -1,0 +1,115 @@
+<div class="login-register p-t-30" style="background-image:url(assets/images/background/login-register.jpg);"
+     fxLayout="column" fxLayoutAlign="center center">
+  <div class="login-register-box">
+    <mat-card>
+      <mat-card-content>
+        <form [formGroup]="form" (ngSubmit)="onSubmit()">
+          <div class="text-center">
+            <img alt="homepage m-b-20" src="assets/images/logo-icon.png">
+            <h3 class="m-b-15 font-33">تسجيل الدخول</h3>
+            <h4 class="m-t-0 font-21">يرجى إدخال رقم الهوية وكلمة المرور</h4>
+          </div>
+          <div fxLayout="row wrap " class="login-form">
+            <!-- col full-->
+            <div fxFlex.gt-sm="100" fxFlex.gt-xs="100" fxFlex="100">
+              <mat-form-field>
+                <input matInput placeholder="اسم المستخدم" maxlength="10" [formControl]="form.controls['username']"
+                       autocomplete="off">
+                <mat-icon matSuffix>person_outline</mat-icon>
+                <mat-error *ngIf="form.controls['username'].hasError('required')">
+                  لابد من إدخال اسم المستخدم.
+                </mat-error>
+              </mat-form-field>
+            </div>
+            <!-- col full-->
+            <div fxFlex.gt-sm="100" fxFlex.gt-xs="100" fxFlex="100">
+              <mat-form-field>
+                <input matInput type="password" placeholder="كلمة المرور" [formControl]="form.controls['password']">
+                <mat-icon matSuffix>verified_user</mat-icon>
+                <mat-error *ngIf="form.controls['password'].hasError('required')">لابد من إدخال كلمة السر.</mat-error>
+              </mat-form-field>
+            </div>
+
+            <!-- col half-->
+            <div fxFlex.gt-sm="100" fxFlex.gt-xs="100" fxFlex="100">
+              <button mat-raised-button color="primary" class="btn-block btn-lg m-t-20 m-b-20" type="submit"
+                      [disabled]="!form.valid">
+                <i class="fa fa-download"></i>
+                تسجيل الدخول
+              </button>
+            </div>
+            <!-- col full-->
+          </div>
+        </form>
+      </mat-card-content>
+    </mat-card>
+  </div>
+  <div class='Login-footer w-md-75 m-b-30' fxLayout="row" fxLayoutAlign="space-between center">
+    <img src="../../../assets/images/V-logo.png" alt="logo" />
+    <div class="font-14 text-right">
+      <p class="m-0">
+        جميع الحقوق محفوظة لوزارة التعليم
+      </p>
+      <p class="m-0">
+        المملكة العربية السعودية
+      </p>
+    </div>
+  </div>
+  <div class="helpCointainer" [ngClass]="status ? 'is-open' : ''">
+    <button (click)="clickEvent()" mat-button class="ml-xs overflow-visible" class="HelpBTn">
+      <span>مساعدة</span>
+    </button>
+    <mat-card #help id="help" class="pl-xs HelpDiv" fxLayout="column" [ngClass]="status ? 'minitoggle' : 'maxtoggle'">
+      <button type="button" mat-raised-button class="primary">
+        <span> فيديو التسجيل الإرشادي </span>
+      </button>
+      <img class="img-icon-login" src="../../../assets/images/question.png">
+      <a href="#" class="m-b-5">
+        فيديو التسجيل الإرشادي
+      </a>
+      <p class="m-t-0">
+        ممثلينا سوف يساعدونك فى الرد على الأسئله الخاصة بك
+      </p>
+    </mat-card>
+  </div>
+</div>
+
+
+<!-- <div class="login-register" style="background-image:url(assets/images/background/login-register.jpg);">
+  <div class="login-register-box">
+    <mat-card>
+      <mat-card-content>
+          <form [formGroup]="form" (ngSubmit)="onSubmit()">
+            <div class="text-center">
+              <img alt="homepage" src="assets/images/MOELogo.png" style="height: 5em;">
+            </div>
+            <div fxLayout="row wrap">
+              <div fxFlex.gt-sm="100" fxFlex.gt-xs="100" fxFlex="100">
+                <mat-form-field>
+                  <input matInput placeholder="اسم المستخدم" maxlength="10" [formControl]="form.controls['username']" autocomplete="off">
+                  <mat-error  *ngIf="form.controls['username'].hasError('required')">لابد من إدخال اسم المستخدم.</mat-error >
+                </mat-form-field>
+              </div>
+              <div fxFlex.gt-sm="100" fxFlex.gt-xs="100" fxFlex="100">
+                <mat-form-field>
+                  <input matInput type="password" placeholder="كلمة المرور" [formControl]="form.controls['password']">
+                  <mat-error  *ngIf="form.controls['password'].hasError('required')">لابد من إدخال كلمة السر.</mat-error >
+                </mat-form-field>
+              </div>
+              <div fxFlex.gt-sm="50" fxFlex.gt-xs="50">
+                <mat-checkbox color="warn">تذكرني</mat-checkbox>
+              </div>
+              <div fxFlex.gt-sm="50" fxFlex.gt-xs="50" class="text-right">
+              </div>
+              <div fxFlex.gt-sm="100" fxFlex.gt-xs="100" fxFlex="100">
+                <button mat-raised-button color="primary" class="btn-block btn-lg m-t-20 m-b-20" type="submit"
+                  [disabled]="!form.valid">دخول</button>
+              </div>
+              <div fxFlex.gt-sm="100" fxFlex.gt-xs="100" fxFlex="100" class="text-center">
+              </div>
+            </div>
+          </form>
+      </mat-card-content>
+    </mat-card>
+  </div>
+</div> -->

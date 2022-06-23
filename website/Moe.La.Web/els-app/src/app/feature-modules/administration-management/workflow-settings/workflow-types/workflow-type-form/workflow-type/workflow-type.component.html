@@ -1,0 +1,32 @@
+<div fxLayout="row wrap" class="screen">
+  <div fxFlex.gt-sm="100" fxFlex="100">
+    <form class="basic-form" [formGroup]="workflowTypeForm" (ngSubmit)="onSave()">
+      <div fxLayout="row wrap" fxFlexAlign="center" class="row">
+        <div fxFlex.gt-sm="50" fxFlex="100" class="p-10">
+          <mat-form-field>
+            <input matInput formControlName="typeArName" placeholder="الاسم" autocomplete="off" required>
+            <mat-error *ngIf="workflowTypeForm.controls['typeArName'].hasError('required')">النوع مطلوب</mat-error>
+          </mat-form-field>
+        </div>
+        <div fxFlex.gt-sm="50" fxFlex="100" class="p-10">
+          <mat-form-field>
+            <input   matInput formControlName="lockPeriod" placeholder="فترة الإستحواذ" autocomplete="off" required>
+            <mat-hint align="start">اقصى مدة بالساعات يمكن لهذا العنصر ان يظل بحوذة احد المستخدمين</mat-hint>
+            <mat-error *ngIf="workflowTypeForm.controls['lockPeriod'].hasError('required')">فترة الإستحواذ مطلوبة
+            </mat-error>
+          </mat-form-field>
+        </div>
+        <!-- <div fxFlex.gt-sm="100" fxFlex="100" class="p-10">
+          <mat-slide-toggle formControlName="isActive">مفعل</mat-slide-toggle>
+        </div> -->
+      </div>
+      <section class="screen-actions">
+        <div class="button-row">
+          <button mat-raised-button color="primary">
+            <span>حفظ & متابعة</span>
+          </button>
+        </div>
+      </section>
+    </form>
+  </div>
+</div>

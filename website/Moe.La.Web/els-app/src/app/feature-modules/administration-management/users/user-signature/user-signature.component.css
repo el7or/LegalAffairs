@@ -1,0 +1,53 @@
+.uploadfilecontainer {
+    background-image: url("../../../../../assets/images/SVGIcon.JPG");
+    background-repeat: no-repeat;
+    background-size: 40px;
+    background-position: center;
+    height: 130px;
+    /* max-width: 550px; */
+    margin: 5px  5px  5px  5px ;
+    border: 3px dashed lightseagreen;
+    /* border-radius: 10px; */
+    text-align: center;
+  }
+  .imagecontainer {
+    background-repeat: no-repeat;
+    background-size: 100px;
+    background-position: center;
+    height: 130px;
+    /* max-width: 550px; */
+    margin: 5px 5px 5px 5px;
+    /* border: 2px dashed #08B0A1; */
+    /* border-radius: 10px; */
+    text-align: center;
+  }
+  .disableuploadfilecontainer{
+    display: none;
+    visibility: hidden;
+    height: 0px;
+  }
+  .uploadfilecontainer:hover {
+    cursor: pointer;
+    /* background-color: #9ecbec !important; */
+    opacity: 0.8;
+  }
+  .delete-image {
+    height: 18px;
+    width: 24px !important;
+    /* background: url("../../../../../assets/images/delete-img.png") no-repeat bottom; */
+    position: absolute;
+    bottom: 5px;
+    left:3px;
+    z-index: 1;
+  }
+ 
+  
+  .preview-image {
+    height: 115px;
+    width: 390px;
+    text-align: center;
+    position: relative;
+  }
+  .delete-image:hover {
+    cursor: pointer;
+  }

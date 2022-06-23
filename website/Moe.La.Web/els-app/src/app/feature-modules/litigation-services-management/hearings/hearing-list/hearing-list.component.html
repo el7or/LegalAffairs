@@ -1,0 +1,264 @@
+<mat-card>
+  <mat-card-content>
+    <div class="screen">
+      <section class="screen-header">
+        <div fxFlex="50">
+          <button mat-raised-button color="primary" *ngIf="isResearcher" [routerLink]="['/hearings/new']"
+            [queryParams]="{ case: selectedCaseId }" routerLinkActive="router-link-active"
+            [disabled]="receivingJudgmentDate">
+            <span
+              [matTooltip]="receivingJudgmentDate ? 'لا يمكن إضافة جلسات جديدة لأنه تم تسجيل تاريخ استلام الحكم للقضية' :''"
+              matTooltipPosition="below">إضافة جلسة</span>
+          </button>
+        </div>
+        <div fxFlex="50" fxLayoutAlign="end center" *ngIf="totalItems!=0">
+          <button mat-stroked-button color="primary" [matMenuTriggerFor]="menu">
+            تصدير
+            <mat-icon>expand_more</mat-icon>
+          </button>
+          <mat-menu #menu="matMenu">
+            <button mat-menu-item (click)="onPrint()">
+              <mat-icon>picture_as_pdf</mat-icon>
+              ملف PDF
+            </button>
+          </mat-menu>
+        </div>
+      </section>
+
+      <section class="screen-table responsive-table extendable">
+        <div fxLayout="row" fxLayoutAlign="space-between center">
+          <div fxLayout="row" fxFlex.gt-sm="50" fxFlex="100">
+            <div class="filter-results">
+              <button mat-flat-button (click)="onShowFilter()">
+                <span *ngIf="!showFilter">
+                  تصفية النتائج
+                </span>
+                <span *ngIf="showFilter">
+                  اخفاء التصفية
+                </span>
+              </button>
+            </div>
+            <div class="free-search">
+              <mat-form-field appearance="outline" [hideRequiredMarker]="true" floatLabel="always">
+                <span matPrefix>
+                  <mat-icon>search</mat-icon>
+                </span>
+                <input matInput placeholder="بحث" [(ngModel)]="searchText" name="searchText" (keyup.enter)="onSearch()"
+                  autocomplete="off">
+              </mat-form-field>
+            </div>
+          </div>
+          <div fxFlex.gt-sm="50" fxFlex="100" fxHide.sm fxHide.xs>
+            <mat-paginator #paginator [length]="totalItems" [pageIndex]="queryObject.page - 1" showFirstLastButtons
+              [pageSize]="queryObject.pageSize" (page)="onPageChange($event.pageIndex)" hidePageSize="true">
+            </mat-paginator>
+          </div>
+        </div>
+        <div *ngIf="showFilter" fxLayout="row wrap">
+          <div fxFlex.gt-sm="100" fxFlex="100">
+            <form class="basic-form" [formGroup]="searchForm">
+              <div class="row filter-container" fxLayout="row wrap" fxFlexAlign="center">
+                <div fxFlex.gt-sm="32" fxFlex="100" class="p-10">
+                  <mat-form-field>
+                    <mat-select matInput formControlName="courtId" placeholder="محكمة/لجنة">
+                      <mat-option value="">--اختر--</mat-option>
+                      <mat-option *ngFor="let item of courts" [value]="item.id">
+                        {{ item.name }}</mat-option>
+                    </mat-select>
+                  </mat-form-field>
+                </div>
+
+                <div fxFlex.gt-sm="32" fxFlex="100" class="p-10">
+                  <mat-form-field>
+                    <mat-select matInput formControlName="status" placeholder="حالة الجلسة">
+                      <mat-option value="">--اختر--</mat-option>
+                      <mat-option *ngFor="let item of hearingStatus" [value]="item.value">
+                        {{ item.nameAr }}</mat-option>
+                    </mat-select>
+                  </mat-form-field>
+                </div>
+                <div fxFlex.gt-sm="32" fxFlex="100" class="p-10">
+                  <mat-form-field>
+
+                    <input type="text" placeholder="عنوان الدعوى" aria-label="Number" matInput formControlName="case"
+                      [matAutocomplete]="auto">
+
+                    <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayCaseSubject"
+                      (optionSelected)='onCaseChanged($event.option.value.id)'>
+                      <mat-option *ngFor="let case of filteredCases$ | async" [value]="case"
+                        style="text-align: right  !important;">
+                        {{case.subject}}
+                      </mat-option>
+                    </mat-autocomplete>
+
+                    <mat-error *ngIf="searchForm.controls['case'].hasError('required')"> القضية مطلوب</mat-error>
+
+                  </mat-form-field>
+
+                </div>
+                <div fxFlex.gt-sm="32" fxFlex="90" class="p-10 screen-actions">
+                  <button type="submit" mat-raised-button color="primary" (click)="onFilter()">
+                    تصفية
+                  </button>
+                  <button type="button" mat-raised-button (click)="onClearFilter()">
+                    مسح التصفية
+                  </button>
+                </div>
+
+
+              </div>
+            </form>
+          </div>
+        </div>
+
+        <table mat-table [dataSource]="dataSource" multiTemplateDataRows class="mat-elevation-z0" matSort
+          matSortActive="hearingDate" matSortDirection="desc" matSortDisableClear>
+          <ng-container matColumnDef="hearingNumber">
+            <th mat-header-cell *matHeaderCellDef>#</th>
+            <td mat-cell *matCellDef="let element; let i = dataIndex" class="nowrap">
+              <div>
+                {{(i + 1 + queryObject.pageSize * ((queryObject.page || 1) -1))}}
+                <button mat-icon-button (click)="onClickRow(i)">
+                  <mat-icon>
+                    {{ expandedIndexes.includes(i) ? 'keyboard_arrow_down': 'keyboard_arrow_left'}}
+                  </mat-icon>
+                </button>
+              </div>
+            </td>
+          </ng-container>
+          <ng-container matColumnDef="hearingDate">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>تاريخ الجلسة</th>
+            <td mat-cell *matCellDef="let element">
+              {{element.hearingDate | date : 'yyyy-MM-dd'}}
+              {{element.hearingDate | arDayOfWeek}}
+              {{ element.hearingDateHigri }}
+            </td>
+          </ng-container>
+          <ng-container matColumnDef="hearingTime">
+            <th mat-header-cell *matHeaderCellDef>وقت الجلسة</th>
+            <td mat-cell *matCellDef="let element">
+              {{ element.hearingTime }}
+            </td>
+          </ng-container>
+          <ng-container matColumnDef="type">
+            <th mat-header-cell *matHeaderCellDef>نوع الجلسة</th>
+            <td mat-cell *matCellDef="let element">
+              {{ element.type }}
+            </td>
+          </ng-container>
+          <ng-container matColumnDef="status">
+            <th mat-header-cell *matHeaderCellDef>حالة الجلسة</th>
+            <td mat-cell *matCellDef="let element">
+              {{ element.status }}
+            </td>
+          </ng-container>
+          <ng-container matColumnDef="caseNumberInSource">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>رقم القضية فى المصدر</th>
+            <td mat-cell *matCellDef="let element">
+              {{ element.case?.caseNumberInSource }}
+            </td>
+          </ng-container>
+          <ng-container matColumnDef="court">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>محكمة/لجنة</th>
+            <td mat-cell *matCellDef="let element">
+              {{ element.court }}
+            </td>
+          </ng-container>
+          <ng-container matColumnDef="circleNumber">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>الدائرة</th>
+            <td mat-cell *matCellDef="let element">
+              {{ element.case.circleNumber }}
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="actions">
+            <th mat-header-cell *matHeaderCellDef></th>
+            <td mat-cell *matCellDef="let element">
+              <button mat-icon-button [matMenuTriggerFor]="menu" aria-label="Example icon-button with a menu">
+                <mat-icon>more_vert</mat-icon>
+              </button>
+              <mat-menu #menu="matMenu">
+                <button mat-menu-item color="primary" [routerLink]="['/hearings/view',element.id]"
+                  routerLinkActive="router-link-active" matTooltip="تفاصيل الجلسة" matTooltipPosition="above">
+                  تفاصيل الجلسة
+                </button>
+
+                <span
+                  [matTooltip]="element.status == 'مغلقة' ? 'لا يمكن تعديل جلسة مغلقة' : (receivingJudgmentDate && element.type != 'نطق بالحكم') ? 'لا يمكن تعديل الجلسة لأنه تم تسجيل تاريخ استلام الحكم للقضية' :''"
+                  matTooltipPosition="above">
+                  <button mat-menu-item [routerLink]="['/hearings/edit',element.id]"
+                    *ngIf="isResearcher && authService.currentUser?.id == element.assignedTo?.id
+                    && element?.case?.status?.id!=CaseStatus.ClosedCase && element?.case?.status?.id!=CaseStatus.ObjectionRecorded"
+                    [disabled]="element.status == 'مغلقة' || (receivingJudgmentDate && element.type != 'نطق بالحكم')">
+                    <span>تعديل</span>
+                  </button>
+                </span>
+
+                <span
+                  [matTooltip]="element.status == 'مغلقة' ? 'لا يمكن حذف جلسة مغلقة' : (receivingJudgmentDate && element.type != 'نطق بالحكم') ? 'لا يمكن حذف الجلسة لأنه تم تسجيل تاريخ استلام الحكم للقضية' :''"
+                  matTooltipPosition="above">
+                  <button mat-menu-item *ngIf="isResearcher && authService.currentUser?.id == element.assignedTo?.id"
+                    [disabled]="element.status == 'مغلقة' || (receivingJudgmentDate && element.type != 'نطق بالحكم')"
+                    (click)="onDelete(element.id)">
+                    <span>حذف</span>
+                  </button>
+                </span>
+
+                <button type="button" mat-menu-item
+                  [routerLink]="['/requests/document-request', element.id ,element.case.id]"
+                  *ngIf="isResearcher && element.status != 'منتهية' && element.status != 'مغلقة'">
+                  <span>طلب مستندات داعمة</span>
+                </button>
+
+                <button type="button" mat-menu-item
+                  [routerLink]="['/requests/document-request/reformulate',element.documentRequest?.id]"
+                  *ngIf="isResearcher && element.status != 'منتهية' && element.status != 'مغلقة' && element.documentRequest?.request?.requestStatus.id == RequestStatus.Returned">
+                  <span>إعادة صياغة طلب مستندات داعمة</span>
+                </button>
+
+                <button type="button" mat-menu-item (click)="onAssign(element)"
+                  *ngIf="(isLitigationManager || authService.checkRole(AppRole.RegionsSupervisor)) && element.status != 'منتهية' && element.status != 'مغلقة'">
+                  <span>إسناد الجلسة لمكلف بالحضور</span>
+                </button>
+
+              </mat-menu>
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="hearingDetails">
+            <td mat-cell *matCellDef="let element" class="borderless-td" [attr.colspan]="columnsToDisplay.length">
+              <div fxLayout="row wrap" fxFlexAlign="center" class="p-10 filter-container">
+                <div fxLayout="column" fxFlex.gt-sm="33" fxFlex="100">
+                  <span>معرف القضية</span>
+                  <span>{{ element.case.id }}</span>
+                </div>
+                <div fxLayout="column" fxFlex.gt-sm="33" fxFlex="100">
+                  <span>عنوان الدعوى</span>
+                  <span>{{ element.case.subject }}</span>
+                </div>
+                <div fxLayout="column" fxFlex.gt-sm="33" fxFlex="100">
+                  <span>المكلف بالحضور</span>
+                  <span>{{ element.assignedTo?.name }}</span>
+                </div>
+              </div>
+            </td>
+          </ng-container>
+
+          <tr mat-header-row *matHeaderRowDef="columnsToDisplay"></tr>
+          <tr mat-row *matRowDef="let element; columns: columnsToDisplay"></tr>
+
+          <tr mat-row *matRowDef="let element; let i = dataIndex; columns: expandedDetail"
+            [class.shrink-row]="expandedIndexes.length == 0 || !expandedIndexes.includes(i)" class="expanded-row">
+          </tr>
+          <tr class="mat-row" *matNoDataRow>
+            <td class="mat-cell" colspan="7" style="text-align: center;">لا يوجد نتائج للبيانات.</td>
+          </tr>
+        </table>
+
+        <mat-paginator #paginator [length]="totalItems" [pageIndex]="queryObject.page - 1" showFirstLastButtons
+          [pageSize]="queryObject.pageSize" (page)="onPageChange($event.pageIndex)" hidePageSize="true">
+        </mat-paginator>
+      </section>
+    </div>
+  </mat-card-content>
+</mat-card>

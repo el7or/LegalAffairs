@@ -1,0 +1,143 @@
+<mat-card>
+  <mat-card-content>
+    <section class="screen">
+      <section class="screen-header">
+        <div fxFlex="50">
+          <button mat-raised-button color="primary" *ngIf="investigationId"
+            [routerLink]="['/investigation-records/new',investigationId]" routerLinkActive="router-link-active">
+            إضافة محضر تحقيق
+          </button>
+        </div>
+      </section>
+      <section class="screen-table responsive-table">
+
+        <div fxLayout="row wrap" fxLayoutAlign="space-between center">
+          <div fxLayout="row" fxFlex.gt-sm="50" fxFlex="100">
+            <div class="free-search">
+              <mat-form-field appearance="outline" [hideRequiredMarker]="true" floatLabel="always">
+                <span matPrefix>
+                  <mat-icon>search</mat-icon>
+                </span>
+                <input matInput placeholder="بحث" [(ngModel)]="searchText" name="searchText" (keyup.enter)="onSearch()"
+                  autocomplete="off" />
+              </mat-form-field>
+            </div>
+          </div>
+          <div fxFlex.gt-sm="50" fxFlex="100" fxHide.sm fxHide.xs>
+            <mat-paginator #paginator [length]="totalItems" [pageIndex]="queryObject.page - 1" showFirstLastButtons
+              [pageSize]="queryObject.pageSize" (page)="onPageChange($event.pageIndex)" hidePageSize="true">
+            </mat-paginator>
+          </div>
+        </div>
+
+        <table mat-table [dataSource]="dataSource" multiTemplateDataRows class="mat-elevation-z0" matSort
+          matSortActive="createdOn" matSortDirection="asc" matSortDisableClear>
+          <ng-container matColumnDef="position">
+            <th mat-header-cell *matHeaderCellDef>#</th>
+            <td mat-cell *matCellDef="let element; let i = dataIndex">
+              {{
+                    (
+                      i +
+                      1 +
+                      queryObject.pageSize * ((queryObject.page || 1) - 1)
+                    ).toLocaleString("ar-SA")
+                  }}
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="recordNumber">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>
+              رقم المحضر
+            </th>
+            <td mat-cell *matCellDef="let investigationRecord">
+              {{ investigationRecord.recordNumber }}
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="startDate">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>
+              تاريخ المحضر
+            </th>
+            <td mat-cell *matCellDef="let investigationRecord">
+              {{ investigationRecord.startDate   | date : 'yyyy-MM-dd'}}
+              {{ investigationRecord.startDate   | arDayOfWeek}}
+              {{investigationRecord.startDateHigri}}
+            </td>
+          </ng-container>
+          <ng-container matColumnDef="startTime">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>
+              وقت بداية المحضر
+            </th>
+            <td mat-cell *matCellDef="let investigationRecord">
+              {{ investigationRecord.startTime }}
+            </td>
+          </ng-container>
+          <ng-container matColumnDef="endDate">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>
+              تاريخ المحضر
+            </th>
+            <td mat-cell *matCellDef="let investigationRecord">
+              {{ investigationRecord.endDate   | date : 'yyyy-MM-dd'}}
+              {{ investigationRecord.endDate   | arDayOfWeek}}
+              {{investigationRecord.endDateHigri}}
+            </td>
+          </ng-container>
+          <ng-container matColumnDef="endTime">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>
+              وقت نهاية المحضر
+            </th>
+            <td mat-cell *matCellDef="let investigationRecord">
+              {{ investigationRecord.endTime }}
+            </td>
+          </ng-container>
+          <ng-container matColumnDef="recordStatus">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>الحالة</th>
+            <td mat-cell *matCellDef="let investigationRecord">{{ investigationRecord.recordStatus.name }}</td>
+          </ng-container>
+
+          <ng-container matColumnDef="createdBy">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>
+              المحقق
+            </th>
+            <td mat-cell *matCellDef="let investigationRecord">
+              <span>
+                {{ investigationRecord.createdBy}}
+              </span>
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="actions">
+            <th mat-header-cell *matHeaderCellDef></th>
+            <td mat-cell *matCellDef="let investigationRecord">
+              <button [matMenuTriggerFor]="profile" mat-icon-button class="m-r-5">
+                <mat-icon>more_vert</mat-icon>
+              </button>
+              <mat-menu #profile="matMenu" class="mymegamenu">
+
+                <button mat-menu-item color="primary"
+                  [routerLink]="['/investigation-records/edit', investigationRecord.id]"
+                  routerLinkActive="router-link-active" matTooltip="تعديل" matTooltipPosition="above">
+                   تعديل
+                </button>
+
+              </mat-menu>
+            </td>
+          </ng-container>
+
+          <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+          <tr mat-row *matRowDef="let element; columns: displayedColumns"></tr>
+
+
+          <tr class="mat-row" *matNoDataRow>
+            <td class="mat-cell" colspan="6" style="text-align: center;">لا يوجد نتائج للبيانات.</td>
+          </tr>
+        </table>
+
+        <mat-paginator #paginator [length]="totalItems" [pageIndex]="queryObject.page - 1" showFirstLastButtons
+          [pageSize]="queryObject.pageSize" (page)="onPageChange($event.pageIndex)" hidePageSize="true">
+        </mat-paginator>
+
+      </section>
+    </section>
+  </mat-card-content>
+</mat-card>

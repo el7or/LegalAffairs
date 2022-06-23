@@ -1,0 +1,48 @@
+<h3 mat-dialog-title class="modal-title">
+ اعتماد طلب إغلاق القضية
+</h3>
+<mat-card>
+    <mat-card-content>
+        <section class="screen">
+            <form class="basic-form"  (submit)="onSubmit()" [formGroup]="form">
+                <section class="screen-content row" fxLayout="row wrap" fxFlexAlign="center">
+                    <div  fxFlex.gt-sm="100" fxFlex="100" class="p-10">
+                        <mat-form-field>
+                            <input matInput formControlName="exportRefNo" required
+                                placeholder="رقم المعاملة الصادر في الاتصالات الادارية">
+                        </mat-form-field>
+
+                        <mat-error *ngIf="form.controls['exportRefNo'].hasError('required')"> رقم المعاملة الصادر في الاتصالات الادارية مطلوب
+                        </mat-error>
+                    </div>
+                    <div  fxFlex.gt-sm="100" fxFlex="100">
+                        <date-picker-dual controlName="exportRefDate" required
+                            [placeholder]="'تاريخ المعاملة الصادر في الاتصالات الادارية'"></date-picker-dual>
+
+                        <mat-error *ngIf="form.controls['exportRefNo'].hasError('required')">   تاريخ المعاملة الصادر في الاتصالات الادارية مطلوب
+                        </mat-error>
+                    </div>
+                    <div fxFlex.gt-sm="100" fxFlex="100" class="p-10">
+                        <mat-form-field>
+                            <mat-select formControlName="caseClosingReason" placeholder="نوع الاغلاق" required>
+                                <mat-option value="">--اختر--</mat-option>
+                                <mat-option *ngFor="let item of caseClosingReasons"
+                                    [value]="item.value">
+                                    {{ item.nameAr}}</mat-option>
+                            </mat-select>
+                            <mat-error *ngIf="form.controls['caseClosingReason'].hasError('required')">نوع الإغلاق مطلوب                           </mat-error>
+                        </mat-form-field>
+                    </div>
+                </section>
+
+                <section class="screen-actions">
+                    <div class="button-row">
+                        <button mat-raised-button type="submit" color="primary" [disabled]="!form.valid">حفظ</button>
+                        &nbsp;
+                        <button mat-raised-button type="button" (click)="onCancel()">إلغاء</button>
+                    </div>
+                </section>
+            </form>
+        </section>
+    </mat-card-content>
+</mat-card>

@@ -1,0 +1,313 @@
+<mat-card>
+  <mat-card-content>
+    <section fxLayout="row wrap" class="screen" *ngIf="memoDetails">
+      <section fxFlex="100" class="screen-header">
+        <div fxFlex="50"></div>
+        <div fxFlex="50" fxLayoutAlign="end center">
+          <button mat-button color="primary" (click)="onBack()">
+            الرجوع للقائمة
+          </button>
+          <button mat-stroked-button color="primary" [matMenuTriggerFor]="menu">
+            تصدير
+            <mat-icon>expand_more</mat-icon>
+          </button>
+          <mat-menu #menu="matMenu">
+            <button mat-menu-item (click)="onPrint()">
+              <mat-icon>picture_as_pdf</mat-icon>
+              ملف PDF
+            </button>
+          </mat-menu>
+        </div>
+      </section>
+
+      <mat-tab-group (selectedTabChange)="tabClick($event)">
+        <mat-tab label="بيانات المذكرة">
+
+          <div fxLayout="row wrap" fxFlexAlign="center" class="entity-details p-10">
+
+            <div fxFlex="100" class="star">
+              <span>حالة المذكرة</span>&nbsp;&nbsp;
+              <div class="badge badge-warning">{{ memoDetails.status.name }}</div>
+            </div>
+
+            <div fxLayout="column" fxFlex.gt-sm="33" fxFlex="100">
+              <span>اسم المذكرة</span>
+              <span>{{ memoDetails.name }}</span>
+            </div>
+            <div fxLayout="column" fxFlex.gt-sm="33" fxFlex="100">
+              <span>نوع المذكرة</span>
+              <span>{{ memoDetails.type.name }}</span>
+            </div>
+            <div fxLayout="column" fxFlex.gt-sm="33" fxFlex="100" *ngIf="!isView">
+              <span>رقم المراجعة</span>
+              <span>{{ memoDetails.reviewNumber }}</span>
+            </div>
+            <div fxLayout="column" fxFlex.gt-sm="100" fxFlex="100">
+              <span>نص المذكرة</span>
+              <div class="well">
+                <span [innerHTML]="memoDetails.text"></span>
+              </div>
+            </div>
+          </div>
+
+          <div class="screen-table responsive-table">
+            <div fxLayout="row wrap">
+              <div class="inner-header" fxLayout="row" fxFlex.gt-xs="50" fxFlex="100" fxLayoutAlign="Start center">
+                <span class="heading"> الملاحظات</span>
+              </div>
+              <div class="inner-actions" fxLayout="row" fxFlex.gt-xs="50" fxFlex="100" fxLayoutAlign="end center"
+                fxLayoutGap="5px">
+                <button class="float-left" color="primary" mat-raised-button
+                  *ngIf="!isView||authService.checkRole(AppRole.AllBoardsHead)" [disabled]="hasNewNotes"
+                  (click)="openModal(0)">
+                  إضافة
+                </button>
+              </div>
+            </div>
+
+            <table mat-table [dataSource]="dataSource" (matSortChange)="sortData($event)" matSort
+              matSortActive="createdOn" matSortDirection="asc" matSortDisableClear>
+
+              <ng-container matColumnDef="position">
+                <th mat-header-cell *matHeaderCellDef> #</th>
+                <td mat-cell *matCellDef="let legalMemoNotes; let i = index">
+                  {{(i + 1 + queryObject.pageSize * ((queryObject.page || 1) -1))}}
+                </td>
+              </ng-container>
+
+              <ng-container matColumnDef="reviewNumber">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header="reviewNumber">
+                  رقم المراجعة
+                </th>
+                <td mat-cell *matCellDef="let legalMemoNotes"> {{legalMemoNotes.reviewNumber}}
+                </td>
+              </ng-container>
+
+              <ng-container matColumnDef="createdOn">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header="createdOn">
+                  التاريخ
+                </th>
+                <td mat-cell *matCellDef="let legalMemoNotes">
+                  {{legalMemoNotes.createdOn | date : 'yyyy-MM-dd'}}
+                  {{legalMemoNotes.createdOn |arDayOfWeek}}
+                  {{legalMemoNotes.createdOnHigri}}
+                </td>
+              </ng-container>
+
+              <ng-container matColumnDef="creationTime">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header="creationTime">
+                  الوقت
+                </th>
+                <td mat-cell *matCellDef="let legalMemoNotes">
+                  {{legalMemoNotes.creationTime }}
+                </td>
+              </ng-container>
+
+              <ng-container matColumnDef="createdBy">
+                <th mat-header-cell *matHeaderCellDef>
+                  المنشئ
+                </th>
+                <td mat-cell *matCellDef="let legalMemoNotes">
+                  <!-- {{legalMemoNotes.role.nameAr}}/ -->
+                  {{legalMemoNotes.createdBy.name}}
+                </td>
+              </ng-container>
+
+              <ng-container matColumnDef="boardName">
+                <th mat-header-cell *matHeaderCellDef>
+                  اللجنة
+                </th>
+                <td mat-cell *matCellDef="let legalMemoNotes">
+                  <span *ngIf="legalMemoNotes.boardName===null">------</span>
+                  <span *ngIf="legalMemoNotes.boardName!==null">{{legalMemoNotes.boardName}}</span>
+                </td>
+              </ng-container>
+
+              <ng-container matColumnDef="noteText">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header="text">
+                  الملاحظة
+                </th>
+                <td mat-cell *matCellDef="let legalMemoNotes" class="note-text">
+                  {{ legalMemoNotes.text | sliceWords : 5 : legalMemoNotes }}
+                  <a mat-button color="primary" *ngIf="legalMemoNotes.isWithViewMore"
+                    (click)="legalMemoNotes.showViewMore = !legalMemoNotes.showViewMore;">
+                    <span *ngIf="legalMemoNotes.showViewMore">المزيد</span>
+                    <span *ngIf="!legalMemoNotes.showViewMore">أقل</span>
+                  </a>
+                </td>
+              </ng-container>
+
+              <ng-container matColumnDef="actions">
+                <th mat-header-cell *matHeaderCellDef> </th>
+                <td mat-cell *matCellDef="let legalMemoNotes" class="nowrap">
+                  <div *ngIf="!isView||authService.checkRole(AppRole.AllBoardsHead)">
+                    <button mat-icon-button color="primary" type="button" (click)="openModal(legalMemoNotes?.id)"
+                      *ngIf="legalMemoNotes.createdBy?.id==authService.currentUser?.id && !legalMemoNotes.isClosed">
+                      <mat-icon>edit</mat-icon>
+                    </button>
+                    <button mat-icon-button color="warn" type="button" (click)="onDelete(legalMemoNotes?.id)"
+                      *ngIf="legalMemoNotes.createdBy?.id==authService.currentUser?.id && !legalMemoNotes.isClosed">
+                      <mat-icon>clear</mat-icon>
+                    </button>
+                  </div>
+                </td>
+              </ng-container>
+
+              <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+              <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+              <tr class="mat-row no-data" *matNoDataRow>
+                <td class="mat-cell" [colSpan]="displayedColumns.length">
+                  لا يوجد ملاحظات حاليا .
+                </td>
+              </tr>
+            </table>
+
+          </div>
+
+          <section class="screen-actions">
+            <ng-container
+              *ngIf="authService.checkRole(AppRole.LegalConsultant)&&memoDetails.status.id==LegalMemoStatus.RaisingConsultant">
+              <button mat-raised-button color="primary" aria-label="Edit" (click)="assignMemoToBoard('Major')"
+                routerLinkActive="router-link-active">
+                إحالة إلى اللجنة الرئيسية
+              </button>
+
+              <button mat-raised-button color="primary" aria-label="Edit"
+                (click)="changeLgalMemoStatus(LegalMemoStatus.Returned)" routerLinkActive="router-link-active"
+                [disabled]="!hasNewNotes">
+                <span [matTooltip]="!hasNewNotes?'الرجاء إضافة ملاحظة لتفعيل زر إعادة صياغه مذكرة':''"
+                  matTooltipPosition="above">
+                  <span>
+                    إعادة صياغة المذكرة
+                  </span>
+                </span>
+              </button>
+
+            </ng-container>
+
+            <ng-container
+              *ngIf="authService.checkRole(AppRole.MainBoardHead)||authService.checkRole(AppRole.SubBoardHead)">
+
+              <!-- RaisingMemo Actions -->
+              <ng-container
+                *ngIf="memoDetails.status.id == LegalMemoStatus.RaisingMainBoardHead ||memoDetails.status.id == LegalMemoStatus.RaisingSubBoardHead ">
+
+
+                <button mat-raised-button color="primary" aria-label="Edit" routerLinkActive="router-link-active"
+                  (click)="raisToAllBoardsHead()">
+                  <span matTooltip="قبول ورفع لرئيس اللجان للاعتماد" matTooltipPosition="above">
+                    <span>قبول</span>
+                  </span>
+                </button>
+
+                <button mat-raised-button color="primary" type="button" aria-label="Edit"
+                  (click)="reject(LegalMemoStatus.Rejected )" routerLinkActive="router-link-active">
+                  رفض
+                </button>
+
+                <button mat-raised-button color="primary" aria-label="Edit"
+                  (click)="changeLgalMemoStatus(LegalMemoStatus.Returned)" routerLinkActive="router-link-active"
+                  [disabled]="!hasNewNotes">
+                  <span [matTooltip]="!hasNewNotes?'الرجاء إضافة ملاحظة لتفعيل زر إعادة صياغه مذكرة':''"
+                    matTooltipPosition="above">
+                    <span>
+                      إعادة صياغة المذكرة
+                    </span>
+                  </span>
+                </button>
+
+                <button mat-raised-button (click)="onChooseBoardMembers()" color="primary"
+                  matTooltip="اختيار الأعضاء وتحديد اجتماع" matTooltipPosition="above">
+                  اختيار الأعضاء
+                </button>
+
+                <button mat-raised-button color="primary" aria-label="Edit" routerLinkActive="router-link-active"
+                  *ngIf="memoDetails.status.id == LegalMemoStatus.RaisingMainBoardHead "
+                  [disabled]="!hasSecondaryLegalBoard" (click)="assignMemoToBoard('Secondary')">
+                  <span
+                    [matTooltip]="!hasSecondaryLegalBoard?'الرجاء إضافة لجنة فرعية مفعلة لتفعيل زر إحالة إلى لجنة فرعية  ':''"
+                    matTooltipPosition="above">
+                    <span>
+                      إحالة إلى لجنة فرعية
+                    </span>
+                  </span>
+                </button>
+
+                <button mat-raised-button color="primary" aria-label="Edit"
+                  *ngIf="memoDetails.status.id==LegalMemoStatus.RaisingSubBoardHead "
+                  routerLinkActive="router-link-active" (click)="assignMemoToBoard('Major')" [disabled]="!hasNewNotes">
+                  <span [matTooltip]="!hasNewNotes?'الرجاء إضافة ملاحظة لتفعيل زر إعادة إلى اللجنة الرئيسية':''"
+                    matTooltipPosition="above">
+                    <span>
+                      إعادة لعدم الاختصاص
+                    </span>
+                  </span>
+                </button>
+
+
+
+              </ng-container>
+
+              <ng-container *ngIf="memoDetails.status.id == LegalMemoStatus.Rejected ">
+
+                <button mat-raised-button color="primary" aria-label="Edit" routerLinkActive="router-link-active"
+                  [routerLink]="['/requests/change-researcher-request']" [queryParams]="{memoId: legalMemoId}"
+                  *ngIf="case?.status?.id != CaseStatus.ClosedCase" [disabled]="!hasNewNotes">
+                  <span [matTooltip]="!hasNewNotes?'الرجاء إضافة ملاحظة لتفعيل زر طلب تغيير باحث ':''"
+                    matTooltipPosition="above">
+                    <span>
+                      طلب تغيير الباحث
+                    </span>
+                  </span>
+                </button>
+              </ng-container>
+            </ng-container>
+
+
+            <ng-container *ngIf="authService.checkRole(AppRole.AllBoardsHead)">
+
+              <button mat-raised-button color="primary" aria-label="Edit" (click)="approve()"
+                *ngIf="memoDetails.status.id == LegalMemoStatus. RaisingAllBoardsHead"
+                routerLinkActive="router-link-active">
+                اعتماد
+              </button>
+
+              <button mat-raised-button color="primary" type="button" aria-label="Edit"
+                (click)="reject(LegalMemoStatus. Rejected)"
+                *ngIf="memoDetails.status.id == LegalMemoStatus. RaisingAllBoardsHead"
+                routerLinkActive="router-link-active">
+                رفض
+              </button>
+
+              <button mat-raised-button color="primary" aria-label="Edit" routerLinkActive="router-link-active"
+                [routerLink]="['/requests/change-researcher-request']" [queryParams]="{memoId: legalMemoId}"
+                *ngIf="memoDetails.status.id == LegalMemoStatus. Rejected&&case?.status?.id != CaseStatus.ClosedCase"
+                [disabled]="!hasNewNotes">
+                <span [matTooltip]="!hasNewNotes?'الرجاء إضافة ملاحظة لتفعيل زر طلب تغيير باحث ':''"
+                  matTooltipPosition="above">
+                  <span>
+                    طلب تغيير الباحث
+                  </span>
+                </span>
+              </button>
+            </ng-container>
+            <button mat-raised-button (click)="onBack()">
+              العودة
+            </button>
+
+          </section>
+
+        </mat-tab>
+
+        <mat-tab *ngIf="!isView">
+          <ng-template mat-tab-label>
+            بيانات القضية
+          </ng-template>
+          <app-case-details [case]='case'></app-case-details>
+        </mat-tab>
+
+      </mat-tab-group>
+
+    </section>
+  </mat-card-content>
+</mat-card>

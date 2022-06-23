@@ -1,0 +1,17 @@
+<Project Sdk="Microsoft.NET.Sdk.Worker">
+  <PropertyGroup>
+    <TargetFramework>net5.0</TargetFramework>
+    <UserSecretsId>dotnet-Moe.La.MockIntegrationService-7AE4795B-98B9-4E6D-862F-EA6C5C336045</UserSecretsId>
+    <ProjectGuid>F85FC0E5-636B-4A67-8B89-52ADD107ED6F</ProjectGuid>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="Microsoft.Extensions.Hosting.WindowsServices" Version="5.0.1" />
+    <PackageReference Include="Serilog.AspNetCore" Version="4.1.0" />
+    <PackageReference Include="Serilog.Sinks.File" Version="4.1.0" />
+    <PackageReference Include="System.Configuration.ConfigurationManager" Version="5.0.0" />
+    <PackageReference Include="Microsoft.AspNet.WebApi.Client" Version="5.2.7" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\src\Moe.La.Core\Moe.La.Core.csproj" />
+  </ItemGroup>
+</Project>

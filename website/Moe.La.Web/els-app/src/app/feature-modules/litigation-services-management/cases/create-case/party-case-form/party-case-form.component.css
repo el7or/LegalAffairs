@@ -1,0 +1,12 @@
+.th-left {
+  text-align: left;
+}
+.w-50 {
+  width: 50px;
+}
+.top15 {
+  margin-top: 15px;
+}
+td mat-form-field{
+  width: auto !important;
+}

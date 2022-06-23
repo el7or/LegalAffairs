@@ -1,0 +1,127 @@
+.card {
+  margin-right: 15px !important;
+  margin-top: 15px;
+  margin-bottom: 15px;
+  background-color: rgba(247, 244, 244, 0.932);
+  border-radius: 4px;
+  border-width: 1px;
+  border-color: #000;
+  border-style: solid;
+}
+
+.letterimg {
+  width: 130px;
+  height: 55px;
+  margin-top: 10px;
+  margin-bottom: 10px;
+  margin-left: 10px;
+  padding-right: 10px;
+  padding-left: 10px;
+  cursor: pointer;
+}
+
+:host ::ng-deep .ck-editor__editable_inline {
+  min-height: 300px !important;
+}
+
+.page-header {
+  border-bottom: 3px solid #000;
+  text-align: center;
+  font-family: "Andalus";
+  margin-top: 1.5em;
+  margin-bottom: 1em;
+}
+.main-header {
+  text-decoration: underline;
+  text-align: center;
+  font-family: "Andalus";
+  margin-top: 1.5em;
+  margin-bottom: 1em;
+}
+.section-header {
+  text-align: right;
+  font-family: "Andalus";
+  margin-top: 1.5em;
+  margin-bottom: 1em;
+}
+.details-page {
+  font-family: "Traditional Arabic";
+  margin: 1em;
+  margin-top: 3em;
+}
+.details-page p {
+  font-size: 1.7em;
+}
+.request-body {
+  font-family: "Traditional Arabic";
+  font-size: 3.5em;
+  direction: rtl !important;
+}
+ol {
+  direction: rtl !important;
+  text-align: right;
+  list-style-position: inside;
+  margin-bottom: 4em;
+}
+.list-item {
+  font-size: 1.5em;
+  text-align: right;
+  list-style-position: inside;
+  direction: rtl !important;
+}
+.footer-text {
+  font-size: 1.5em;
+  text-align: center;
+  font-weight: bold;
+}
+.remove-bullet {
+  list-style-type: none;
+}
+
+/* Create three equal columns that floats next to each other */
+.sigColumn {
+  float: left;
+  width: 33.333%;
+  padding: 10px;
+  height: 300px; /* Should be removed. Only for demonstration */
+}
+
+/* Clear floats after the columns */
+.sigRow:after {
+  content: "";
+  display: table;
+  clear: both;
+}
+
+.content-left {
+  float: left;
+  width: 300px;
+}
+
+.page-header-arabic {
+  border-bottom: 3px solid #000;
+  text-align: center;
+  font-family: "Traditional Arabic";
+  margin-top: 1.5em;
+  margin-bottom: 1em;
+}
+
+.section-header-arabic {
+  text-align: right;
+  font-family: "Traditional Arabic";
+  margin-top: 1.5em;
+  margin-bottom: 1em;
+  font-size: 1.8em;
+}
+
+.section-arabic {
+  text-align: right;
+  font-family: "Traditional Arabic";
+  font-size: 1.8em;
+}
+
+.padding-content {
+  padding-right: 300px;
+  font-family: "Traditional Arabic";
+  font-size: 1.8em;
+}

@@ -1,0 +1,70 @@
+<div fxLayout="row wrap" class="screen">
+  <div fxFlex.gt-sm="100" fxFlex="100">
+    <mat-card>
+      <mat-card-content>
+        <h3 style="color: #009081;" *ngIf="!hearing?.case?.receivingJudgmentDate"><strong>إضافة</strong> </h3>
+        <h3 style="color: #009081;" *ngIf="hearing?.case?.receivingJudgmentDate"><strong>تعديل</strong> </h3>
+
+        <form (submit)="onSubmit()" [formGroup]="form">
+          <div fxLayout="row wrap" fxFlexAlign="center" class="row">
+
+            <div fxFlex.gt-sm="50" fxFlex="100" class="p-10">
+              <!-- <mat-form-field>
+                <input matInput placeholder="القضية" formControlName="caseSubject" readonly>
+              </mat-form-field> -->
+              <b>القضية</b> : {{caseSubject}}
+            </div>
+
+            <!-- <div fxFlex.gt-sm="50" fxFlex="100" class="p-10">
+              <b>رقم الجلسة</b> : {{hearing.hearingNumber}}
+            </div> -->
+
+            <div fxFlex.gt-sm="50" fxFlex="100" class="p-10">
+              <b>تاريخ الجلسة</b> :
+              {{hearing.hearingDate | date : 'yyyy-MM-dd'}}
+              {{hearing.hearingDate | arDayOfWeek }}
+              {{ hearing.hearingDateHigri  }}
+            </div>
+
+            <div fxFlex.gt-sm="50" fxFlex="100" class="p-10">
+              <!-- <span>وقت الجلسة:</span> -->
+              <!-- <timepicker formControlName="hearingTime" showMeridian="true" labelMinutes="Minutes" disabled="true"
+                style="direction: ltr;"></timepicker> -->
+              <b>وقت الجلسة</b> : {{hearing?.hearingTime?.substring(0,2) > "12" ? hearing.hearingTime+'م':hearing.hearingTime+  'ص'}}
+            </div>
+
+            <div fxFlex.gt-sm="50" fxFlex="100" class="p-10" *ngIf="!hearing?.case?.receivingJudgmentDate">
+              <b>تاريخ نطق الحكم</b> :
+              {{hearing.hearingDate | date : 'yyyy-MM-dd'}}
+              {{hearing.hearingDate |arDayOfWeek}}
+              {{ hearing.hearingDateHigri  }}
+            </div>
+
+            <div fxFlex="100" *ngIf="hearing?.case?.receivingJudgmentDate">
+              <date-picker-dual controlName="pronouncingJudgmentDate" [placeholder]="'تاريخ موعد نطق الحكم'">
+              </date-picker-dual>
+            </div>
+
+            <div fxFlex="100">
+              <date-picker-dual controlName="receivingJudgmentDate" [placeholder]="'تاريخ موعد استلام الحكم'">
+              </date-picker-dual>
+            </div>
+
+            <section class="screen-actions">
+              <div class="button-row">
+
+                <button mat-raised-button color="primary" type="submit" [disabled]="!form.valid">
+                  <span *ngIf="hearingId"> حفظ</span>
+                </button>
+                <button mat-raised-button  type="button" (click)="location.back()">
+                  إلغاء
+                </button>
+              </div>
+            </section>
+          </div>
+        </form>
+
+      </mat-card-content>
+    </mat-card>
+  </div>
+</div>

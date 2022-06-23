@@ -1,0 +1,64 @@
+<div fxLayout="row wrap" fxFlexAlign="center" class="row" fxFlex="100">
+  <div fxFlex.gt-sm="100" fxFlex="100" class="p-10">
+
+    <label for="file-input">
+      <a type="button" mat-raised-button style="cursor: pointer;" title="انقر هنا لرفع ملف جديد">
+        <i class="fa fa-upload"></i> &nbsp; رفع ملف
+      </a>
+    </label>
+    <input id="file-input" style="visibility: hidden;" type="file" (change)="uploadAttachment()" multiple #fileInput />
+
+  </div>
+
+  <div fxFlex.gt-sm="100" fxFlex="100" class="p-10">
+    <div class="responsive-table screen-table">
+
+      <table mat-table [(dataSource)]="attachments" multiTemplateDataRows>
+        <ng-container matColumnDef="position">
+          <th mat-header-cell *matHeaderCellDef style="width:4rem;">#</th>
+          <td mat-cell *matCellDef="let element; let i = dataIndex">
+            {{(i + 1)}}
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="file">
+          <th mat-header-cell *matHeaderCellDef>الملف</th>
+          <td mat-cell *matCellDef="let element">
+            {{element.name }}
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="attachmentType">
+          <th mat-header-cell *matHeaderCellDef>نوع الملف</th>
+          <td mat-cell *matCellDef="let element">
+            <!-- {{element.attachmentTypeId | arrayKeyValue : attachmentTypesList }} -->
+            {{element.attachmentTypeId }}
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="actions">
+          <th mat-header-cell *matHeaderCellDef></th>
+          <td mat-cell *matCellDef="let element ; let i = dataIndex" style="text-align: center">
+            <tr>
+              <td>
+                <button type="button" mat-raised-button (click)="onDeleteAttachment(i)">
+                  <mat-icon class="material-icons" style="color: red;cursor:pointer;">delete</mat-icon>
+                </button>
+              </td>
+            </tr>
+          </td>
+
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="columnsToDisplay"></tr>
+        <tr mat-row *matRowDef="let element; columns: columnsToDisplay"></tr>
+        <tr class="mat-row" *matNoDataRow>
+          <td class="mat-cell"colspan="4" style="text-align: center;">لم يتم رفع المرفقات </td>
+        </tr>
+
+      </table>
+
+    </div>
+  </div>
+
+</div>

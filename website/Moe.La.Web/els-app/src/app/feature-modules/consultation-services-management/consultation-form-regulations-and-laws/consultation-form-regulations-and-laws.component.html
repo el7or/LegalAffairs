@@ -1,0 +1,207 @@
+<mat-card>
+  <mat-card-content>
+    <section fxLayout="row wrap" class="screen">
+      <section fxFlex="100" class="screen-header">
+        <div fxFlex="50"><span class="section-head">عرض النموذج</span></div>
+        <div fxFlex="50" fxLayoutAlign="end center">
+          <button mat-button color="primary" (click)="location.back()">
+            العودة إلى القائمة
+          </button>
+        </div>
+      </section>
+      <div *ngIf="moamala">
+        <app-consultation-moamala-details [moamalaId]="moamala.id"></app-consultation-moamala-details>
+      </div>
+
+      <form class="basic-form" [formGroup]="form">
+        <section class="screen-content row" fxLayout="row wrap" fxFlexAlign="center">
+          <span class="section-head">بيانات النموذج</span>
+
+          <div fxFlex.gt-sm="100" fxFlex="100" class="p-10">
+            <mat-form-field>
+              <input required matInput formControlName="subject" placeholder="الموضوع" autocomplete="off">
+              <mat-error *ngIf="form.controls['subject'].hasError('required')"> الموضوع مطلوب
+              </mat-error>
+            </mat-form-field>
+          </div>
+
+          <div fxFlex.gt-sm="50" fxFlex="100" class="p-10">
+            <mat-form-field>
+              <input required matInput formControlName="consultationNumber" placeholder="الرقم" autocomplete="off">
+              <mat-error *ngIf="form.controls['consultationNumber'].hasError('required')"> الرقم مطلوب
+              </mat-error>
+            </mat-form-field>
+          </div>
+
+          <div fxFlex.gt-sm="50" fxFlex="100">
+            <date-picker-dual controlName="consultationDate" [placeholder]="'التاريخ'"></date-picker-dual>
+          </div>
+
+          <div fxFlex.gt-sm="50" fxFlex="100" class="p-10">
+            <mat-form-field>
+              <input required matInput formControlName="legalAnalysis" placeholder="دراسة التحليلية" autocomplete="off">
+              <mat-error *ngIf="form.controls['legalAnalysis'].hasError('required')"> دراسة التحليلية مطلوب
+              </mat-error>
+            </mat-form-field>
+          </div>
+
+          <div fxFlex.gt-sm="50" fxFlex="100" class="p-10">
+            <mat-form-field>
+              <input required matInput formControlName="importantElements" placeholder="أهم العناصر" autocomplete="off">
+              <mat-error *ngIf="form.controls['importantElements'].hasError('required')"> أهم العناصر مطلوب
+              </mat-error>
+            </mat-form-field>
+          </div>
+
+          <div fxLayout="column" fxFlex.gt-sm="50" fxFlex="100" class="p-10">
+            <mat-form-field>
+              <mat-select matInput formControlName="workItemTypeId" placeholder="النوع"
+                (selectionChange)="populateSubWorkItemType($event.value)">
+                <mat-option value="">--اختر--</mat-option>
+                <mat-option *ngFor="let workItemType of workItemTypes" [value]="workItemType.id">
+                  {{ workItemType.name }}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
+
+          <div fxLayout="column" fxFlex.gt-sm="50" fxFlex="100" class="p-10">
+            <mat-form-field>
+              <mat-select matInput formControlName="subWorkItemTypeId" placeholder="النوع الفرعي">
+                <mat-option value="">--اختر--</mat-option>
+                <mat-option *ngFor="let subWorkItemType of subWorkItemTypes" [value]="subWorkItemType.id">
+                  {{ subWorkItemType.name }}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
+
+          <div fxLayout="column" fxFlex.gt-sm="50" fxFlex="100" class="p-10">
+            <span>هل توجد ملاحظات</span>
+            <mat-radio-group formControlName="isWithNote">
+              <mat-radio-button [value]="true" (change)="$event.value ? initVisualsForm() : ''">نعم</mat-radio-button>
+              &nbsp;
+              <mat-radio-button [value]="false">لا</mat-radio-button>
+            </mat-radio-group>
+          </div>
+
+          <div *ngIf="form.value.isWithNote" fxFlex.gt-sm="100" fxFlex="100" class="p-10">
+            <span class="section-head">المرئيات</span>
+            <form [formGroup]="formConsultationVisuals">
+              <div fxLayout="column" fxFlex.gt-sm="45" fxFlex="100" class="p-10" style="margin-top: -5px;">
+                <mat-form-field>
+                  <input matInput required formControlName="material" placeholder="المادة" autocomplete="off"
+                    maxlength="100" />
+                  <mat-error *ngIf="formConsultationVisuals.controls['material'].hasError('required')"> المادة مطلوب
+                  </mat-error>
+                </mat-form-field>
+              </div>
+              <div fxLayout="column" fxFlex.gt-sm="45" fxFlex="100" class="p-10" style="margin-top: -7.5px;">
+                <mat-form-field>
+                  <input matInput required formControlName="visuals" placeholder="المرئيات" autocomplete="off"
+                    maxlength="100" />
+                  <mat-error *ngIf="formConsultationVisuals.controls['visuals'].hasError('required')"> المرئيات مطلوبة
+                  </mat-error>
+                </mat-form-field>
+              </div>
+              <div fxFlex.gt-sm="10" fxFlex="100" class="p-10">
+                <button type="button" mat-raised-button color="primary" [disabled]="!formConsultationVisuals.valid"
+                  (click)="addConsultationVisuals(formConsultationVisuals)">
+                   إضافة
+                </button>
+              </div>
+            </form>
+
+            <section class="responsive-table screen-table">
+              <table mat-table [dataSource]="consultationVisualsDataSource" class="mat-elevation-z0">
+                <ng-container matColumnDef="position">
+                  <th mat-header-cell *matHeaderCellDef>مسلسل</th>
+                  <td mat-cell *matCellDef="let item; let i = index">
+                    {{(i+1)}}
+                  </td>
+                </ng-container>
+
+                <ng-container matColumnDef="material">
+                  <th mat-header-cell *matHeaderCellDef>المادة</th>
+                  <td mat-cell *matCellDef="let item">
+                    {{item.material}}
+                  </td>
+                </ng-container>
+
+                <ng-container matColumnDef="visuals">
+                  <th mat-header-cell *matHeaderCellDef>المرئيات</th>
+                  <td mat-cell *matCellDef="let item">
+                    {{item.visuals}}
+                  </td>
+                </ng-container>
+
+                <ng-container matColumnDef="actions">
+                  <th mat-header-cell *matHeaderCellDef></th>
+                  <td mat-cell *matCellDef="let item" class="note-text">
+                    <button type="button" mat-raised-button color="warn" style="margin: 12px;"
+                      (click)="deleteConsultationVisuals(item)" matTooltip="حذف" matTooltipPosition="above">
+                      <mat-icon>clear</mat-icon>
+                    </button>
+                  </td>
+                </ng-container>
+
+                <tr mat-header-row *matHeaderRowDef="visualsDisplayedColumns"></tr>
+                <tr mat-row *matRowDef="let row; columns: visualsDisplayedColumns;"></tr>
+              </table>
+            </section>
+          </div>
+        </section>
+
+        <section class="screen-content row" fxLayout="row wrap" fxFlexAlign="center">
+          <div fxLayout="column" fxFlex.gt-sm="100" fxFlex="100">
+            <span class="section-head">جدول المعاملات المرتبطة</span>
+            <section class="responsive-table screen-table">
+              <app-moamalat-list-table [dataSource]="relatedMoamalatDataSource" [hideActions]="true">
+              </app-moamalat-list-table>
+            </section>
+          </div>
+        </section>
+
+        <section class="screen-content row" *ngIf="consultationDetails" fxLayout="row wrap" fxFlexAlign="center">
+          <div fxLayout="column" fxFlex.gt-sm="100" fxFlex="100">
+            <span class="section-head">جدول حركات النموذج</span>
+            <section class="responsive-table screen-table">
+              <app-consultation-transaction-list [consultation]="consultationDetails">
+              </app-consultation-transaction-list>
+            </section>
+          </div>
+        </section>
+
+        <section class="screen-actions">
+          <button mat-raised-button color="primary" type="submit"
+            [disabled]="!form.valid || (form.value.isWithNote && !consultationVisuals.length)" (click)="onSubmit()">
+            حفظ
+          </button>
+          <button mat-raised-button color="primary" type="button" [disabled]="!form.valid || !consultationId"
+            (click)="onSubmit(consultationDetails.status.id)">
+            حفظ وإرسال
+          </button>
+          <button mat-raised-button color="primary" type="button"
+            *ngIf="(consultationId && !consultationSupportingDocument?.request?.id)&& (consultationDetails?.status?.id == ConsultationStatus.Returned || consultationDetails?.status?.id == ConsultationStatus.Draft)"
+            [routerLink]="['/requests/consultation-request', consultationId, moamalaId ]">
+            طلب نواقص
+          </button>
+          <button mat-raised-button color="primary" type="button"
+            *ngIf="(consultationId && consultationSupportingDocument?.request?.id) && (consultationDetails?.status?.id == ConsultationStatus.Returned || consultationDetails?.status?.id == ConsultationStatus.Draft)"
+            [routerLink]="['/requests/consultation-request/reformulate',consultationSupportingDocument.request.id]">
+            عرض طلب نواقص
+          </button>
+          <button mat-raised-button color="primary" type="button"
+            *ngIf="(consultationId && consultationSupportingDocument?.request?.id) && !(consultationDetails?.status?.id == ConsultationStatus.Returned || consultationDetails?.status?.id == ConsultationStatus.Draft)"
+            [routerLink]="['/requests/view', consultationSupportingDocument.request.id,consultationSupportingDocument.request.requestType]">
+            عرض طلب نواقص
+          </button>
+          <button mat-raised-button color="accent" type="button" class="float-left" (click)="location.back()">
+            رجوع
+          </button>
+        </section>
+
+      </form>
+    </section>
+  </mat-card-content>
+</mat-card>

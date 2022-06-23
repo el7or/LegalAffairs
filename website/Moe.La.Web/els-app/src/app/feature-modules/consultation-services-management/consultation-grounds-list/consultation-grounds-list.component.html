@@ -1,0 +1,33 @@
+<h4>الأسانيد النظامية</h4>
+<div class="screen-table responsive-table p-10">
+  <table mat-table [dataSource]="consultation.consultationGrounds" class="mat-elevation-z0">
+    <ng-container matColumnDef="position">
+      <th mat-header-cell *matHeaderCellDef> #</th>
+      <td mat-cell *matCellDef="let ground; let i = index">
+        {{(i+1)}}
+      </td>
+    </ng-container>
+    <ng-container matColumnDef="text">
+      <th mat-header-cell *matHeaderCellDef>
+      </th>
+
+      <td mat-cell *matCellDef="let ground" class="note-text">
+        {{ ground.text | sliceWords : 5 : ground }}
+        <a mat-button color="primary" *ngIf="ground.isWithViewMore"
+          (click)="ground.showViewMore = !ground.showViewMore;">
+          <span *ngIf="ground.showViewMore">المزيد</span>
+          <span *ngIf="!ground.showViewMore">أقل</span>
+        </a>
+      </td>
+    </ng-container>
+    <tr mat-header-row *matHeaderRowDef="groundsDisplayedColumns"></tr>
+
+    <tr mat-row *matRowDef="let row; columns: groundsDisplayedColumns;"></tr>
+
+    <tr class="mat-row no-data" *matNoDataRow>
+      <td class="mat-cell" [colSpan]="groundsDisplayedColumns.length">
+        لا يوجد نتائج .
+      </td>
+    </tr>
+  </table>
+</div>

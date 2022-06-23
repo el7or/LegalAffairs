@@ -1,0 +1,7 @@
+:host ::ng-deep .ck-editor__editable_inline {
+    min-height: 70px;
+}
+.screen-actions
+{
+    padding-bottom: .5em;
+}

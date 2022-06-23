@@ -1,0 +1,139 @@
+<table mat-table [dataSource]="dataSource" multiTemplateDataRows class="mat-elevation-z0" matSort
+  matSortActive="createdOn" matSortDirection="asc" matSortDisableClear>
+
+  <ng-container matColumnDef="unifiedNo">
+    <th [hidden]="hideActions" mat-header-cell *matHeaderCellDef mat-sort-header>الرقم الموحد</th>
+    <td [hidden]="hideActions" mat-cell *matCellDef="let moamala; let i = dataIndex">
+      {{moamala.unifiedNo}}
+    </td>
+  </ng-container>
+
+  <ng-container matColumnDef="moamalaNumber">
+    <th mat-header-cell *matHeaderCellDef mat-sort-header>رقم المعاملة</th>
+    <td mat-cell *matCellDef="let moamala; let i = dataIndex">
+      {{moamala.moamalaNumber}}
+    </td>
+  </ng-container>
+
+  <ng-container matColumnDef="createdOn">
+    <th mat-header-cell *matHeaderCellDef mat-sort-header>تاريخ ووقت المعاملة</th>
+    <td mat-cell *matCellDef="let moamala; let i = dataIndex">
+      <span>{{ moamala.createdOn | date: "yyyy-MM-dd" }} &nbsp;
+        {{ moamala.createdOnHigri }} &nbsp;
+        {{ moamala.createdOnTime }}</span>
+    </td>
+  </ng-container>
+
+  <ng-container matColumnDef="passDate">
+    <th [hidden]="hideActions" mat-header-cell *matHeaderCellDef mat-sort-header>تاريخ ووقت ورود المعاملة</th>
+    <td [hidden]="hideActions" mat-cell *matCellDef="let moamala; let i = dataIndex">
+      <span>{{ moamala.passDate | date: "yyyy-MM-dd" }} &nbsp;
+        {{ moamala.passDateHigri }} &nbsp; {{ moamala.passTime }}</span>
+
+    </td>
+  </ng-container>
+
+  <ng-container matColumnDef="subject">
+    <th mat-header-cell *matHeaderCellDef mat-sort-header>عنوان المعاملة</th>
+    <td mat-cell *matCellDef="let moamala; let i = dataIndex">
+      {{moamala.subject}}
+    </td>
+  </ng-container>
+
+  <ng-container matColumnDef="confidentialDegree">
+    <th [hidden]="hideActions" mat-header-cell *matHeaderCellDef mat-sort-header>درجة السرية</th>
+    <td [hidden]="hideActions" mat-cell *matCellDef="let moamala; let i = dataIndex">
+      {{moamala.confidentialDegree?.name}}
+    </td>
+  </ng-container>
+
+  <ng-container matColumnDef="status">
+    <th [hidden]="hideActions" mat-header-cell *matHeaderCellDef mat-sort-header>حالة المعاملة</th>
+    <td [hidden]="hideActions" mat-cell *matCellDef="let moamala; let i = dataIndex">
+      {{moamala.status?.name}}
+    </td>
+  </ng-container>
+
+  <ng-container matColumnDef="senderDepartment">
+    <th [hidden]="hideActions" mat-header-cell *matHeaderCellDef mat-sort-header>واردة من</th>
+    <td [hidden]="hideActions" mat-cell *matCellDef="let moamala; let i = dataIndex">
+      <span *ngIf="moamala.senderDepartment">{{moamala.senderDepartment?.name}}</span>
+      <span *ngIf="!moamala.senderDepartment">لا يوجد</span>
+    </td>
+  </ng-container>
+
+  <ng-container matColumnDef="branch">
+    <th [hidden]="hideActions" mat-header-cell *matHeaderCellDef mat-sort-header>الفرع المحالة إليه</th>
+    <td [hidden]="hideActions" mat-cell *matCellDef="let moamala; let i = dataIndex">
+      {{moamala.branch?.name}}
+    </td>
+  </ng-container>
+
+  <ng-container matColumnDef="createdBy">
+    <th [hidden]="!hideActions" mat-header-cell *matHeaderCellDef>منشيء المعاملة</th>
+    <td [hidden]="!hideActions" mat-cell *matCellDef="let moamala; let i = dataIndex">
+      {{moamala.createdByFullName}}
+    </td>
+  </ng-container>
+
+
+  <!-- Star Column -->
+  <ng-container matColumnDef="actions">
+    <th mat-header-cell *matHeaderCellDef></th>
+    <td mat-cell *matCellDef="let moamala">
+      <button [matMenuTriggerFor]="profile" mat-icon-button class="m-r-5">
+        <mat-icon>more_vert</mat-icon>
+      </button>
+      <mat-menu #profile="matMenu" class="mymegamenu">
+        <button mat-menu-item [routerLink]="['/moamalat/view', moamala.id]" routerLinkActive="router-link-active"
+          matTooltip="عرض" matTooltipPosition="above">
+          التفاصيل
+        </button>
+        <button type="button" mat-menu-item *ngIf="isLitigationManager" [routerLink]="['/cases/create']"
+          [queryParams]="{ moamalaId: moamala.id }" routerLinkActive="router-link-active" matTooltip="إنشاء قضية"
+          matTooltipPosition="above">
+          <span>إنشاء القضية</span>
+        </button>
+        <ng-container *ngIf="!hideActions">
+          <button mat-menu-item (click)="changeStatus(moamala, MoamalaStatuses.Referred, MoamalaSteps.Branch)"
+            *ngIf="moamala?.currentStep == MoamalaSteps.Initial && moamala?.confidentialDegree?.id != ConfidentialDegrees.Confidential "
+            routerLinkActive="router-link-active" matTooltip="إحالة" matTooltipPosition="above">
+            إحالة
+          </button>
+          <button mat-menu-item (click)="changeStatus(moamala, MoamalaStatuses.Referred, MoamalaSteps.Department)"
+            *ngIf="moamala?.currentStep == MoamalaSteps.Branch" routerLinkActive="router-link-active" matTooltip="إحالة"
+            matTooltipPosition="above">
+            إحالة
+          </button>
+          <button mat-menu-item (click)="changeStatus(moamala, MoamalaStatuses.MoamalaReturned)"
+            *ngIf="moamala?.currentStep != MoamalaSteps.Initial" routerLinkActive="router-link-active"
+            matTooltip="إعادة" matTooltipPosition="above">
+         إعادة
+          </button>
+          <button mat-menu-item (click)="changeStatus(moamala, MoamalaStatuses.Assigned)" *ngIf="(moamala?.confidentialDegree?.id == ConfidentialDegrees.Confidential&&moamala?.currentStep == MoamalaSteps.Initial)
+            || moamala?.currentStep == MoamalaSteps.Department" routerLinkActive="router-link-active"
+            matTooltip="اسناد" matTooltipPosition="above">
+            اسناد
+          </button>
+          <button mat-menu-item color="warn" aria-label="Edit"
+            *ngIf="moamala?.currentStep == MoamalaSteps.Initial && moamala.isManual"
+            [routerLink]="['/moamalat/edit',moamala.id]" routerLinkActive="router-link-active">
+            <span>تعديل</span>
+          </button>
+          <button mat-menu-item color="warn" aria-label="Delete" (click)="onDelete(moamala.id)"
+            *ngIf="moamala?.status?.id == MoamalaStatuses.New && moamala.isManual">
+            <span>حذف</span>
+          </button>
+        </ng-container>
+      </mat-menu>
+    </td>
+  </ng-container>
+
+  <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+  <tr mat-row *matRowDef="let moamala; columns: displayedColumns" [class.unread]="!moamala.isRead"></tr>
+
+  <!-- Row shown when there is no matching data. -->
+  <tr class="mat-row" *matNoDataRow>
+    <td class="mat-cell" colspan="11" style="text-align: center;">لا يوجد نتائج للبيانات.</td>
+  </tr>
+</table>

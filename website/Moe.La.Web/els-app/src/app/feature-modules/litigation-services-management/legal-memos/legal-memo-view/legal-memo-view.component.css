@@ -1,0 +1,48 @@
+.note-text{
+    white-space: normal;
+    word-wrap: break-word;
+    max-width: 300px;
+    text-align: justify;
+    padding-left:20px;
+}
+
+/* ::ng-deep .mat-figure{
+    justify-content: end !important;
+    display: block !important;
+    padding-left: 0.5rem !important;
+    padding-right: 0.5rem !important;
+    padding-top: .3rem !important;
+}
+:host ::ng-deep .ck-editor__editable_inline {
+    min-height: 150px;
+} */
+
+.well {
+    height: 200px;
+    /* min-height: 20px; */
+    overflow-y: scroll;
+    padding: 19px;
+    margin-bottom: 20px;
+    background-color: #FCFCFC;
+    border: 1px solid #F1F1F1;
+    border-radius: 4px;
+    -webkit-box-shadow: inset 0 1px 1px rgb(0 0 0 / 5%);
+    box-shadow: inset 0 1px 1px rgb(0 0 0 / 5%);
+}
+
+.well::-webkit-scrollbar-track {
+    border: 1px solid #F2F2F2;
+    padding: 2px 0;
+    background-color: #ECECEC;
+  }
+  
+  .well::-webkit-scrollbar {
+    width: 10px;
+  }
+  
+  .well::-webkit-scrollbar-thumb {
+    border-radius: 10px;
+    box-shadow: inset 0 0 6px rgba(180,180,180);
+    background-color: #B4B4B4;
+    border: 1px solid #F2F2F2;
+  }

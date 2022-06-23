@@ -1,0 +1,7 @@
+b {
+  color: gray;
+}
+
+::ng-deep .mat-horizontal-stepper-header-container {
+  margin-bottom: 1em;
+}

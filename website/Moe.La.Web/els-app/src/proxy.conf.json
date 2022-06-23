@@ -1,0 +1,7 @@
+{
+    "/adfs/*": {
+        "target": "https://stsstaging.moe.gov.sa",
+        "secure": true,
+        "logLevel": "debug"
+    }
+}

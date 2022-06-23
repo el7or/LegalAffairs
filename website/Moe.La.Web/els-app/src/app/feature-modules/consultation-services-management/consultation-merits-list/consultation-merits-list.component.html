@@ -1,0 +1,32 @@
+<h4>الحيثيات</h4>
+<div class="screen-table responsive-table p-10">
+  <table mat-table [dataSource]="consultation.consultationMerits" class="mat-elevation-z0">
+    <ng-container matColumnDef="position">
+      <th mat-header-cell *matHeaderCellDef> #</th>
+      <td mat-cell *matCellDef="let merit; let i = index">
+        {{(i+1)}}
+      </td>
+    </ng-container>
+    <ng-container matColumnDef="text">
+      <th mat-header-cell *matHeaderCellDef>
+      </th>
+
+      <td mat-cell *matCellDef="let merit" class="note-text">
+        {{ merit.text | sliceWords : 5 : merit }}
+        <a mat-button color="primary" *ngIf="merit.isWithViewMore" (click)="merit.showViewMore = !merit.showViewMore;">
+          <span *ngIf="merit.showViewMore">المزيد</span>
+          <span *ngIf="!merit.showViewMore">أقل</span>
+        </a>
+      </td>
+    </ng-container>
+    <tr mat-header-row *matHeaderRowDef="meritsDisplayedColumns"></tr>
+
+    <tr mat-row *matRowDef="let row; columns: meritsDisplayedColumns;"></tr>
+
+    <tr class="mat-row no-data" *matNoDataRow>
+      <td class="mat-cell" [colSpan]="meritsDisplayedColumns.length">
+        لا يوجد نتائج .
+      </td>
+    </tr>
+  </table>
+</div>

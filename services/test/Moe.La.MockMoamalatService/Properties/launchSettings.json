@@ -1,0 +1,10 @@
+﻿{
+  "profiles": {
+    "MockTrasolService": {
+      "commandName": "Project",
+      "environmentVariables": {
+        "DOTNET_ENVIRONMENT": "Development"
+      }
+    }
+  }
+}

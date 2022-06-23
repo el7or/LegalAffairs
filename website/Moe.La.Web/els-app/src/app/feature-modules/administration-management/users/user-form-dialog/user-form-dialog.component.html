@@ -1,0 +1,161 @@
+<h3 mat-dialog-title>
+  إضافة مستخدم
+</h3>
+<div mat-dialog-content>
+  <section class="screen">
+    <mat-form-field>
+      <mat-placeholder>البحث باستخدم اسم المستخدم في نظام الهوية الموحد
+      </mat-placeholder>
+      <input matInput type="search" [(ngModel)]="searchText" autocomplete="off" (keyup.enter)="onSearch()">
+      <button mat-button matSuffix mat-stroked-button aria-label="search" type="button" color="primary"
+        [disabled]="!searchText" (click)="onSearch()">
+        بحث
+      </button>
+    </mat-form-field>
+    <form [formGroup]="form">
+      <div *ngIf="user">
+        <div fxLayout="row wrap" fxFlexAlign="center" style="background-color: #F2F2F2;" class="entity-details p-10">
+          <div fxLayout="column" fxFlex.gt-sm="33" fxFlex="100" style="border: none;">
+            <span>الاسم </span>
+            <span> {{user?.firstName}} {{user?.secondName}} {{user?.thirdName}} {{user?.lastName}}</span>
+          </div>
+          <div fxLayout="column" fxFlex.gt-sm="33" fxFlex="100" style="border: none;">
+            <span>رقم الهوية</span>
+            <span> {{user?.identityNumber}}</span>
+          </div>
+          <div fxLayout="column" fxFlex.gt-sm="33" fxFlex="100" style="border: none;">
+            <span>البريد الالكتروني</span>
+            <span> {{user?.email}}</span>
+          </div>
+        </div>
+        <div fxLayout="row wrap" fxFlexAlign="center" class="row">
+          <div fxFlex.gt-sm="50" fxFlex="100" class="p-10">
+            <mat-form-field>
+              <mat-select matInput formControlName="branchId" placeholder="الفرع"
+                (selectionChange)="onSelectBranch($event.value)" required>
+                <mat-option value="">--اختر--</mat-option>
+                <mat-option *ngFor="let branch of branches" [value]="branch.id">
+                  {{ branch.name }}</mat-option>
+              </mat-select>
+              <mat-error *ngIf="form.controls['branchId'].hasError('required')">الفرع مطلوبة
+              </mat-error>
+            </mat-form-field>
+          </div>
+          <div fxFlex.gt-sm="50" fxFlex="100" class="p-10">
+            <mat-form-field>
+              <mat-select formControlName="roles" multiple required placeholder="الادوار">
+                <mat-option *ngFor="let role of allRoles" [value]="role.name" (click)="onChangeRoles()"
+                  [disabled]="disableResearcherOrConsultant(role.name)">
+                  {{ role.nameAr }}
+                </mat-option>
+              </mat-select>
+              <mat-error *ngIf="form.controls['roles'].hasError('required')">الادوار مطلوبة</mat-error>
+            </mat-form-field>
+          </div>
+          <div fxFlex.gt-sm="50" fxFlex="100" class="p-10">
+            <mat-form-field>
+              <input matInput formControlName="employeeNo" placeholder="الرقم الوظيفي" autocomplete="off"
+                maxlength="10" />
+              <mat-error *ngIf="form.controls['employeeNo'].hasError('maxlength')">رقم الجوال يجب ان لايزيد عن 10 أرقام
+              </mat-error>
+            </mat-form-field>
+          </div>
+
+          <div fxFlex.gt-sm="50" fxFlex="100" class="p-10">
+            <mat-form-field>
+              <mat-select matInput formControlName="jobTitleId" placeholder="المسمى الوظيفي">
+                <mat-option value="">--اختر--</mat-option>
+                <mat-option *ngFor="let jobTitle of jobTitles" [value]="jobTitle.id">
+                  {{ jobTitle.name }}</mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
+
+          <div fxFlex.gt-sm="25" fxFlex="100" class="p-10">
+            <mat-form-field style="direction: ltr !important;">
+              <span matSuffix>966+ &nbsp;</span>
+              <input type="tel" matInput formControlName="phoneNumber" required numbersOnlyValidator mobileValidator2
+                minlength="9" maxlength="9" placeholder="رقم الجوال" autocomplete="off">
+              <mat-hint>مثال (Eg.) 5xxxxxxxx</mat-hint>
+              <mat-error *ngIf="form.controls['phoneNumber'].hasError('required')">رقم الجوال مطلوب</mat-error>
+              <mat-error *ngIf="form.controls['phoneNumber'].hasError('maxlength')">رقم الجوال يجب ان لايزيد عن 9 أرقام
+              </mat-error>
+              <mat-error *ngIf="form.controls['phoneNumber'].hasError('minlength')">رقم الجوال يجب ان لايقل عن
+                {{form.controls['phoneNumber'].errors.minlength.requiredLength}} خانات
+              </mat-error>
+              <mat-error *ngIf="form.controls['phoneNumber'].hasError('numbersOnlyValidator')">
+                رقم الجوال يجب ان لايحوي احرف
+              </mat-error>
+              <mat-error *ngIf="form.controls['phoneNumber'].hasError('mobileValidator2')">
+                رقم الجوال غير صحيح
+              </mat-error>
+            </mat-form-field>
+          </div>
+
+          <div fxFlex.gt-sm="100" fxFlex="100" class="p-10">
+            <ng-container formArrayName="claims" *ngIf="form.controls['claims']">
+              <div *ngFor="let claim of allClaims; let i = index">
+                <mat-checkbox [formControlName]="i" color="warn">
+                  {{claim.nameAr}} </mat-checkbox>
+              </div>
+              <br />
+            </ng-container>
+          </div>
+
+          <div fxFlex.gt-sm="100" fxFlex="100" class="p-10">
+            <mat-slide-toggle formControlName="enabled" name="enabled">
+              &nbsp;&nbsp;مفعل
+            </mat-slide-toggle>
+          </div>
+
+          <div fxFlex.gt-sm="100" fxFlex="100" class="p-10">
+            <strong>صورة التوقيع <span class="mat-placeholder-required">*</span></strong>
+            <app-user-signature (set-attachment)="onSignatureChange($event)">
+            </app-user-signature>
+          </div>
+        </div>
+        <section class="screen-table responsive-table"
+          *ngIf="branchDepartments?.length>0&&checkedDistributableRoles?.length>0">
+          <table style="border:lightseagreen solid 1px;">
+            <thead style="border:lightseagreen solid 1px;">
+              <tr>
+                <th rowspan="2"></th>
+                <th [attr.colspan]="branchDepartments?.length">الإدارات التخصصية</th>
+              </tr>
+              <tr>
+                <th *ngFor="let department of branchDepartments">{{department.name}}</th>
+              </tr>
+            </thead>
+
+            <tbody style="border:lightseagreen solid 1px;">
+              <tr *ngFor="let userRole of myUserRoleDepartments; let i = index">
+                <th>{{userRole.role?.name}}</th>
+                <td *ngFor="let specialzedDepartment of branchDepartments; let j = index" style="align-items: center;">
+                  <mat-checkbox class="amateur" color="primary"
+                    [checked]="isDepartmentSelected(userRole.role?.id,specialzedDepartment.id)"
+                    (change)="onSelectUserRoleDepartment($event.checked,userRole.role.id,specialzedDepartment.id)">
+                  </mat-checkbox>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </section>
+
+      </div>
+    </form>
+  </section>
+</div>
+<div *ngIf="requiredDepartmentSelection && form.controls['branchId'].value">
+  <span style="color: red;">
+    يجب اضافة الادارات التخصصية للادارة العامة المختارة
+  </span>
+</div>
+<div mat-dialog-actions class="screen-actions">
+  <button mat-raised-button color="primary" (click)="onSubmit()"
+    [disabled]="!form.valid ||requiredDepartmentSelection||(form.controls['signature'].value ==null || form.controls['signature'].value =='')">
+    <span>إضافة</span>
+  </button>
+  <button type="button" mat-raised-button (click)="onCancel()">
+    إغلاق
+  </button>
+</div>

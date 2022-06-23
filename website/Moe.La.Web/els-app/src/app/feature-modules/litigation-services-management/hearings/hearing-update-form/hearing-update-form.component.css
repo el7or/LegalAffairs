@@ -1,0 +1,20 @@
+.responsive-table.app-table
+{
+
+    border-top: 0px;
+}
+h3{
+    margin: 0px;
+    margin-top: .3em;
+}
+.responsive-table.app-table table {
+    margin: 0px;
+}
+.screen-content .app-table .mat-table {
+    border-bottom: 0px;
+    padding: 0;
+
+}
+.screen-content .app-table{
+    border-bottom: 0px;
+}

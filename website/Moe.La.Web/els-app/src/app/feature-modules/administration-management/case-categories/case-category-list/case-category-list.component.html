@@ -1,0 +1,162 @@
+<mat-card>
+  <mat-card-content>
+    <section class="screen">
+
+      <section class="screen-header">
+        <div fxLayout="row" fxFlex="70">
+          <button mat-raised-button color="primary" (click)="openModal(null)">
+            إضافة
+          </button>
+        </div>
+        <div fxFlex="30" fxLayoutAlign="end center">
+        </div>
+      </section>
+
+      <section class="screen-table responsive-table">
+        <div fxLayout="row wrap" fxLayoutAlign="space-between stretch">
+          <div fxLayout="row" fxFlex.gt-sm="50" fxFlex="100">
+            <div class="filter-results">
+              <button mat-flat-button (click)="showFilter = !showFilter">
+                <span *ngIf="!showFilter">
+                  تصفية النتائج
+                </span>
+                <span *ngIf="showFilter">
+                  اخفاء التصفية
+                </span>
+              </button>
+            </div>
+            <div class="free-search">
+              <mat-form-field appearance="outline" [hideRequiredMarker]="true" floatLabel="always">
+                <span matPrefix>
+                  <mat-icon>search</mat-icon>
+                </span>
+                <input matInput placeholder="بحث" [(ngModel)]="searchText" name="searchText" (keyup)="onSearch()"
+                  autocomplete="off">
+              </mat-form-field>
+            </div>
+          </div>
+          <div fxFlex.gt-sm="50" fxFlex="100" fxHide.sm fxHide.xs>
+            <mat-paginator #paginator [length]="categories.length" [pageIndex]="queryObject.page - 1"
+              showFirstLastButtons [pageSize]="queryObject.pageSize" (page)="onPageChange($event.pageIndex)"
+              hidePageSize="true">
+            </mat-paginator>
+          </div>
+        </div>
+
+        <div *ngIf="showFilter" fxLayout="row wrap">
+          <div fxFlex.gt-sm="100" fxFlex="100">
+            <form class="basic-form" [formGroup]="form" (submit)="onSearch()">
+              <div class="filter-container p-10" fxLayout="row wrap">
+                <div fxFlex.gt-sm="50" fxFlex="100" class="p-10">
+                  <mat-form-field>
+                    <input matInput formControlName="name" placeholder="التصنيف الفرعى 2" autocomplete="off" />
+                  </mat-form-field>
+                </div>
+                <div fxFlex="100" class="screen-actions">
+                  <button color="primary" type="submit" mat-raised-button>
+                    تصفية
+                  </button>
+                  <button type="button" mat-raised-button (click)="onClearFilter()">
+                    مسح التصفية
+                  </button>
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+        <table mat-table [dataSource]="categories" matSort matSortActive="parent" matSortDirection="asc"
+          matSortDisableClear>
+
+          <ng-container matColumnDef="position">
+            <th mat-header-cell *matHeaderCellDef> #</th>
+            <td mat-cell *matCellDef="let category; let i = index">
+              {{(i + 1 + queryObject.pageSize * ((queryObject.page || 1) -1))}}
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="caseSource">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>
+              المصدر
+            </th>
+            <td mat-cell *matCellDef="let category"> {{category?.caseSource?.name}}</td>
+          </ng-container>
+
+
+          <ng-container matColumnDef="mainCategory">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>
+              التصنيف الرئيسى
+            </th>
+            <td mat-cell *matCellDef="let category"> {{category?.mainCategory?.name}} </td>
+          </ng-container>
+
+          <ng-container matColumnDef="firstSubCategory">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>
+              التصنيف الفرعى 1
+            </th>
+            <td mat-cell *matCellDef="let category"> {{category?.firstSubCategory?.name}} </td>
+          </ng-container>
+
+          <ng-container matColumnDef="secondSubCategory">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>
+              التصنيف الفرعى 2
+            </th>
+            <td mat-cell *matCellDef="let category"> {{category?.name}} </td>
+          </ng-container>
+
+          <!-- <ng-container matColumnDef="isActive">
+            <th mat-header-cell *matHeaderCellDef>
+               الحالة
+            </th>
+            <td mat-cell *matCellDef="let category">
+              <span *ngIf="category.isActive">مفعل</span>
+              <span *ngIf="!category.isActive">معطل</span>
+            </td>
+          </ng-container> -->
+
+          <ng-container matColumnDef="isActive">
+            <th mat-header-cell *matHeaderCellDef>الحالة</th>
+            <td mat-cell *matCellDef="let category">
+              <mat-slide-toggle [(ngModel)]="category.isActive" color="accent" (change)="onChange($event,category.id)">
+                <span *ngIf="category.isActive">مفعل</span>
+                <span *ngIf="!category.isActive">معطل</span>
+              </mat-slide-toggle>
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="actions">
+            <th mat-header-cell *matHeaderCellDef> </th>
+            <td mat-cell *matCellDef="let category">
+              <button [matMenuTriggerFor]="profile" mat-icon-button class="m-r-5">
+                <mat-icon>more_vert</mat-icon>
+              </button>
+              <mat-menu #profile="matMenu" class="mymegamenu">
+
+                <button mat-menu-item color="primary" aria-label="Edit" (click)="openModal(category.id)">
+                  تعديل
+                </button>
+
+                <button mat-menu-item color="warn" aria-label="Delete" (click)="onDelete(category.id)">
+                  حذف
+                </button>
+              </mat-menu>
+            </td>
+          </ng-container>
+
+
+          <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+          <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+          <tr class="mat-row no-data" *matNoDataRow>
+            <td class="mat-cell" [colSpan]="displayedColumns.length">
+              لا يوجد نتائج .
+            </td>
+          </tr>
+        </table>
+
+        <mat-paginator #paginator [length]="categories.length" [pageIndex]="queryObject.page - 1" showFirstLastButtons
+          [pageSize]="queryObject.pageSize" (page)="onPageChange($event.pageIndex)" hidePageSize="true">
+        </mat-paginator>
+
+      </section>
+    </section>
+  </mat-card-content>
+</mat-card>

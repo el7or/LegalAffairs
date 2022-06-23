@@ -1,0 +1,80 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="Moe.La.Core.Entities.Integration.Moeen.Defendant">
+    <Position X="1" Y="1.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AGACAAAAAAAAAAAAAAAAAAAQAAAAIAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Entities\Integration\Moeen\Defendant.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Moe.La.Core.Entities.Integration.Moeen.InformLetter">
+    <Position X="4.25" Y="3.75" Width="2" />
+    <TypeIdentifier>
+      <HashCode>AAAQAAAAAgXGiAABAgAAAAAIQgAAACAAEAABAQAAAAE=</HashCode>
+      <FileName>Entities\Integration\Moeen\InformLetter.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Property Name="NextSessionInfo" />
+      <Property Name="RequestInfo" />
+      <Property Name="RulingInfo" />
+    </ShowAsAssociation>
+    <ShowAsCollectionAssociation>
+      <Property Name="DefendantList" />
+      <Property Name="ProsecutorList" />
+      <Property Name="ProsecutorRequestList" />
+    </ShowAsCollectionAssociation>
+  </Class>
+  <Class Name="Moe.La.Core.Entities.Integration.Moeen.InformLetterAttachments" Collapsed="true">
+    <Position X="7.25" Y="10.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAgAAAAAAAA=</HashCode>
+      <FileName>Entities\Integration\Moeen\InformLetterAttachments.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsCollectionAssociation>
+      <Property Name="SupportingDocumentList" />
+    </ShowAsCollectionAssociation>
+  </Class>
+  <Class Name="Moe.La.Core.Entities.Integration.Moeen.Prosecutor">
+    <Position X="4" Y="8.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAACCAAAAAAAAAAAAAAAAAAQAAAAIAAAAAAIAAAAAAA=</HashCode>
+      <FileName>Entities\Integration\Moeen\Prosecutor.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Moe.La.Core.Entities.Integration.Moeen.ProsecutorRequest">
+    <Position X="4" Y="1" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAACAAAAAAAAAAAAAACAAAAAAAAAAQAAAAAAAAAAAAA=</HashCode>
+      <FileName>Entities\Integration\Moeen\ProsecutorRequest.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Moe.La.Core.Entities.Integration.Moeen.Request">
+    <Position X="7.75" Y="4.25" Width="2" />
+    <TypeIdentifier>
+      <HashCode>AAASAAQAAIAAAAABAAAEAAAAAAAAgAAAAAAAAAAAQAI=</HashCode>
+      <FileName>Entities\Integration\Moeen\Request.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Moe.La.Core.Entities.Integration.Moeen.Ruling">
+    <Position X="2" Y="4.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAGAAEAAACAAAAEAgAABAAAAAAAAAAAAAAAAAgAAAA=</HashCode>
+      <FileName>Entities\Integration\Moeen\Ruling.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Moe.La.Core.Entities.Integration.Moeen.Session">
+    <Position X="7" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAACAAAACAAFAAAAAAAAAIAAAAAAAgAAAAAAAAAAQAA=</HashCode>
+      <FileName>Entities\Integration\Moeen\Session.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Moe.La.Core.Entities.Integration.Moeen.SupportingDocument">
+    <Position X="7.25" Y="7.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AABAAAAAAAAAGAAAAAAAAAAAAAQAAAgAAAEAAABAAAA=</HashCode>
+      <FileName>Entities\Integration\Moeen\SupportingDocument.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>

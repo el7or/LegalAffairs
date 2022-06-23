@@ -1,0 +1,92 @@
+<h3 mat-dialog-title>مراحل إنشاء قضية
+    <span *ngIf="litigationType == LitigationTypes.FirstInstance"> استئناف</span>
+    <span *ngIf="litigationType == LitigationTypes.Appeal"> عليا</span>
+
+</h3>
+<div mat-dialog-content>
+
+    <p class="hint-header">يجب على مستخدمى النظام اتباع الخطوات التالية لإنشاء قضية جديدة</p>
+
+    <div fxLayout="row wrap" class="steps-container">
+
+        <div fxFlex.gt-sm="100" fxFlex="100" *ngIf="showObjectionPermitRequest" [ngClass]="{
+            'steps-row': true,
+            'in-review': selectedIndex==StepsIndexes.PermitRequest && (permitRequest?.id && permitRequest?.request?.requestStatus == RequestStatus.New),
+            'accepted': permitRequest?.request?.requestStatus == RequestStatus.AcceptedFromLitigationManager,
+            'rejected': permitRequest?.request?.requestStatus == RequestStatus.Rejected
+            }">
+            <span *ngIf="permitRequest?.request?.requestStatus != RequestStatus.Rejected" class="number-circle">1</span>
+            <mat-icon class="right-icon" *ngIf="permitRequest?.request?.requestStatus == RequestStatus.Rejected">clear
+            </mat-icon>
+            <span *ngIf="!permitRequest?.id">طلب توجيه بخصوص الاعتراض أو الاكتفاء بالحكم</span>
+            <span *ngIf="permitRequest?.id">تم تقديم طلب بخصوص
+                الاعتراض أو الاكتفاء بالحكم</span>
+
+            <button
+                *ngIf="selectedIndex==StepsIndexes.PermitRequest && (!permitRequest || permitRequest?.request?.requestStatus == RequestStatus.Rejected)"
+                mat-raised-button type="button" color="primary" (click)="openObjectionPermitRequestModal()">
+                <span>تقديم الطلب</span>
+            </button>
+
+            <span
+                *ngIf="selectedIndex==StepsIndexes.PermitRequest && permitRequest?.id && permitRequest?.request?.requestStatus == RequestStatus.New"
+                class="review">
+                قيد المراجعة
+                <mat-icon>edit</mat-icon>
+            </span>
+            <span
+                *ngIf="permitRequest?.request?.requestStatus == RequestStatus.AcceptedFromLitigationManager && permitRequest?.suggestedOpinon == SuggestedOpinon.ObjectionAction"
+                class="accepted">
+                <mat-icon>done</mat-icon>
+            </span>
+        </div>
+        <div fxFlex.gt-sm="100" fxFlex="100" [ngClass]="{
+            'steps-row': true,
+            'in-review': selectedIndex==StepsIndexes.MemoRequest &&(objectionRequest?.id && objectionRequest?.request?.requestStatus.id == RequestStatus.New),
+            'accepted':selectedIndex>StepsIndexes.MemoRequest,
+            'rejected':objectionRequest?.request?.requestStatus.id == RequestStatus.Rejected
+            }">
+            <span class="number-circle"
+                *ngIf="showObjectionPermitRequest && objectionRequest?.request?.requestStatus.id != RequestStatus.Rejected">2</span>
+            <span class="number-circle"
+                *ngIf="!showObjectionPermitRequest && objectionRequest?.request?.requestStatus.id != RequestStatus.Rejected">1</span>
+
+            <mat-icon class="right-icon" *ngIf="objectionRequest?.request?.requestStatus.id == RequestStatus.Rejected">
+                clear
+            </mat-icon>
+            طلب اختيار مذكرة اعتراضية
+            <button
+                *ngIf="selectedIndex==StepsIndexes.MemoRequest &&(!objectionRequest || objectionRequest?.request?.requestStatus.id == RequestStatus.Rejected)"
+                mat-raised-button type="button" color="primary" (click)="openSelectMemoModal()">
+                <span>تقديم الطلب</span>
+            </button>
+            <span class="review"
+                *ngIf="selectedIndex==StepsIndexes.MemoRequest &&(objectionRequest?.id && objectionRequest?.request?.requestStatus.id == RequestStatus.New)">
+                قيد المراجعة
+                <mat-icon>edit</mat-icon>
+            </span>
+            <mat-icon *ngIf="selectedIndex < StepsIndexes.MemoRequest" class="left-icon">schedule</mat-icon>
+
+            <span *ngIf="selectedIndex>StepsIndexes.MemoRequest" class="accepted">
+                <mat-icon>done</mat-icon>
+            </span>
+        </div>
+        <div fxFlex.gt-sm="100" fxFlex="100" class="steps-row">
+            <span class="number-circle" *ngIf="showObjectionPermitRequest">3</span>
+            <span class="number-circle" *ngIf="!showObjectionPermitRequest">2</span>
+
+            إنشاء قضية
+            <button *ngIf="selectedIndex==StepsIndexes.NewCase" mat-raised-button type="button" color="primary"
+                (click)="addNextCase()">
+                <span>إنشاء قضية</span>
+            </button>
+            <mat-icon *ngIf="selectedIndex < StepsIndexes.NewCase" class="left-icon">schedule</mat-icon>
+        </div>
+
+    </div>
+    <section class="screen-actions">
+        <div class="button-row">
+            <button mat-raised-button type="button" class="cancel" (click)="onCancel()">إغلاق</button>
+        </div>
+    </section>
+</div>

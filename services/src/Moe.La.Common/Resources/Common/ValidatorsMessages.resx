@@ -1,0 +1,540 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="ActionArName" xml:space="preserve">
+    <value>اسم الحدث باللغة العربية</value>
+  </data>
+  <data name="ActionEnName" xml:space="preserve">
+    <value>اسم الحدث باللغة الانجليزية</value>
+  </data>
+  <data name="AddressDetails" xml:space="preserve">
+    <value>تفاصيل العنوان</value>
+  </data>
+  <data name="AppealLegalMemoId" xml:space="preserve">
+    <value>مذكرة الاستئناف</value>
+  </data>
+  <data name="AppealReasons" xml:space="preserve">
+    <value>أسباب الاستئناف</value>
+  </data>
+  <data name="AttachmentType" xml:space="preserve">
+    <value>نوع الملف</value>
+  </data>
+  <data name="AttorneyNumber" xml:space="preserve">
+    <value>رقم المحامى</value>
+  </data>
+  <data name="BoardId" xml:space="preserve">
+    <value>رقم اللجنة</value>
+  </data>
+  <data name="BoardMeetingMembers" xml:space="preserve">
+    <value>اعضاء اللجنة</value>
+  </data>
+  <data name="BuidlignNumber" xml:space="preserve">
+    <value>رقم البناية</value>
+  </data>
+  <data name="CaseCategories" xml:space="preserve">
+    <value>تصنيف القضية</value>
+  </data>
+  <data name="CaseDescription" xml:space="preserve">
+    <value>وصف الدعوى</value>
+  </data>
+  <data name="CaseId" xml:space="preserve">
+    <value>رقم القضية</value>
+  </data>
+  <data name="CaseRuleGeneralManagementIds" xml:space="preserve">
+    <value>الجهة المعنية بالحكم</value>
+  </data>
+  <data name="CaseRuleLegalAffairsDepartmentIds" xml:space="preserve">
+    <value>الجهة المعنية بالحكم</value>
+  </data>
+  <data name="CaseSource" xml:space="preserve">
+    <value>مصدر القضية</value>
+  </data>
+  <data name="CaseSourceNumber" xml:space="preserve">
+    <value>رقم القضية</value>
+  </data>
+  <data name="CategoryArName" xml:space="preserve">
+    <value />
+  </data>
+  <data name="CategoryEnName" xml:space="preserve">
+    <value />
+  </data>
+  <data name="CircleNumber" xml:space="preserve">
+    <value>رقم الدائرة</value>
+  </data>
+  <data name="Closed" xml:space="preserve">
+    <value>مغلق</value>
+  </data>
+  <data name="ClosingReason" xml:space="preserve">
+    <value>سبب الاغلاق</value>
+  </data>
+  <data name="ClosingReport" xml:space="preserve">
+    <value>غلق التقرير</value>
+  </data>
+  <data name="CommitteeCaseNo" xml:space="preserve">
+    <value>رقم القضية في اللجنة</value>
+  </data>
+  <data name="ConfidentialDegree" xml:space="preserve">
+    <value>درجة السرية</value>
+  </data>
+  <data name="ConsigneeDepartment" xml:space="preserve">
+    <value>الادارة المرسل إليها </value>
+  </data>
+  <data name="ConsultantId" xml:space="preserve">
+    <value>المستشار</value>
+  </data>
+  <data name="ConsultationSubject" xml:space="preserve">
+    <value>الموضوع</value>
+  </data>
+  <data name="CourtId" xml:space="preserve">
+    <value>المحكمة</value>
+  </data>
+  <data name="Description" xml:space="preserve">
+    <value>وصف خطوة الحدث</value>
+  </data>
+  <data name="Feedback" xml:space="preserve">
+    <value>التحليل و الرأي</value>
+  </data>
+  <data name="File" xml:space="preserve">
+    <value>الملف</value>
+  </data>
+  <data name="FileNo" xml:space="preserve">
+    <value>رقم الملف</value>
+  </data>
+  <data name="FinalConclusions" xml:space="preserve">
+    <value>الاستنتاجات النهائية</value>
+  </data>
+  <data name="FirstName" xml:space="preserve">
+    <value>الاسم الأول</value>
+  </data>
+  <data name="GroupId" xml:space="preserve">
+    <value>رقم المجموعة</value>
+  </data>
+  <data name="GroupName" xml:space="preserve">
+    <value>اسم المجموعة</value>
+  </data>
+  <data name="HearingDate" xml:space="preserve">
+    <value>تاريخ الجلسة</value>
+  </data>
+  <data name="HearingId" xml:space="preserve">
+    <value>رقم الجلسة</value>
+  </data>
+  <data name="HearingNumber" xml:space="preserve">
+    <value>رقم الجلسة</value>
+  </data>
+  <data name="HearingTime" xml:space="preserve">
+    <value>وقت الجلسة</value>
+  </data>
+  <data name="IdentityNumber" xml:space="preserve">
+    <value>رقم الهوية او الاقامة</value>
+  </data>
+  <data name="IdentitySource" xml:space="preserve">
+    <value>المصدر التعريفيى</value>
+  </data>
+  <data name="IdentityValue" xml:space="preserve">
+    <value>القيمة التعريفية</value>
+  </data>
+  <data name="InitialCaseId" xml:space="preserve">
+    <value>رقم القضية</value>
+  </data>
+  <data name="InValid" xml:space="preserve">
+    <value>يجب ان يكون اكبر من الصفر</value>
+  </data>
+  <data name="IsActive" xml:space="preserve">
+    <value>فعال</value>
+  </data>
+  <data name="IsClosed" xml:space="preserve">
+    <value>مغلق</value>
+  </data>
+  <data name="IsFinalJudgment" xml:space="preserve">
+    <value>حكم نهائي</value>
+  </data>
+  <data name="ISO31661CodeAlph3" xml:space="preserve">
+    <value>الايزو</value>
+  </data>
+  <data name="IsRead" xml:space="preserve">
+    <value>مقروء</value>
+  </data>
+  <data name="JudgementResult" xml:space="preserve">
+    <value>نوع الحكم</value>
+  </data>
+  <data name="JudgementText" xml:space="preserve">
+    <value>نص الحكم</value>
+  </data>
+  <data name="JudgeName" xml:space="preserve">
+    <value>اسم القضية</value>
+  </data>
+  <data name="JudgmentBrief" xml:space="preserve">
+    <value>مختصر الحكم</value>
+  </data>
+  <data name="JudgmentInstrumentSummary" xml:space="preserve">
+    <value>ملخص صك الحكم</value>
+  </data>
+  <data name="JudgmentReasons" xml:space="preserve">
+    <value>الأسباب التى بني عليها الحكم</value>
+  </data>
+  <data name="LastName" xml:space="preserve">
+    <value>الاسم الأخير</value>
+  </data>
+  <data name="LegalAnalysis" xml:space="preserve">
+    <value>التحليل القانوني</value>
+  </data>
+  <data name="LegalMemoId" xml:space="preserve">
+    <value>رقم المذكرة</value>
+  </data>
+  <data name="LegalStatus" xml:space="preserve">
+    <value>صفة الوزارة القانونية</value>
+  </data>
+  <data name="Letter" xml:space="preserve">
+    <value>الخطاب</value>
+  </data>
+  <data name="LitigationType" xml:space="preserve">
+    <value>درجة الترافع</value>
+  </data>
+  <data name="LockPeriod" xml:space="preserve">
+    <value>مدة الاغلاق</value>
+  </data>
+  <data name="MainNo" xml:space="preserve">
+    <value>الرقم الرئيسي</value>
+  </data>
+  <data name="MaxLength" xml:space="preserve">
+    <value>تعدى عدد الاحرف المطلوبة</value>
+  </data>
+  <data name="MeetingDate" xml:space="preserve">
+    <value>وقت الاجتماع</value>
+  </data>
+  <data name="MeetingPlace" xml:space="preserve">
+    <value>مكان الاجتماع</value>
+  </data>
+  <data name="MemoId" xml:space="preserve">
+    <value>رقم المذكرة</value>
+  </data>
+  <data name="MoamalaId" xml:space="preserve">
+    <value>رقم المعاملة</value>
+  </data>
+  <data name="MoamalaNumber" xml:space="preserve">
+    <value>رقم المعاملة</value>
+  </data>
+  <data name="MoamlaDepartmentId" xml:space="preserve">
+    <value>الإدارة الداخلية أو الجهة الخارجية المرسلة للمعاملة</value>
+  </data>
+  <data name="MoamlaDescription" xml:space="preserve">
+    <value>تفاصيل المعاملة</value>
+  </data>
+  <data name="MoamlaStatus" xml:space="preserve">
+    <value>حالة المعاملة</value>
+  </data>
+  <data name="MoamlaSubject" xml:space="preserve">
+    <value>عنوان المعاملة</value>
+  </data>
+  <data name="Mobile" xml:space="preserve">
+    <value>رقم الجوال</value>
+  </data>
+  <data name="MoeenId" xml:space="preserve">
+    <value>رقم الدعوى في معين</value>
+  </data>
+  <data name="MoeenRef" xml:space="preserve">
+    <value>رقم المعاملة في معين</value>
+  </data>
+  <data name="Motions" xml:space="preserve">
+    <value>الطلبات</value>
+  </data>
+  <data name="NajizCaseNo" xml:space="preserve">
+    <value>رقم القضية في ناجز</value>
+  </data>
+  <data name="NajizId" xml:space="preserve">
+    <value>رقم الطلب في ناجز</value>
+  </data>
+  <data name="NajizRef" xml:space="preserve">
+    <value>رقم المعاملة في ناجز</value>
+  </data>
+  <data name="Name" xml:space="preserve">
+    <value>الأسم</value>
+  </data>
+  <data name="NameAr" xml:space="preserve">
+    <value>الاسم باللغة العربية</value>
+  </data>
+  <data name="NameEn" xml:space="preserve">
+    <value>الاسم باللغة الانجليزية</value>
+  </data>
+  <data name="NationalityAr" xml:space="preserve">
+    <value>الجنسية باللغة العربية</value>
+  </data>
+  <data name="NationalityEn" xml:space="preserve">
+    <value>الجنسية باللغة الانجليزية</value>
+  </data>
+  <data name="Note" xml:space="preserve">
+    <value>الملاحظات</value>
+  </data>
+  <data name="NotificationType" xml:space="preserve">
+    <value>نوع الاشعار</value>
+  </data>
+  <data name="ObjectionRequestId" xml:space="preserve">
+    <value>رقم طلب الاعتراض للحكم</value>
+  </data>
+  <data name="ObjectionRequestRequests" xml:space="preserve">
+    <value>الطلبات المقدمة فى الطلب</value>
+  </data>
+  <data name="ObjectionRequestType" xml:space="preserve">
+    <value>نوع طلب الاعتراض</value>
+  </data>
+  <data name="OrderDescription" xml:space="preserve">
+    <value>وصف الطلب</value>
+  </data>
+  <data name="PartyId" xml:space="preserve">
+    <value>رقم الطرف</value>
+  </data>
+  <data name="PartyPresentation" xml:space="preserve">
+    <value>نوع الرابط</value>
+  </data>
+  <data name="PassDate" xml:space="preserve">
+    <value>تاريخ ووقت المرور</value>
+  </data>
+  <data name="PassType" xml:space="preserve">
+    <value>نوع المرور واردة ام صادرة</value>
+  </data>
+  <data name="PostalCode" xml:space="preserve">
+    <value>الرقم البريدى</value>
+  </data>
+  <data name="PronouncedJudgmentText" xml:space="preserve">
+    <value>منطوق الحكم</value>
+  </data>
+  <data name="PronouncingJudgmentDate" xml:space="preserve">
+    <value>تاريخ النطق بالحكم</value>
+  </data>
+  <data name="Question" xml:space="preserve">
+    <value>نص السؤال</value>
+  </data>
+  <data name="RaselRef" xml:space="preserve">
+    <value>رقم القيد في راسل</value>
+  </data>
+  <data name="RaselUnifiedNo" xml:space="preserve">
+    <value>الرقم الموحد في راسل</value>
+  </data>
+  <data name="ReceivingJudgmentDate" xml:space="preserve">
+    <value>تاريخ موعد استلام الحكم</value>
+  </data>
+  <data name="ReferenceCaseNo" xml:space="preserve">
+    <value>رقم القضية المرجعية</value>
+  </data>
+  <data name="RelatedCaseId" xml:space="preserve">
+    <value>القضية الاساسية</value>
+  </data>
+  <data name="ReplyNote" xml:space="preserve">
+    <value>ملاحظات الطلب</value>
+  </data>
+  <data name="RepresentativeLetterImage" xml:space="preserve">
+    <value>صورة خطاب التمثيل</value>
+  </data>
+  <data name="RepresentativeLetterNumber" xml:space="preserve">
+    <value>رقم خطاب التمثيل</value>
+  </data>
+  <data name="Request" xml:space="preserve">
+    <value>الطلب</value>
+  </data>
+  <data name="RequestId" xml:space="preserve">
+    <value>رقم الطلب</value>
+  </data>
+  <data name="RequestStatus" xml:space="preserve">
+    <value>حالة الطلب</value>
+  </data>
+  <data name="Required" xml:space="preserve">
+    <value>مطلوب</value>
+  </data>
+  <data name="ResearchCountRequired" xml:space="preserve">
+    <value>يجب إضافة باحث واحد على الاقل</value>
+  </data>
+  <data name="ResearcherId" xml:space="preserve">
+    <value>الباحث</value>
+  </data>
+  <data name="ResourceId" xml:space="preserve">
+    <value>الباحث</value>
+  </data>
+  <data name="ReviewNumber" xml:space="preserve">
+    <value>رقم المراجعة</value>
+  </data>
+  <data name="RoleId" xml:space="preserve">
+    <value>رقم الوظيفة</value>
+  </data>
+  <data name="SecondSubCategory" xml:space="preserve">
+    <value>التصنيف الفرعي</value>
+  </data>
+  <data name="SessionMinutes" xml:space="preserve">
+    <value>محضر الجلسة</value>
+  </data>
+  <data name="StartDate" xml:space="preserve">
+    <value>تاريخ بداية القضية</value>
+  </data>
+  <data name="Status" xml:space="preserve">
+    <value>حالة القضية</value>
+  </data>
+  <data name="StatusArName" xml:space="preserve">
+    <value>اسم الحالة باللغة العربية</value>
+  </data>
+  <data name="StatusEnName" xml:space="preserve">
+    <value>اسم الحالة باللغة الانجليزية</value>
+  </data>
+  <data name="StatusId" xml:space="preserve">
+    <value>رقم الحالة</value>
+  </data>
+  <data name="StepArName" xml:space="preserve">
+    <value>اسم الخطوة باللغة العربية</value>
+  </data>
+  <data name="StepEnName" xml:space="preserve">
+    <value>اسم الخطوة باللغة الانجليزية</value>
+  </data>
+  <data name="Street" xml:space="preserve">
+    <value>الشارع</value>
+  </data>
+  <data name="Subject" xml:space="preserve">
+    <value>عنوان الدعوى</value>
+  </data>
+  <data name="Summary" xml:space="preserve">
+    <value>ملخص الجلسة</value>
+  </data>
+  <data name="TelephoneNumber" xml:space="preserve">
+    <value>رقم الهاتف</value>
+  </data>
+  <data name="Text" xml:space="preserve">
+    <value>النص</value>
+  </data>
+  <data name="ToUserId" xml:space="preserve">
+    <value>رقم المستخدم المرسل اليه</value>
+  </data>
+  <data name="TransactionType" xml:space="preserve">
+    <value>نوع الحركة</value>
+  </data>
+  <data name="TypeArName" xml:space="preserve">
+    <value>اسم النوع باللغة العربية</value>
+  </data>
+  <data name="TypeEnName" xml:space="preserve">
+    <value>اسم النوع باللغة الانجليزية</value>
+  </data>
+  <data name="TypeId" xml:space="preserve">
+    <value>رقم النوع</value>
+  </data>
+  <data name="UnifiedNo" xml:space="preserve">
+    <value>الرقم الموحد او المرجعى للمعاملة</value>
+  </data>
+  <data name="URL" xml:space="preserve">
+    <value>الرابط</value>
+  </data>
+  <data name="UserName" xml:space="preserve">
+    <value>اسم المستخدم</value>
+  </data>
+</root>

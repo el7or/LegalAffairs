@@ -1,0 +1,128 @@
+<mat-card>
+  <mat-card-content>
+    <section class="screen">
+      <section class="screen-header">
+        <div fxLayout="row" fxFlex="70">
+          <button mat-raised-button color="primary"
+          *ngIf="isDistributor || isGeneralSupervisor"
+            [routerLink]="['/moamalat/new']" routerLinkActive="router-link-active">
+            إضافة معاملة جديدة
+          </button>
+        </div>
+      </section>
+
+      <section class="screen-table responsive-table">
+        <div fxLayout="row wrap" fxLayoutAlign="space-between center">
+          <div fxLayout="row" fxFlex.gt-sm="50" fxFlex="100">
+            <div class="filter-results">
+              <button mat-flat-button (click)="advancedFilter()">
+                <span *ngIf="!showFilter"> تصفية النتائج </span>
+                <span *ngIf="showFilter"> اخفاء التصفية </span>
+              </button>
+            </div>
+            <div class="free-search">
+              <mat-form-field appearance="outline" [hideRequiredMarker]="true" floatLabel="always">
+                <span matPrefix>
+                  <mat-icon>search</mat-icon>
+                </span>
+                <input matInput placeholder="بحث" [(ngModel)]="searchText" name="searchText" (keyup.enter)="onSearch()"
+                  autocomplete="off" />
+              </mat-form-field>
+            </div>
+          </div>
+          <div fxFlex.gt-sm="50" fxFlex="100" fxHide.sm fxHide.xs>
+            <mat-paginator #paginator [length]="totalItems" [pageIndex]="queryObject.page - 1" showFirstLastButtons
+              [pageSize]="queryObject.pageSize" (page)="onPageChange($event.pageIndex)" hidePageSize="true">
+            </mat-paginator>
+          </div>
+        </div>
+
+        <div *ngIf="showFilter" fxLayout="row wrap">
+          <div fxFlex.gt-sm="100" fxFlex="100">
+            <form class="basic-form" [formGroup]="searchForm" (submit)="onFilter()">
+              <div class="row filter-container" fxLayout="row wrap" fxFlexAlign="center">
+
+                <div fxFlex.gt-sm="33" fxFlex="100" class="p-10">
+                  <mat-form-field>
+                    <mat-select formControlName="status" placeholder="حالة المعاملة">
+                      <mat-option value="">--اختر--</mat-option>
+                      <mat-option [value]="0">الكل</mat-option>
+                      <mat-option [value]="MoamalaStatuses.New"> جديدة </mat-option>
+                      <mat-option [value]="MoamalaStatuses.Referred"> محالة </mat-option>
+                      <mat-option [value]="MoamalaStatuses.Assigned"> مسندة </mat-option>
+                      <mat-option [value]="MoamalaStatuses.MoamalaReturned"> معادة </mat-option>
+                    </mat-select>
+                  </mat-form-field>
+                </div>
+                <div fxFlex.gt-sm="33" fxFlex="100" class="p-10">
+                  <mat-form-field>
+                    <mat-select formControlName="confidentialDegree" placeholder="السرية">
+                      <mat-option value="">--اختر--</mat-option>
+                      <mat-option [value]="0">الكل</mat-option>
+                      <mat-option [value]="ConfidentialDegrees.Normal"> عادية </mat-option>
+                      <mat-option [value]="ConfidentialDegrees.Confidential"> سرية</mat-option>
+
+                    </mat-select>
+                  </mat-form-field>
+                </div>
+                <div fxFlex.gt-sm="33" fxFlex="100" class="p-10">
+                  <mat-form-field>
+                    <mat-select formControlName="senderDepartmentId" placeholder="واردة من">
+                      <mat-option value="">--اختر--</mat-option>
+                      <mat-option *ngFor="let item of ministryDepartments" [value]="item.id">
+                        {{ item.name }}
+                      </mat-option>
+                    </mat-select>
+                  </mat-form-field>
+                </div>
+                <div fxFlex.gt-sm="33" fxFlex="100" class="p-10">
+                  <mat-form-field>
+                    <mat-select formControlName="receiverDepartmentId" placeholder="محالة إلى">
+                      <mat-option value="">--اختر--</mat-option>
+                      <mat-option *ngFor="let item of departments" [value]="item.id">
+                        {{ item.name }}
+                      </mat-option>
+                    </mat-select>
+                  </mat-form-field>
+                </div>
+                <div fxFlex.gt-sm="33" fxFlex="100" class="p-10">
+                  <mat-form-field>
+                    <mat-select formControlName="assignedToId" placeholder="مسندة إلى">
+                      <mat-option value="">--اختر--</mat-option>
+                      <mat-option *ngFor="let item of usersList" [value]="item.id">
+                        {{ item.firstName }} {{ item.lastName }}
+                      </mat-option>
+                    </mat-select>
+                  </mat-form-field>
+                </div>
+
+                <div fxFlex.gt-sm="50" fxFlex="100">
+                  <date-picker-dual controlName="createdOnFrom" [placeholder]="'تاريخ المعاملة من'"></date-picker-dual>
+                </div>
+                <div fxFlex.gt-sm="50" fxFlex="100">
+                  <date-picker-dual controlName="createdOnTo" [placeholder]="'تاريخ المعاملة إلى'"></date-picker-dual>
+                </div>
+                <div fxFlex="100" class="p-10" class="screen-actions">
+                  <button color="accent" type="submit" mat-raised-button>
+                    تصفية
+                  </button>
+                  <button type="button" mat-raised-button (click)="onClearFilter()">
+                    مسح التصفية
+                  </button>
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+        <app-moamalat-list-table [dataSource]="dataSource" (set-data-list)="populateMoamalat($event)"
+          style="overflow: overlay;">
+        </app-moamalat-list-table>
+
+        <mat-paginator #paginator [length]="totalItems" [pageIndex]="queryObject.page - 1" showFirstLastButtons
+          [pageSize]="queryObject.pageSize" (page)="onPageChange($event.pageIndex)" hidePageSize="true">
+        </mat-paginator>
+
+      </section>
+    </section>
+  </mat-card-content>
+</mat-card>

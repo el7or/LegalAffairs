@@ -1,0 +1,344 @@
+<mat-card>
+  <mat-card-content>
+    <div class="screen" *ngIf="hearing">
+
+      <mat-tab-group>
+        <mat-tab>
+          <ng-template mat-tab-label>
+            بيانات الجلسة
+          </ng-template>
+          <!-- <div fxLayout="row wrap" fxFlexAlign="center" class="entity-details p-10 alert" style="color: red;"
+          *ngIf="hasReceivingJudgmentDate">
+            <span  *ngIf="hearing?.type.id== HearingType.PronouncingJudgment"> سيتم حذف بيانات الحكم اذا تم تعديل جلسة نطق الحكم إلى مرافعة بعد استلام موعد الحكم</span> &nbsp;
+            <span  *ngIf="hearing?.type.id== HearingType.Pleading">لا يسمح بتعديل الجلسة بعد استلام موعد الحكم</span> &nbsp;
+          </div> -->
+          <div fxLayout="row wrap" fxFlexAlign="center" class="entity-details p-10">
+            <div fxLayout="column" fxFlex.gt-sm="25" fxFlex="100">
+              <span>القضية</span>
+              <span> {{ hearing?.case?.subject }}</span>
+            </div>
+
+            <!-- <div fxLayout="column" fxFlex.gt-sm="25" fxFlex="100">
+              <span>رقم الجلسة</span>
+              <span>{{hearing.hearingNumber}}</span>
+            </div> -->
+
+            <div fxLayout="column" fxFlex.gt-sm="25" fxFlex="100">
+              <span>حالة الجلسة</span>
+              <span>{{hearing.status.name}}</span>
+            </div>
+
+            <div fxLayout="column" fxFlex.gt-sm="25" fxFlex="100">
+              <span>محكمة/لجنة</span>
+              <span> {{hearing.court.name}}</span>
+            </div>
+
+            <div fxLayout="column" fxFlex.gt-sm="25" fxFlex="100">
+              <span>الدائرة</span>
+              <span>{{hearing.circleNumber}}</span>
+            </div>
+
+            <div fxLayout="column" fxFlex.gt-sm="25" fxFlex="100">
+              <span>نوع الجلسة</span>
+              <span>{{hearing.type.name}}</span>
+            </div>
+
+            <div fxLayout="column" fxFlex.gt-sm="50" fxFlex="100">
+              <span>تاريخ الجلسة</span>
+              <span>
+                {{hearing.hearingDate | date : 'yyyy-MM-dd'}}
+                {{hearing.hearingDate | arDayOfWeek}}
+                {{ hearing.hearingDateHigri }}
+              </span>
+            </div>
+
+            <div fxLayout="column" fxFlex.gt-sm="25" fxFlex="100">
+              <span>وقت الجلسة</span>
+              <span>{{hearing.hearingTime.substring(0,2) > "12" ? hearing.hearingTime+'م':hearing.hearingTime+
+                'ص'}}</span>
+            </div>
+
+            <div fxLayout="column" fxFlex.gt-sm="100" fxFlex="100">
+              <span>الطلبات</span>
+              <div style="font-weight: bold;" [innerHTML]="hearing.motions"></div>
+            </div>
+
+            <div fxLayout="column" fxFlex.gt-sm="100" fxFlex="100">
+              <span>ملخص الجلسة</span>
+              <span>{{hearing.summary}}</span>
+            </div>
+
+            <div fxLayout="column" fxFlex.gt-sm="100" fxFlex="100">
+              <span>محضر الجلسة</span>
+              <span>{{hearing.sessionMinutes}}</span>
+            </div>
+
+            <div fxFlex.gt-sm="100" fxFlex="100" class="p-10">
+              <span>مرفقات الجلسة</span>
+              <app-attachments [groupName]="GroupNames.Hearing" [attachmentsToUpdate]="hearing.attachments"
+                [readOnly]="true">
+              </app-attachments>
+              <!-- <span class="bg-danger" *ngIf="form.controls['attachments'].hasError('required')">
+              رفع المرفقات مطلوب
+            </span> -->
+            </div>
+          </div>‏
+
+          <section class="screen-table responsive-table">
+
+            <div fxLayout="row wrap">
+              <div class="inner-header" fxLayout="row" fxFlex.gt-xs="50" fxFlex="100" fxLayoutAlign="Start center">
+                مذكرات الجلسة
+              </div>
+              <div class="inner-actions" fxLayout="row" fxFlex.gt-xs="50" fxFlex="100" fxLayoutAlign="end center"
+                fxLayoutGap="5px"
+                *ngIf="hearing.hearingLegalMemoReviewRequest?.request.requestStatus.id==RequestStatus.New">
+                جاري اعتماد المذكرة </div>
+              <div class="inner-actions" fxLayout="row" fxFlex.gt-xs="50" fxFlex="100" fxLayoutAlign="end center"
+                fxLayoutGap="5px"
+                *ngIf="isResearcher && hearing.status.id != HearingStatus.Closed">
+                <button mat-button color="primary" type="submit" (click)="openDialog()">
+                  اختيار مذكرة للجلسة
+                </button>
+
+              </div>
+
+              <table>
+                <thead>
+                  <tr>
+                    <th>اسم المذكرة</th>
+                    <th>تاريخ الإضافة</th>
+                    <th>اسم المستشار المعتمد</th>
+                    <th>تاريخ الاعتماد</th>
+                    <th></th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr
+                    *ngIf="hearing.hearingLegalMemoReviewRequest&&hearing.hearingLegalMemoReviewRequest?.request.requestStatus.id!=RequestStatus.Rejected">
+                    <td class="text-center">{{hearing.hearingLegalMemoReviewRequest?.legalMemo?.name}}</td>
+                    <td class="text-center">
+                      {{hearing.hearingLegalMemoReviewRequest?.request?.createdOn | date : 'yyyy-MM-dd'}}
+                      {{hearing.hearingLegalMemoReviewRequest?.request?.createdOn | arDayOfWeek}}
+                      {{ hearing.hearingLegalMemoReviewRequest?.request?.createdOnHigri }} </td>
+                    <td class="text-center">{{hearing.hearingLegalMemoReviewRequest?.request?.updatedBy?.name}}</td>
+                    <td class="text-center">
+                      <span *ngIf="hearing.hearingLegalMemoReviewRequest?.request.requestStatus.id!=RequestStatus.New">
+                        {{hearing.hearingLegalMemoReviewRequest?.replyDate| date : 'yyyy-MM-dd'}}
+                        {{hearing.hearingLegalMemoReviewRequest?.replyDate| arDayOfWeek}}
+                      </span>
+                      {{hearing.hearingLegalMemoReviewRequest?.replyDateHigri}}
+                    </td>
+                    <td class="text-left">
+                      <button [matMenuTriggerFor]="profile" mat-icon-button class="m-r-5"
+                        *ngIf="!hearing.hearingLegalMemoReviewRequest?.isDeleted">
+                        <mat-icon>more_vert</mat-icon>
+                      </button>
+                      <mat-menu #profile="matMenu" class="mymegamenu">
+                        <button mat-menu-item
+                          [routerLink]="['/memos/view', hearing.hearingLegalMemoReviewRequest?.legalMemo?.id]"
+                          routerLinkActive="router-link-active" matTooltip="عرض" matTooltipPosition="above">
+                         عرض
+                        </button>
+
+                        <button mat-menu-item (click)="onPrint(hearing.hearingLegalMemoReviewRequest?.legalMemo.id)">
+                          ملف PDF
+                        </button>
+
+                      </mat-menu>
+                    </td>
+                  </tr>
+                  <tr
+                    *ngIf="!hearing.hearingLegalMemoReviewRequest||hearing.hearingLegalMemoReviewRequest?.request.requestStatus.id==RequestStatus.Rejected">
+                    <td colspan="5" class="text-center">لا توجد مذكرات</td>
+                  </tr>
+
+                </tbody>
+              </table>
+            </div>
+          </section>
+
+          <section class="screen-actions" *ngIf="hearing">
+
+            <button mat-raised-button color="primary" [routerLink]="['/hearings/edit',hearing.id]"
+              routerLinkActive="router-link-active"
+              *ngIf="isAssignedTo && hearing?.case?.status?.id!=CaseStatus.ClosedCase && hearing?.case?.status?.id!=CaseStatus.ObjectionRecorded"
+              [disabled]="hearing.status.id == HearingStatus.Closed || (hasReceivingJudgmentDate && hearing.type.id != HearingType.PronouncingJudgment)">
+              <span
+                [matTooltip]="(hasReceivingJudgmentDate && hearing.type.id != HearingType.PronouncingJudgment) ? 'لا يمكن تعديل الجلسة لأنه تم تسجيل تاريخ استلام الحكم للقضية' : 'تعديل الجلسة متاح طالما لم تغلق بعد'"
+                matTooltipPosition="above">
+                تعديل الجلسة</span>
+            </button>
+
+            <button mat-raised-button color="primary" routerLinkActive="router-link-active"
+              [routerLink]="['/requests/change-hearing-researcher-request', hearing.id]"
+              *ngIf="isAssignedTo && hearing.status.id == HearingStatus.Scheduled"
+              [disabled]="hearing.status.id != HearingStatus.Scheduled">
+              <span
+                [matTooltip]="hearing.status.id != HearingStatus.Scheduled?'طلب تغيير المكلف بحضور الجلسة متاح للجلسة المجدولة فقط':''"
+                matTooltipPosition="above">طلب تغيير المكلف بحضور الجلسة
+              </span>
+            </button>
+
+            <button mat-raised-button color="primary" routerLinkActive="router-link-active" (click)="onAssign(hearing)"
+              *ngIf="isLitigationManager && hearing.status.id != HearingStatus.Closed">
+              <span>تغيير المكلف بحضور الجلسة</span>
+            </button>
+
+            <ng-container
+              *ngIf="hearing.type.id == HearingType.PronouncingJudgment && hearing?.case?.status?.id!=CaseStatus.ClosedCase && hearing?.case?.status?.id!=CaseStatus.ObjectionRecorded">
+              <button mat-raised-button color="primary" [routerLink]="['/hearings/judgment', hearing.id]"
+                routerLinkActive="router-link-active"
+                *ngIf="isAssignedTo && hearing.type.id == HearingType.PronouncingJudgment"
+                [disabled]="hearing.status.id != HearingStatus.Finished">
+                <span matTooltip="إضافة موعد استلام الحكم متاح للجلسة المنتهية فقط" matTooltipPosition="above">
+                  <span *ngIf="!hearing.case.receivingJudgmentDate">إضافة موعد استلام الحكم</span>
+                </span>
+                <span matTooltip="تعديل موعد استلام الحكم متاح طالما الجلسة لم تغلق بعد" matTooltipPosition="above">
+                  <span *ngIf="hearing.case.receivingJudgmentDate">تعديل موعد استلام الحكم</span>
+                </span>
+              </button>
+              <!-- [routerLink]="['/hearings/judgmentInstrument', hearing.case.id]" -->
+              <button mat-raised-button color="primary"
+              [routerLink]="['/cases', hearing.case.id,'judgment-received']"
+                routerLinkActive="router-link-active"
+                *ngIf="hearing?.case?.caseRule==null && isAssignedTo && hearing.type.id == HearingType.PronouncingJudgment"
+                [disabled]="receivingJudgmentDate?.getTime() > todayDate?.getTime() || hearing.status.id != HearingStatus.Finished || !(hearing.case.receivingJudgmentDate || hearing.case.litigationType.id == LitigationTypes.Supreme)">
+                <span matTooltip="استلام الحكم متاح بعد إضافة موعد استلام الحكم وحلول هذا الموعد"
+                  matTooltipPosition="above">
+                  استلام الحكم من المحكمة
+                </span>
+              </button>
+
+              <button mat-raised-button color="primary"
+                [routerLink]="['/cases', hearing.case.id,'judgment-received']"
+                routerLinkActive="router-link-active"
+                *ngIf="hearing?.case?.caseRule!=null && isAssignedTo && hearing.type.id == HearingType.PronouncingJudgment"
+                [disabled]="hearing.status.id != HearingStatus.Finished || !(hearing.case.receivingJudgmentDate || hearing.case.litigationType.id == LitigationTypes.Supreme)">
+                <span matTooltip="تعديل الحكم متاح طالما الجلسة لم تغلق بعد" matTooltipPosition="above">
+                  تعديل الحكم</span>
+              </button>
+            </ng-container>
+
+            <button mat-raised-button color="primary" [routerLink]="['/hearings/summary',hearing.id]"
+              routerLinkActive="router-link-active"
+              *ngIf="isAssignedTo && hearing?.case?.status?.id!=CaseStatus.ClosedCase && hearing?.case?.status?.id!=CaseStatus.ObjectionRecorded"
+              [disabled]="hearing.status.id != HearingStatus.Finished
+              || (hearing?.type?.id == HearingType.PronouncingJudgment && hearing?.case?.caseRule==null)">
+              <span
+                [matTooltip]="hearing?.type?.id == HearingType.Pleading ? 'إغلاق جلسة المرافعة متاح للجلسة المنتهية فقط' : 'إغلاق جلسة نطق الحكم متاح بعد استلام الحكم للجلسة المنتهية فقط'"
+                matTooltipPosition="above">إغلاق الجلسة</span>
+            </button>
+
+            <button mat-raised-button (click)="location.back()" matTooltip="الرجوع للصفحة السابقة"
+              matTooltipPosition="above">العودة</button>
+
+          </section>
+        </mat-tab>
+
+        <mat-tab>
+          <ng-template mat-tab-label>
+            بيانات القضية
+          </ng-template>
+          <app-case-details [case]='hearing.case'></app-case-details>
+        </mat-tab>
+
+        <mat-tab>
+          <ng-template mat-tab-label>
+            تحديثات الجلسة
+          </ng-template>
+          <app-hearing-updates-list [hearingId]="hearingId" [Editable]="editable"
+            [HearingAssignedTo]="hearing.assignedTo"></app-hearing-updates-list>
+        </mat-tab>
+
+        <mat-tab *ngIf="hearing.caseSupportingDocumentRequests && hearing.caseSupportingDocumentRequests.length >0">
+          <ng-template mat-tab-label>
+            طلبات الجلسة
+          </ng-template>
+          <div>
+            <div class="responsive-table screen-table" style="margin-top: 1em;">
+
+              <table mat-table [dataSource]="hearing.caseSupportingDocumentRequests" class="mat-elevation-z0">
+
+                <ng-container matColumnDef="position">
+                  <th mat-header-cell *matHeaderCellDef> #</th>
+                  <td mat-cell *matCellDef="let department; let i = index">
+                    {{i + 1 }}
+                  </td>
+                </ng-container>
+                <ng-container matColumnDef="requestType">
+                  <th mat-header-cell *matHeaderCellDef>نوع الطلب</th>
+                  <td mat-cell *matCellDef="let element">
+                    {{ element.request.requestType.name }}
+                  </td>
+                </ng-container>
+
+                <ng-container matColumnDef="requestStatus">
+                  <th mat-header-cell *matHeaderCellDef>حالة الطلب</th>
+                  <td mat-cell *matCellDef="let element">
+                    {{ element.request.requestStatus.name }}
+                  </td>
+                </ng-container>
+
+                <ng-container matColumnDef="createdByFullName">
+                  <th mat-header-cell *matHeaderCellDef>اسم مقدم الطلب</th>
+                  <td mat-cell *matCellDef="let element">
+                    {{element.request.createdBy.name }}
+                  </td>
+                </ng-container>
+
+                <ng-container matColumnDef="createdOn">
+                  <th mat-header-cell *matHeaderCellDef>تاريخ تقديم الطلب</th>
+                  <td mat-cell *matCellDef="let element">
+                    {{ element.request.createdOn | date : 'yyyy-MM-dd'}}
+                    {{ element.request.createdOn | arDayOfWeek}}
+                    {{ element.request.createdOnHigri }}
+                  </td>
+                </ng-container>
+
+                <ng-container matColumnDef="actions">
+                  <th mat-header-cell *matHeaderCellDef></th>
+                  <td mat-cell *matCellDef="let element" (click)="$event.stopPropagation()" style="text-align: center">
+                    <button mat-icon-button [matMenuTriggerFor]="menu">
+                      <mat-icon>more_vert</mat-icon>
+                    </button>
+                    <mat-menu #menu="matMenu">
+                      <button type="button" mat-menu-item
+                        [routerLink]="['/requests/view', element.id,element.request.requestType.id]">
+                        <span>عرض</span>
+                      </button>
+                      <button type="button" mat-menu-item
+                        [routerLink]="['/requests/objection-request-form/reformulate',element.id]"
+                        *ngIf="isResearcher  && element.request.requestType.id ==  RequestTypes.RequestObjection">
+                        <span>تعديل</span>
+                      </button>
+                      <button type="button" mat-menu-item
+                        [routerLink]="['/requests/document-request/reformulate',element.id]"
+                        *ngIf="isResearcher && element.request.requestType.id == RequestTypes.RequestSupportingDocuments && element.request.requestStatus.id == RequestStatus.Returned ">
+                        <span>إعادة صياغة</span>
+                      </button>
+                      <button mat-menu-item color="primary" type="button"
+                        [routerLink]="['/requests/attached-letter',element.id]"
+                        *ngIf="element.request.requestType.id==RequestTypes.RequestSupportingDocuments&&(element.request.requestStatus.id==RequestStatus.Approved||element.request.requestStatus.id==RequestStatus.Exported) && isResearcher  && !element.attachedLetterRequestCount">
+                        إضافة خطاب إلحاقى
+                      </button>
+                    </mat-menu>
+                  </td>
+                </ng-container>
+
+                <tr mat-header-row *matHeaderRowDef="requestsDisplayedColumns"></tr>
+                <tr mat-row *matRowDef="let row; columns: requestsDisplayedColumns;"></tr>
+                <tr class="mat-row no-data" *matNoDataRow>
+                  <td class="mat-cell" [colSpan]="requestsDisplayedColumns.length">
+                    لا يوجد نتائج .
+                  </td>
+                </tr>
+              </table>
+            </div>
+
+          </div>
+        </mat-tab>
+      </mat-tab-group>
+    </div>
+  </mat-card-content>
+</mat-card>

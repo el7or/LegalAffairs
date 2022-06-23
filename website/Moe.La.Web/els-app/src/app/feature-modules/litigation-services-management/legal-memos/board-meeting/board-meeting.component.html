@@ -1,0 +1,47 @@
+<h3 mat-dialog-title>اختيار الأعضاء</h3>
+<div mat-dialog-content>
+  <form [formGroup]="form">
+    <div fxLayout="row wrap" fxFlexAlign="center" class="row">
+
+      <div fxFlex.gt-sm="100" fxFlex="100" class="p-10">
+        <mat-form-field>
+          <input matInput formControlName="meetingPlace" placeholder="مكان الاجتماع" required autocomplete="off" />
+        </mat-form-field>
+      </div>
+
+      <div fxFlex.gt-sm="100" fxFlex="100">
+        <date-picker-dual controlName="meetingDate" [placeholder]="'تاريخ الاجتماع'" required>
+        </date-picker-dual>
+      </div>
+
+      <div fxFlex.gt-sm="100" fxFlex="100" class="p-10">
+        <div fxFlex.gt-sm="5" fxFlex="100" class="p-10"></div>
+        <div fxFlex.gt-sm="20" fxFlex="100" class="p-10">
+          <span>وقت الاجتماع <span class="mat-placeholder-required">*</span></span>
+          <timepicker formControlName="meetingTime" showMeridian="true" labelMinutes="Minutes" style="direction: ltr">
+          </timepicker>
+        </div>
+        <div fxFlex.gt-sm="75" fxFlex="100" class="p-10"></div>
+      </div>
+
+      <div fxFlex.gt-sm="100" fxFlex="100" class="p-10">
+        <mat-checkbox color="warn" (change)="onSelectAll($event.checked)" [(ngModel)]="isSelectedAll" [ngModelOptions]="{standalone: true}"> اختيار الكل </mat-checkbox>
+      </div>
+
+      <div fxFlex.gt-sm="50" fxFlex="100" class="p-10 bordered" *ngFor="let member of legalBoardMembers; let i = index">
+        <mat-checkbox color="warn" (change)="onSelectMember()" [(ngModel)]="member.isSelected" [ngModelOptions]="{standalone: true}">
+          {{member.userName}} </mat-checkbox>
+      </div>
+
+    </div>
+  </form>
+</div>
+
+<div mat-dialog-actions class="screen-actions">
+  <button mat-raised-button color="primary" [disabled]="!form.valid" (click)="onSubmit()">
+    حفظ
+  </button>
+  <button type="button" mat-raised-button (click)="onCancel()">
+    إلغاء
+  </button>
+</div>

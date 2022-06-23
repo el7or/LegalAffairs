@@ -1,0 +1,103 @@
+<mat-card>
+  <mat-card-content>
+    <section class="screen">
+      <form class="basic-form" [formGroup]="form">
+        <section class="screen-content row" fxLayout="row wrap" fxFlexAlign="center">
+
+          <div fxFlex.gt-sm="33" fxFlex="100" class="p-10">
+            <mat-form-field>
+              <input matInput autocomplete="off" formControlName="moamalaNumber" placeholder="رقم المعاملة" required digitsOnly/>
+              <mat-error *ngIf="form.controls['moamalaNumber'].errors?.maxlength">رقم المعاملة يجب ألا يزيد عن 20 رقم
+              </mat-error>
+            </mat-form-field>
+          </div>
+
+          <div fxFlex.gt-sm="33" fxFlex="100" class="p-10">
+            <mat-form-field>
+              <input matInput autocomplete="off" formControlName="unifiedNo" placeholder="الرقم الموحد" digitsOnly/>
+              <mat-error *ngIf="form.controls['unifiedNo'].errors?.maxlength">الرقم الموحد يجب ألا يزيد عن 20 رقم
+              </mat-error>
+            </mat-form-field>
+          </div>
+
+          <div fxFlex.gt-sm="33" fxFlex="100" class="p-10">
+            <mat-form-field>
+              <mat-select matInput formControlName="confidentialDegree" placeholder="درجة السرية" required>
+                <mat-option value="">--اختر--</mat-option>
+                <mat-option *ngFor="let item of confidentialDegrees" [value]="item.value">
+                  {{ item.nameAr }}</mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
+
+          <div fxFlex.gt-sm="33" fxFlex="100" class="p-10">
+            <mat-form-field>
+              <mat-select matInput formControlName="passType" placeholder="نوع المعاملة" required>
+                <mat-option value="">--اختر--</mat-option>
+                <mat-option *ngFor="let item of passTypes" [value]="item.value">
+                  {{ item.nameAr }}</mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
+
+          <div fxFlex.gt-sm="66" fxFlex="100">
+            <date-picker-dual controlName="passDate" [placeholder]="'تاريخ المعاملة'" [required]="true">
+            </date-picker-dual>
+          </div>
+
+          <div fxFlex.gt-sm="50" fxFlex="100" class="p-10">
+            <mat-form-field>
+              <mat-select matInput formControlName="senderDepartmentId" placeholder="واردة من" required>
+                <mat-option value="">--اختر--</mat-option>
+                <mat-option *ngFor="let item of departments" [value]="item.id">
+                  {{ item.name }}</mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
+
+          <div fxFlex.gt-sm="50" fxFlex="100" class="p-10">
+            <mat-form-field>
+              <input matInput autocomplete="off" formControlName="subject" placeholder="عنوان المعاملة" required />
+              <mat-error *ngIf="form.controls['subject'].errors?.maxlength">عنوان المعاملة يجب ألا يزيد عن 100 حرف
+              </mat-error>
+            </mat-form-field>
+          </div>
+
+          <div fxFlex.gt-sm="100" fxFlex="100" class="p-10">
+            <mat-form-field>
+              <textarea matInput formControlName="description" [value]="form.controls['description'].value | replaceLineBreaks" placeholder="تفاصيل المعاملة" rows="3" maxlength="2000"
+                required #description></textarea>
+                <!-- <mat-hint>عدد الاحرف يجب ان لا يزيد عن 2000 حرف</mat-hint> -->
+                <mat-hint>2000/{{description.value?.length || 0}}</mat-hint>
+                <mat-error *ngIf="form.controls['description'].errors?.maxlength">تفاصيل المعاملة يجب ألا تزيد عن 2000 حرف
+                </mat-error>
+            </mat-form-field>
+          </div>
+          <div fxFlex.gt-sm="100" fxFlex="100" class="p-10">
+            <strong>مرفقات المعاملة</strong>
+            <ng-template mat-tab-label>
+              الملفات المرفقة &nbsp;
+              <span *ngIf="filesCount" class="label label-info" style="font-family: Arial">{{ filesCount }}</span>
+            </ng-template>
+            <br />
+            <app-attachments [groupName]="GroupNames.Moamala" (set-attachments-list)="onAttachFiles($event)"
+              [attachmentsToUpdate]="attachments">
+            </app-attachments>
+            <!-- <span class="bg-danger" *ngIf="form.controls['attachments'].hasError('required')">
+              رفع المرفقات مطلوب
+            </span> -->
+          </div>
+
+        </section>
+        <section class="screen-actions">
+          <button mat-raised-button color="primary" type="submit" [disabled]="!form.valid" (click)="onSubmit()">
+            <span *ngIf="!moamalaId">إضافة</span>
+            <span *ngIf="moamalaId"> تعديل</span></button>
+          <button mat-raised-button type="button" (click)="location.back()">
+            إلغاء
+          </button>
+        </section>
+      </form>
+    </section>
+  </mat-card-content>
+</mat-card>

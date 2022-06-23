@@ -1,0 +1,127 @@
+<mat-card>
+  <mat-card-content>
+    <section class="screen">
+      <form class="basic-form" [formGroup]="form">
+
+        <section class="screen-content row" fxLayout="row wrap" fxFlexAlign="center">
+          <div fxFlex.gt-sm="100" fxFlex="100" class="p-10" *ngIf="!caseId && !hearingId">
+            <button mat-raised-button color="primary" type="button" (click)="onChooseCase()">
+              اختيار قضية *
+            </button>
+          </div>
+          <div fxFlex.gt-sm="50" fxFlex="100" class="p-10" *ngIf="caseId && !hearingId">
+            <mat-form-field>
+              <input required matInput placeholder="رقم القضية" [value]="_case?.caseNumberInSource" readonly />
+            </mat-form-field>
+          </div>
+          <div fxFlex.gt-sm="50" fxFlex="100" class="p-10" *ngIf="caseId && !hearingId">
+            <mat-form-field>
+              <input required matInput placeholder="عنوان القضية" [value]="caseSubject" readonly />
+            </mat-form-field>
+          </div>
+
+          <!-- <div fxFlex.gt-sm="50" fxFlex="100" class="p-10">
+            <mat-form-field>
+              <input required matInput placeholder="رقم الجلسة" digitsOnly maxlength="2" formControlName="hearingNumber"
+                [ngClass]="
+                  form.controls['hearingNumber'].hasError('hearingNumberExists')
+                    ? 'mat-form-field-invalid'
+                    : ''
+                " (blur)="isHearingNumberExist()" />
+              <mat-error *ngIf="form.controls['hearingNumber'].hasError('required')">
+                رقم الجلسة مطلوب
+              </mat-error>
+              <mat-error *ngIf="
+                  form.controls['hearingNumber'].hasError('hearingNumberExists')
+                ">رقم الجلسة موجود مسبقا
+              </mat-error>
+            </mat-form-field>
+          </div> -->
+
+          <div fxFlex.gt-sm="50" fxFlex="100" class="p-10">
+            <mat-form-field>
+              <mat-select matInput formControlName="courtId" placeholder="محكمة/لجنة">
+                <mat-option value="">--اختر--</mat-option>
+                <mat-option *ngFor="let item of courts" [value]="item.id">
+                  {{ item.name }}</mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
+
+          <div fxFlex.gt-sm="50" fxFlex="100" class="p-10">
+            <mat-form-field>
+              <input matInput placeholder="الدائرة" formControlName="circleNumber" readonly />
+            </mat-form-field>
+          </div>
+
+          <div fxFlex.gt-sm="50" fxFlex="100" class="p-10">
+            <mat-form-field>
+              <input matInput placeholder="حالة الجلسة" formControlName="statusAr" />
+            </mat-form-field>
+          </div>
+
+          <div fxFlex.gt-sm="50" fxFlex="100" class="p-10">
+            <mat-form-field>
+              <mat-select required matInput formControlName="type" placeholder="نوع الجلسة"
+                [matTooltip]="isCaseHasHearingTypeJudgment && (!hearingId || (hearingId && hearing.type.id != HearingType.PronouncingJudgment)) ? 'نوع الجلسة مرافعة لوجود جلسة أخرى من نوع نطق بالحكم في نفس القضية' :''"
+                matTooltipPosition="below">
+                <mat-option value="">--اختر--</mat-option>
+                <mat-option *ngFor="let item of hearingType" [value]="item.value">
+                  {{ item.nameAr }}</mat-option>
+              </mat-select>
+              <mat-error *ngIf="form.controls['type'].hasError('required')">
+                نوع الجلسة مطلوب</mat-error>
+            </mat-form-field>
+          </div>
+
+          <div fxFlex.gt-sm="50" fxFlex="100">
+            <date-picker-dual controlName="hearingDate" [placeholder]="'تاريخ الجلسة'" [required]="true">
+            </date-picker-dual>
+          </div>
+
+          <div fxFlex.gt-sm="100" fxFlex="100" class="p-10">
+            <div fxFlex.gt-sm="5" fxFlex="100" class="p-10"></div>
+            <div fxFlex.gt-sm="20" fxFlex="100" class="p-10">
+              <span>وقت الجلسة <span class="mat-placeholder-required">*</span></span>
+              <timepicker formControlName="hearingTime" showMeridian="true" labelMinutes="Minutes"
+                style="direction: ltr"></timepicker>
+            </div>
+            <div fxFlex.gt-sm="75" fxFlex="100" class="p-10"></div>
+          </div>
+
+          <div fxFlex.gt-sm="100" fxFlex="100" class="p-10">
+            <mat-form-field>
+              <textarea [value]="form.controls['motions'].value | replaceLineBreaks" matInput formControlName="motions" placeholder="الطلبات" rows="3" maxlength="255"
+                required #motions></textarea>
+                <!-- <mat-hint>عدد الاحرف يجب ان لا يزيد عن 255 حرف</mat-hint> -->
+                <mat-hint>255/{{motions.value?.length || 0}}</mat-hint>
+                <mat-error *ngIf="form.controls['motions'].hasError('required')"> الطلبات مطلوب
+              </mat-error>
+            </mat-form-field>
+          </div>
+
+          <div fxFlex.gt-sm="100" fxFlex="100" class="p-10">
+            <strong>مرفقات الجلسة </strong>
+            &nbsp;
+            <span *ngIf="filesCount" class="label label-warning" style="font-family: Arial">{{ filesCount }}</span>
+
+            <app-attachments [groupName]="GroupNames.Hearing" (set-attachments-list)="onHearingAttachment($event)"
+              [attachmentsToUpdate]="attachments">
+            </app-attachments>
+
+          </div>
+        </section>
+        <section class="screen-actions">
+
+          <button mat-raised-button color="primary" type="submit" [disabled]="!form.valid" (click)="onSubmit()">
+            <span *ngIf="!hearingId">إضافة</span>
+            <span *ngIf="hearingId"> تعديل</span></button>
+          <button mat-raised-button type="button" (click)="location.back()">
+            إلغاء
+          </button>
+
+        </section>
+      </form>
+    </section>
+  </mat-card-content>
+</mat-card>

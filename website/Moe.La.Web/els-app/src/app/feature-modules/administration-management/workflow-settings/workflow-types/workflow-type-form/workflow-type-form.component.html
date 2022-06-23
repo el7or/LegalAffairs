@@ -1,0 +1,37 @@
+<mat-horizontal-stepper [linear]="true" #stepper labelPosition="bottom" (selectionChange)="OnSelectionChange($event)">
+  <ng-template matStepperIcon="edit">
+    <mat-icon>edit</mat-icon>
+  </ng-template>
+  <mat-step>
+    <ng-template matStepLabel>
+      <span>
+        نوع سير العمل
+      </span>
+    </ng-template>
+    <app-workflow-type [stepper]="stepper"></app-workflow-type>
+  </mat-step>
+  <mat-step>
+    <ng-template matStepLabel>
+      <span>
+        إجراءات سير العمل
+      </span>
+    </ng-template>
+    <app-workflow-action-list [stepper]="stepper"></app-workflow-action-list>
+  </mat-step>
+  <mat-step>
+    <ng-template matStepLabel>
+      <span>
+        خطوات سير العمل
+      </span>
+    </ng-template>
+    <app-workflow-step-list [stepper]="stepper"></app-workflow-step-list>
+  </mat-step>
+  <mat-step>
+    <ng-template matStepLabel>
+      <span>
+        تهيئة سير العمل
+      </span>
+    </ng-template>
+    <!-- <app-workflow-step-actions-list [stepper]="stepper"></app-workflow-step-actions-list> -->
+  </mat-step>
+</mat-horizontal-stepper>

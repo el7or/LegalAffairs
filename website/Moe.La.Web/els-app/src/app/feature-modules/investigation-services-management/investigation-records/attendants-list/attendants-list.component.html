@@ -1,0 +1,72 @@
+<strong>الحضور</strong>
+<fieldset>
+  <button class="add-btn m-b-10" mat-raised-button type="button" (click)="onAdd()">
+    إضافة
+  </button>
+
+  <div class="responsive-table screen-table">
+    <table mat-table [dataSource]="attendantsDataSource">
+      <ng-container matColumnDef="fullName">
+        <th mat-header-cell *matHeaderCellDef> الاسم </th>
+        <td mat-cell *matCellDef="let attendant"> {{attendant.fullName}} </td>
+      </ng-container>
+
+      <ng-container matColumnDef="assignedWork">
+        <th mat-header-cell *matHeaderCellDef> العمل المكلف به </th>
+        <td mat-cell *matCellDef="let attendant"> {{attendant.assignedWork}} </td>
+      </ng-container>
+
+      <ng-container matColumnDef="workLocation">
+        <th mat-header-cell *matHeaderCellDef> مقر العمل </th>
+        <td mat-cell *matCellDef="let attendant"> {{attendant.workLocation}} </td>
+      </ng-container>
+
+      <ng-container matColumnDef="representativeOf">
+        <th mat-header-cell *matHeaderCellDef> ممثل عن </th>
+        <td mat-cell *matCellDef="let attendant">
+          {{attendant.representativeOf.name}}
+        </td>
+
+      </ng-container>
+
+      <ng-container matColumnDef="details">
+        <th mat-header-cell *matHeaderCellDef> تفاصيل </th>
+        <td mat-cell *matCellDef="let attendant; let i = index" style="max-width: 22em;">
+          <span *ngIf="attendant.details">
+            {{ attendant.details | sliceWords : 5 : attendant }}
+            <a mat-button color="primary" *ngIf="attendant.isWithViewMore"
+              (click)="attendant.showViewMore = !attendant.showViewMore;">
+              <span *ngIf="attendant.showViewMore">المزيد</span>
+              <span *ngIf="!attendant.showViewMore">أقل</span>
+            </a>
+          </span>
+        </td>
+
+      </ng-container>
+
+      <ng-container matColumnDef="actions">
+        <th mat-header-cell *matHeaderCellDef> </th>
+        <td mat-cell *matCellDef="let attendant; let i = index">
+
+          <button [matMenuTriggerFor]="profile" mat-icon-button class="m-r-5">
+            <mat-icon>more_vert</mat-icon>
+          </button>
+          <mat-menu #profile="matMenu" class="mymegamenu">
+            <button mat-menu-item (click)="onDelete(i)" type="button">
+              حذف
+            </button>
+            <button mat-menu-item (click)="onEdit(attendant, i)" type="button">
+              تعديل
+            </button>
+          </mat-menu>
+        </td>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+      <tr class="mat-row" *matNoDataRow>
+        <td class="mat-cell" colspan="6" style="text-align: center;">لا يوجد نتائج للبيانات.</td>
+      </tr>
+    </table>
+  </div>
+</fieldset>

@@ -1,0 +1,41 @@
+<h3 mat-dialog-title class="modal-title">
+ إضافة طلب توجيه للاعتراض
+</h3>
+
+<div mat-dialog-content>
+    <form (submit)="onSubmit()" [formGroup]="form">
+        <div fxLayout="row wrap" fxFlexAlign="center" class="row">
+            <div fxFlex.gt-sm="100" fxFlex="100" class="p-10">
+                <!-- <mat-label>
+                    طلب الباحث
+                </mat-label> -->
+                <mat-radio-group formControlName="suggestedOpinon">
+                    <mat-radio-button [value]="SuggestedOpinon.ObjectionAction">الاعتراض</mat-radio-button>
+                    &nbsp;
+                    <mat-radio-button [value]="SuggestedOpinon.NoFutherAction">الاكتفاء بالحكم</mat-radio-button>
+                </mat-radio-group>
+            </div>
+            <div fxFlex.gt-sm="100" fxFlex="100" class="p-10">
+                <mat-form-field>
+                    <mat-label>
+                        سبب الطلب
+                    </mat-label>
+                    <textarea matInput formControlName="note" [value]="form.controls['note'].value | replaceLineBreaks" type="text" rows="5" maxlength="4000" required
+                    #note></textarea>
+                    <!-- <mat-hint>عدد الاحرف يجب ان لا يزيد عن 4000 حرف</mat-hint> -->
+                    <mat-hint>4000/{{note.value?.length || 0}}</mat-hint>
+                    <mat-error *ngIf="form.controls['note'].hasError('required')"> سبب الطلب مطلوب</mat-error>
+                    <mat-error *ngIf="form.controls['note'].hasError('maxlength')" class="text-danger "> عدد الحروف
+                        لا يزيد عن 4000 حرف</mat-error>
+                </mat-form-field>
+            </div>
+        </div>
+        <section class="screen-actions">
+            <div class="button-row">
+                <button mat-raised-button type="submit" color="primary" [disabled]="!form.valid">ارسال</button>
+                &nbsp;
+                <button mat-raised-button type="button" (click)="onCancel()">إلغاء</button>
+            </div>
+        </section>
+    </form>
+</div>

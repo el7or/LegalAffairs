@@ -1,0 +1,113 @@
+<div fxFlex.gt-sm="100" fxFlex.gt-xs="100" fxFlex="100">
+  <mat-card>
+    <mat-card-content>
+      <div fxLayout="row wrap" class="screen">
+        <section fxFlex="100" class="screen-header">
+          <button class="add-btn" mat-raised-button color="primary" [routerLink]="['new']"
+            routerLinkActive="router-link-active">
+            إضافة
+          </button>
+        </section>
+
+        <section fxFlex="100" class="responsive-table screen-table">
+
+          <div fxLayout="row" fxLayoutAlign="space-between stretch" class="filter">
+            <div class="free-search" fxFlex="25" fxLayout="row" fxLayoutAlign="center center">
+              <mat-form-field appearance="outline" [hideRequiredMarker]="true" floatLabel="always">
+                <span matPrefix>
+                  <mat-icon>search</mat-icon>
+                </span>
+                <input matInput placeholder="بحث" autocomplete="off">
+              </mat-form-field>
+            </div>
+            <mat-paginator #paginator hidePageSize="true" [pageSize]="10" fxFlex="60"></mat-paginator>
+          </div>
+          <div *ngIf="showFilter" fxLayout="row wrap">
+            <div fxFlex.gt-sm="100" fxFlex="100">
+              <form class="basic-form">
+                <div class="row filter-container" fxLayout="row wrap" fxFlexAlign="center">
+                  <div fxFlex.gt-sm="31" fxFlex="90" class="p-10">
+                    <mat-form-field>
+                      <input matInput formControlName="name" placeholder="الاسم" autocomplete="off" />
+                    </mat-form-field>
+                  </div>
+                  <div fxFlex.gt-sm="31" fxFlex="90" class="p-10">
+                    <button class="btn m-b-10 float-left" color="accent" type="submit" mat-raised-button
+                      (click)="showFilter = false">
+                      تصفية
+                    </button>
+                  </div>
+                </div>
+              </form>
+            </div>
+          </div>
+          <table mat-table [dataSource]="dataSource" matSort>
+
+            <!-- ID Column -->
+            <ng-container matColumnDef="id">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header> رقم المعرف </th>
+              <td mat-cell *matCellDef="let row"> {{row.id}} </td>
+            </ng-container>
+
+            <!-- TypeArName Column -->
+            <ng-container matColumnDef="typeArName">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header> الاسم </th>
+              <td mat-cell *matCellDef="let row"> {{row.typeArName}} </td>
+            </ng-container>
+
+            <!-- LockPeriod Column -->
+            <ng-container matColumnDef="lockPeriod">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header> مدة الإستحواذ (ساعة) </th>
+              <td mat-cell *matCellDef="let row"> {{row.lockPeriod}} س</td>
+            </ng-container>
+
+            <!-- IsActive Column -->
+            <ng-container matColumnDef="isActive">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header> مفعل </th>
+              <td mat-cell *matCellDef="let row">
+                <span *ngIf="row.isActive">مفعل</span>
+                <span *ngIf="!row.isActive">معطل</span>
+              </td>
+            </ng-container>
+
+            <!-- Actions Column -->
+            <ng-container matColumnDef="actions">
+              <th mat-header-cell *matHeaderCellDef>
+                <!-- <mat-icon class="dd-icon">settings</mat-icon> -->
+                إجراء
+              </th>
+              <td mat-cell *matCellDef="let row">
+                <button mat-icon-button [matMenuTriggerFor]="menu" aria-label="Example icon-button with a menu">
+                  <mat-icon>more_vert</mat-icon>
+                </button>
+                <mat-menu #menu="matMenu">
+                  <button type="menu" mat-menu-item [routerLink]="['view', row.id]">
+                    <span>عرض</span>
+                  </button>
+                  <button type="menu" mat-menu-item [routerLink]="['edit', row.id]">
+                    <span>تعديل</span>
+                  </button>
+                  <button type="menu" mat-menu-item disabled>
+                    <span>حذف</span>
+                  </button>
+                </mat-menu>
+              </td>
+            </ng-container>
+
+            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+            <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+
+            <!-- Row shown when there is no matching data. -->
+            <tr class="mat-row" *matNoDataRow>
+              <td class="mat-cell" colspan="6" style="text-align: center;">لا يوجد نتائج للبيانات.</td>
+            </tr>
+          </table>
+
+          <mat-paginator hidePageSize="true" [pageSize]="paginator.pageSize" [pageIndex]="paginator.pageIndex"
+            [length]="paginator.length" [pageSizeOptions]="paginator.pageSizeOptions" (page)="syncPaginator($event)">
+          </mat-paginator>
+        </section>
+      </div>
+    </mat-card-content>
+  </mat-card>
+</div>

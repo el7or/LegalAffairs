@@ -1,0 +1,79 @@
+<mat-tab-group>
+  <mat-tab label="بيانات القضية">
+    <fieldset>
+      <!-- <h2 class="heading">بيانات القضية الأساسية</h2> -->
+      <div fxLayout="row wrap" fxFlexAlign="center" class="entity-details p-10">
+
+        <div fxLayout="column" fxFlex.gt-sm="33" fxFlex="100">
+          <span>رقم القضية</span>
+          <span>{{request.case.caseNumberInSource}}</span>
+        </div>
+
+        <div fxLayout="column" fxFlex.gt-sm="33" fxFlex="100">
+          <span>عنوان الدعوى</span>
+          <span>{{request.case.subject}}</span>
+        </div>
+
+        <div fxLayout="column" fxFlex.gt-sm="33" fxFlex="100">
+          <span>تاريخ بداية القضية</span>
+          <span>
+            {{request.case.startDate | date : 'yyyy-MM-dd'}}
+            {{request.case.startDate | arDayOfWeek}}
+            {{request.case.startDateHigri }}
+          </span>
+        </div>
+
+        <div fxLayout="column" fxFlex.gt-sm="33" fxFlex="100">
+          <span>مصدر القضية</span>
+          <span>{{request.case.caseSource.name}}</span>
+        </div>
+      </div>
+    </fieldset>
+  </mat-tab>
+  <mat-tab label="بيانات المذكرة">
+    <fieldset>
+      <!-- <h2 class="heading">بيانات المذكرة</h2> -->
+      <div fxLayout="row wrap" fxFlexAlign="center" class="entity-details p-10">
+
+        <div fxLayout="column" fxFlex.gt-sm="33" fxFlex="100">
+          <span>اسم المذكرة</span>
+          <span>{{request.legalMemo.name}}</span>
+        </div>
+
+        <div fxLayout="column" fxFlex.gt-sm="33" fxFlex="100">
+          <span>تاريخ اعتماد المذكرة</span>
+          <span>
+            {{request.legalMemo.updatedOn | date : 'yyyy-MM-dd'}}
+            {{request.legalMemo.updatedOn | arDayOfWeek}}
+            {{ request.legalMemo.updatedOnHigri }}
+          </span>
+        </div>
+
+        <div fxLayout="column" fxFlex.gt-sm="33" fxFlex="100">
+          <span>تصنيف القضية</span>
+          <span>{{request.legalMemo.secondSubCategory.name}}</span>
+        </div>
+
+        <div fxLayout="column" fxFlex="100">
+          <span>نص المذكرة</span>
+          <div class="well">
+            <span [innerHTML]="request.legalMemo.text"></span>
+          </div>
+        </div>
+      </div>
+    </fieldset>
+  </mat-tab>
+</mat-tab-group>
+
+<section class="screen-actions">
+  <div class="button-row">
+    <button mat-raised-button color="primary" type="button" (click)="ReplyObjectionMemoRequest(RequestStatus.Accepted)"
+      *ngIf="(request.request.requestStatus.id==RequestStatus.Modified || request.request.requestStatus.id==RequestStatus.New) && isConsultant">
+      <span>قبول</span>
+    </button>
+    <button mat-raised-button color="primary" type="button" (click)="onReject()"
+      *ngIf="(request.request.requestStatus.id==RequestStatus.Modified || request.request.requestStatus.id==RequestStatus.New) && isConsultant">
+      رفض
+    </button>
+  </div>
+</section>

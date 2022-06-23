@@ -1,0 +1,73 @@
+<!-- ============================================================== -->
+<!-- Notification - style you can find in header.scss -->
+<!-- ============================================================== -->
+<!-- <button mat-icon-button class="m-r-10" class="Notifications">
+  <mat-icon>notifications</mat-icon>
+  <div class="notify">
+    <span class="heartbit"></span>
+  </div>
+</button> -->
+
+
+<!-- <button [matMenuTriggerFor]="notification" mat-icon-button class="m-r-10" class="Notifications">
+  <mat-icon>notifications</mat-icon>
+  <div class="notify">
+    <span class="heartbit"></span>
+    <span *ngIf="notifications.length>0" class="point">{{notifications.length}}</span>
+  </div>
+</button> -->
+<mat-menu #notification="matMenu" class="mymegamenu">
+  <div class="mailbox">
+    <ul>
+      <li>
+        <div *ngIf="notifications.length > 0" class="drop-title">لديك {{notifications.length}} اشعارات جديدة</div>
+        <div *ngIf="notifications.length < 1" class="drop-title">لا يوجد اشعارات جديدة.</div>
+      </li>
+      <li>
+        <div class="message-center">
+          <div class="list-scrollbar">
+            <!-- Message -->
+            <a (click)="readNotification(notification.id,notification.url)" *ngFor="let notification of notifications">
+              <!-- <div class="round round-{{notification.type}}">
+                <i class="{{notification.icon}}"></i>
+              </div> -->
+              <div class="mail-content">
+                <h5 [class.unread]="!notification.isRead">{{notification.text}}</h5>
+                <!-- <span class="mail-desc">{{notification.text}}</span> -->
+                <span class="time" *ngIf="notification.currentDay">{{notification.creationTime}}</span>
+                <span class="time" *ngIf="!notification.currentDay">
+                  {{notification.createdOn | date :'yyyy-MM-dd'}}
+                  {{notification.createdOn | arDayOfWeek}}
+                  {{notification.createdOnHigri}}
+                </span>
+              </div>
+            </a>
+            <a *ngIf="notifications.length > 0" href="/notifications" class="flex-center"> ... المزيد</a>
+            <a *ngIf="notifications.length < 1" href="/notifications" class="flex-center">صفحة الإشعارات</a>
+          </div>
+        </div>
+      </li>
+    </ul>
+  </div>
+</mat-menu>
+
+<!-- ============================================================== -->
+<!-- Profile - style you can find in header.scss -->
+<!-- ============================================================== -->
+<a [matMenuTriggerFor]="profile" class="font-16">
+  <i class="fa fa-caret-down font-12 m-l-10"></i>
+  <span class="font-14 m-l-10">أهلًا </span>
+  {{authService.currentUser?.given_name }}
+  <span *ngIf="authService.currentUser">({{authService.currentUserRole}})</span>
+</a>
+<button [matMenuTriggerFor]="profile" mat-icon-button class="m-r-5">
+  <img src="assets/images/users/user-avatar.png" alt="user" class="profile-pic">
+</button>
+<mat-menu #profile="matMenu" class="mymegamenu">
+  <button mat-menu-item [routerLink]="['/user-settings/profile']">
+     الملف الشخصى
+  </button>
+  <button mat-menu-item (click)="logout()">
+     تسجيل الخروج
+  </button>
+</mat-menu>

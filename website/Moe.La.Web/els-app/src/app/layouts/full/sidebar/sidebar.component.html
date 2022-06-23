@@ -1,0 +1,95 @@
+<!-- ============================================================== -->
+<!-- sidebar -->
+<!-- Logo - style you can find in header.scss -->
+<!-- ============================================================== -->
+<div fxLayout="column">
+
+
+  <div class="navbar-header m-auto p-b-30" fxFlex>
+    <a class="navbar-brand" href="/">
+      <span fxShow="false" fxShow.gt-xs>
+        <img src="assets/images/logo.png" class="light-logo" alt="homepage">
+      </span>
+    </a>
+  </div>
+  <!-- ============================================================== -->
+
+  <mat-nav-list appAccordion fxFlex>
+    <mat-list-item appAccordionLink *ngFor="let menuitem of menuItems.getMenuitem()" routerLinkActive="selected"
+                   group="{{menuitem.state}}" (click)="scrollToTop()">
+      <ng-container *ngIf="!menuitem.rolesDepartment || menuitem.rolesDepartment?.length > 0 && checkUserRole(menuitem.rolesDepartment)">
+        <a class="" appAccordionToggle [routerLink]="['/' + menuitem.state]" *ngIf="menuitem.type === 'link'">
+          <mat-icon class="m-l-15">{{ menuitem.icon }}</mat-icon>
+          <span>{{ menuitem.name }}</span>
+          <span fxFlex></span>
+          <span class="label label-{{ badge.type }}" *ngFor="let badge of menuitem.badge">{{ badge.value }}</span>
+        </a>
+
+        <a class="" appAccordionToggle href="{{menuitem.state}}" *ngIf="menuitem.type === 'extLink'">
+          <mat-icon class="m-l-15">{{ menuitem.icon }}</mat-icon>
+          <span>{{ menuitem.name }}</span>
+          <span fxFlex></span>
+          <span class="label label-{{ badge.type }}" *ngFor="let badge of menuitem.badge">{{ badge.value }}</span>
+        </a>
+        <a class="" appAccordionToggle href="{{menuitem.state}}" target="_blank" *ngIf="menuitem.type === 'extTabLink'">
+          <mat-icon class="m-l-15">{{ menuitem.icon }}</mat-icon>
+          <span>{{ menuitem.name}}</span>
+          <span fxFlex></span>
+          <span class="label label-{{ badge.type }}" *ngFor="let badge of menuitem.badge">{{ badge.value }}</span>
+        </a>
+
+        <a class="" appAccordionToggle href="javascript:;" *ngIf="menuitem.type === 'sub'">
+          <mat-icon class="m-l-15">{{ menuitem.icon }}</mat-icon>
+          <span>{{ menuitem.name }}</span>
+          <span fxFlex></span>
+          <span class="label label-{{ badge.type }}" *ngFor="let badge of menuitem.badge">{{ badge.value }}</span>
+          <i class="fa fa-caret-left"></i>
+        </a>
+        <mat-nav-list class="sub-item" *ngIf="menuitem.type === 'sub'">
+          <mat-list-item *ngFor="let childitem of menuitem.children; let j=index; let i = childitem"
+                         routerLinkActive="selected">
+            <ng-container *ngIf="!childitem.rolesDepartment || childitem.rolesDepartment?.length > 0 && checkUserRole(childitem.rolesDepartment)">
+
+              <a [routerLink]="childitem.state != ''? ['/', menuitem.state, childitem.state ]: ['/', menuitem.state]"
+                 *ngIf="childitem.type === 'link'" class="relative" routerLinkActive="selected"
+                 (click)="itemSelect[i]=j">
+                <i class="fa fa-circle m-l-10"></i>
+
+                <span> {{ childitem.name}}</span>
+                <span fxFlex></span>
+                <span class="label label-{{ badge.type }}" *ngFor="let badge of childitem.badge">{{badge.value }}</span>
+
+
+              </a>
+            </ng-container>
+          </mat-list-item>
+          <mat-list-item *ngFor="let childitem of menuitem.children; let j=index; let i=childitem">
+            <ng-container *ngIf="!childitem.rolesDepartment || childitem.rolesDepartment?.length > 0 && checkUserRole(childitem.rolesDepartment)">
+
+              <a class="" href="javascript: void(0);" *ngIf="childitem.type === 'subchild'" (click)="itemSelect[i]=j"
+                 [ngClass]="j==itemSelect[i]? 'selected' : ''">
+                <span>{{ childitem.name }} </span>
+                <span fxFlex></span>
+                <i class="fa fa-caret-left"></i>
+              </a>
+              <mat-nav-list class="child-sub-item" *ngIf="childitem.type === 'subchild'">
+                <mat-list-item *ngFor="let child of childitem.child" routerLinkActive="selected">
+                  <ng-container *ngIf="!child.rolesDepartment || child.rolesDepartment?.length > 0 && checkUserRole(child.rolesDepartment)">
+
+                    <a [routerLink]="['/', menuitem.state, childitem.state, child.state ]"
+                       routerLinkActive="selected">{{child.name}} </a>
+                  </ng-container>
+                </mat-list-item>
+              </mat-nav-list>
+            </ng-container>
+          </mat-list-item>
+
+        </mat-nav-list>
+
+        <div class="saperator " *ngIf="menuitem.type === 'saperator'">
+          <span>{{ menuitem.name }}</span>
+        </div>
+      </ng-container>
+    </mat-list-item>
+  </mat-nav-list>
+</div>

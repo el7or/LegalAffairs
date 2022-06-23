@@ -1,0 +1,33 @@
+<div class="screen">
+  <h3 mat-dialog-title>
+ إضافة إجراء
+  </h3>
+  <div mat-dialog-content>
+    <div fxLayout="row wrap">
+      <div fxFlex.gt-sm="100" fxFlex="100">
+        <form class="basic-form" [formGroup]="form">
+          <div fxLayout="row wrap" fxFlexAlign="center" class="row">
+            <div fxFlex.gt-sm="100" fxFlex="100" class="p-10">
+              <mat-form-field>
+                <input matInput formControlName="actionArName" placeholder="الاسم" autocomplete="off" required>
+                <mat-error *ngIf="form.controls['actionArName'].hasError('required')">إسم الإجراء مطلوب</mat-error>
+              </mat-form-field>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+  <div mat-dialog-actions>
+    <section class="screen-actions">
+      <div class="button-row">
+        <button mat-raised-button color="primary" (click)="onSave()">
+          <span>حفظ</span>
+        </button>
+        <button type="button" mat-raised-button (click)="onCancel()">
+          إلغاء
+        </button>
+      </div>
+    </section>
+  </div>
+</div>

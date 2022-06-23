@@ -1,0 +1,249 @@
+<mat-card>
+  <mat-card-content>
+    <section fxLayout="row wrap" class="screen" *ngIf="moamala">
+      <section fxFlex="100" class="screen-header">
+        <div fxFlex="50"></div>
+        <div fxFlex="50" fxLayoutAlign="end center">
+          <button mat-button color="primary" (click)="onBack()">
+            العودة إلى القائمة
+          </button>
+          <button mat-stroked-button color="primary" [matMenuTriggerFor]="menu">
+            تصدير
+            <mat-icon>expand_more</mat-icon>
+          </button>
+          <mat-menu #menu="matMenu">
+            <button mat-menu-item (click)="onPrint()">
+              <mat-icon>picture_as_pdf</mat-icon>
+              ملف PDF
+            </button>
+          </mat-menu>
+        </div>
+      </section>
+
+      <div fxLayout="row wrap" fxFlexAlign="center" class="entity-details p-10">
+        <div fxLayout="column" fxFlex.gt-sm="25" fxFlex="100">
+          <span>الرقم الموحد</span>
+          <span>{{ moamala.unifiedNo!=null? moamala.unifiedNo:"" }}</span>
+        </div>
+
+        <div fxLayout="column" fxFlex.gt-sm="25" fxFlex="100">
+          <span>رقم المعاملة</span>
+          <span>{{ moamala.moamalaNumber!=null? moamala.moamalaNumber:"" }}</span>
+        </div>
+
+        <div fxLayout="column" fxFlex.gt-sm="25" fxFlex="100">
+          <span>عنوان المعاملة</span>
+          <span>{{ moamala.subject !=null? moamala.subject:"" }}</span>
+        </div>
+
+        <div fxLayout="column" fxFlex.gt-sm="25" fxFlex="100">
+          <span>تاريخ ووقت إنشاء المعاملة</span>
+          <span>{{ moamala.createdOn | date: "yyyy-MM-dd" }} &nbsp;
+            {{ moamala.createdOnHigri }} &nbsp;
+            {{ moamala.createdOnTime }}</span>
+        </div>
+
+        <div fxLayout="column" fxFlex.gt-sm="25" fxFlex="100">
+          <span>تاريخ ووقت ورود المعاملة</span>
+          <span>{{ moamala.passDate | date: "yyyy-MM-dd" }} &nbsp;
+            {{ moamala.passDateHigri }} &nbsp; {{ moamala.passTime }}</span>
+        </div>
+
+        <div fxLayout="column" fxFlex.gt-sm="25" fxFlex="100">
+          <span>درجة السرية</span>
+          <span>{{ moamala.confidentialDegree?.name }}</span>
+        </div>
+
+        <div fxLayout="column" fxFlex.gt-sm="25" fxFlex="100">
+          <span>واردة من</span>
+          <span>{{ moamala.senderDepartment?.name != null ? moamala.senderDepartment?.name : "" }}</span>
+        </div>
+
+        <div fxLayout="column" fxFlex.gt-sm="25" fxFlex="100">
+          <span>حالة المعاملة</span>
+          <span>{{ moamala.status?.name }}</span>
+        </div>
+
+        <div fxLayout="column" fxFlex.gt-sm="25" fxFlex="100" *ngIf="!updatingWorkItemType">
+          <span>نوع المعاملة</span>
+          <ng-container *ngIf="!updatingWorkItemType">
+            <span>{{ moamala.workItemType?.name!=null? moamala.workItemType?.name:"" }}</span>
+            <div>
+              <button mat-raised-button color="primary" type="button" (click)="updateWorkItemType()"
+                *ngIf="authService.checkRole(AppRole.DepartmentManager,moamala?.senderDepartment?.id)
+              && ((moamala?.status?.id == MoamalaStatuses.Referred && moamala?.currentStep == MoamalaSteps.Department)
+              || (moamala?.status?.id == MoamalaStatuses.MoamalaReturned && moamala?.currentStep == MoamalaSteps.Department))">
+                تعديل
+              </button>
+            </div>
+          </ng-container>
+        </div>
+
+        <div fxLayout="column" fxFlex.gt-sm="25" fxFlex="100" *ngIf="!updatingWorkItemType">
+          <span>النوع الفرعي للمعاملة</span>
+          <ng-container>
+            <span>{{ moamala.subWorkItemType?.name!=null? moamala.subWorkItemType?.name:"" }}</span>
+          </ng-container>
+        </div>
+
+        <div fxLayout="column" fxFlex.gt-sm="50" fxFlex="100" *ngIf="updatingWorkItemType">
+          <form *ngIf="updatingWorkItemType" (submit)="onChangeWorkItemType()" [formGroup]="formWorkItemType">
+            <div fxLayout="column" fxFlex.gt-sm="50" fxFlex="100" class="p-10" style="margin-top: -5px;">
+              <span>نوع المعاملة</span>
+              <mat-form-field>
+                <mat-select matInput formControlName="workItemTypeId"
+                  (selectionChange)="getSubWorkItemType($event.value)">
+                  <mat-option value="">--اختر--</mat-option>
+                  <mat-option *ngFor="let workItemType of workItemTypes" [value]="workItemType.id">
+                    {{ workItemType.name }}
+                  </mat-option>
+                </mat-select>
+              </mat-form-field>
+              <button mat-raised-button color="primary" type="submit">حفظ</button>
+            </div>
+            <div fxLayout="column" fxFlex.gt-sm="50" fxFlex="100" class="p-10" style="margin-top: -7.5px;">
+              <span>النوع الفرعي للمعاملة</span>
+              <ng-container>
+                <mat-form-field>
+                  <mat-select matInput formControlName="subWorkItemTypeId">
+                    <mat-option value="">--اختر--</mat-option>
+                    <mat-option *ngFor="let subWorkItemType of subWorkItemTypes" [value]="subWorkItemType.id">
+                      {{ subWorkItemType.name }}
+                    </mat-option>
+                  </mat-select>
+                </mat-form-field>
+              </ng-container>
+            </div>
+          </form>
+        </div>
+
+        <div fxLayout="column" fxFlex.gt-sm="25" fxFlex="100">
+          <span>العنصر المتربط بالمعاملة</span>
+          <span *ngIf="!moamala.releatedItems?.length">{{ moamala.releatedItemsTitle !=null? moamala.releatedItemsTitle
+            :""}}</span>
+          <mat-select matInput *ngIf="moamala.releatedItems?.length" [value]="moamala.relatedId"
+            (selectionChange)="onChangeReleatedItem($event)" [placeholder]="moamala.releatedItemsTitle"
+            [disabled]="moamala.relatedId">
+            <mat-option value="">--اختر--</mat-option>
+            <mat-option *ngFor="let item of moamala.releatedItems" [value]="item.id" [matTooltip]="item.name"
+              matTooltipPosition="above">
+              {{item.name}}
+            </mat-option>
+          </mat-select>
+        </div>
+
+        <div fxLayout="column" fxFlex.gt-sm="25" fxFlex="100">
+          <span>الإدارة العامة المحالة إليها</span>
+          <span>{{ moamala.branch?.name != null ? moamala.branch?.name : "" }}</span>
+        </div>
+
+        <div fxLayout="column" fxFlex.gt-sm="25" fxFlex="100">
+          <span>الإدارة المختصة المحالة إليها</span>
+          <span>{{ moamala.receiverDepartment?.name != null ? moamala.receiverDepartment?.name : "" }}</span>
+        </div>
+
+        <div fxLayout="column" fxFlex.gt-sm="25" fxFlex="100">
+          <span>ملاحظات الإحالة</span>
+          <span>{{ moamala.referralNote != null ? moamala.referralNote : "" }}</span>
+        </div>
+
+        <div fxLayout="column" fxFlex.gt-sm="25" fxFlex="100">
+          <span>الموظف المسندة إليه</span>
+          <span>{{ moamala.assignedToFullName != null ? moamala.assignedToFullName : "" }}</span>
+        </div>
+
+        <div fxLayout="column" fxFlex.gt-sm="25" fxFlex="100">
+          <span>ملاحظات الإسناد</span>
+          <span>{{ moamala.assigningNote != null ? moamala.assigningNote : "" }}</span>
+        </div>
+
+        <div fxLayout="column" fxFlex.gt-sm="25" fxFlex="100"
+          *ngIf="moamala?.status?.id == MoamalaStatuses.MoamalaReturned">
+          <span>معادة من</span>
+
+          <span
+            *ngIf="moamala?.currentStep == MoamalaSteps.Initial&&moamala?.confidentialDegree?.id == ConfidentialDegrees.Confidential">
+            {{moamala?.assignedToFullName != null ? moamala.assignedToFullName : "--------" }}
+          </span>
+          <span
+            *ngIf="moamala?.currentStep == MoamalaSteps.Initial&&moamala?.confidentialDegree?.id != ConfidentialDegrees.Confidential">
+            {{moamala?.branch?.name != null ? moamala.branch?.name : "--------" }}
+          </span>
+          <span *ngIf="moamala?.currentStep == MoamalaSteps.Branch">
+            {{moamala?.receiverDepartment?.name != null ? moamala.receiverDepartment?.name : "--------" }}
+          </span>
+          <span *ngIf="moamala?.currentStep == MoamalaSteps.Department">
+            {{moamala?.assignedToFullName != null ? moamala.assignedToFullName : "--------" }}
+          </span>
+        </div>
+
+        <div fxLayout="column" fxFlex.gt-sm="25" fxFlex="100"
+          *ngIf="moamala?.status?.id == MoamalaStatuses.MoamalaReturned">
+          <span>سبب الإعادة</span>
+          <span>{{ moamala.returningReason != null ? moamala.returningReason : ""}}</span>
+        </div>
+
+        <div fxLayout="column" fxFlex.gt-sm="100" fxFlex="100">
+          <span>تفاصيل المعاملة</span>
+          <span [innerHTML]="moamala.description !=null? moamala.description:''"></span>
+        </div>
+
+        <div fxLayout="column" fxFlex.gt-sm="100" fxFlex="100">
+          <span>المرفقات</span>
+          <app-attachments [groupName]="GroupNames.Moamala" [readOnly]="true"
+            [attachmentsToUpdate]="moamala.attachments">
+          </app-attachments>
+        </div>
+
+        <div fxLayout="column" fxFlex.gt-sm="100" fxFlex="100">
+          <span>المعاملات المرتبطة</span>
+          <section class="responsive-table screen-table">
+            <app-moamalat-list-table [dataSource]="relatedMoamalatDataSource">
+            </app-moamalat-list-table>
+          </section>
+        </div>
+      </div>
+
+      <section class="screen-actions">
+        <button mat-raised-button color="primary" aria-label="Edit"
+          *ngIf="(authService.checkRole(AppRole.Distributor) || authService.checkRole(AppRole.GeneralSupervisor)) && moamala?.isManual"
+          [routerLink]="['/moamalat/edit',moamala.id]" routerLinkActive="router-link-active">
+          تعديل
+        </button>
+        <button mat-raised-button color="primary"
+          (click)="changeStatus(moamala, MoamalaStatuses.Referred, MoamalaSteps.Branch)"
+          *ngIf="moamala?.currentStep == MoamalaSteps.Initial && moamala?.confidentialDegree?.id != ConfidentialDegrees.Confidential "
+          routerLinkActive="router-link-active">
+          إحالة
+        </button>
+        <button mat-raised-button color="primary"
+          (click)="changeStatus(moamala, MoamalaStatuses.Referred, MoamalaSteps.Department)"
+          *ngIf="moamala?.currentStep == MoamalaSteps.Branch" routerLinkActive="router-link-active" matTooltip="إحالة"
+          routerLinkActive="router-link-active">
+          إحالة
+        </button>
+        <button mat-raised-button color="primary" (click)="changeStatus(moamala, MoamalaStatuses.Assigned)" *ngIf="(moamala?.confidentialDegree?.id == ConfidentialDegrees.Confidential&&moamala?.currentStep == MoamalaSteps.Initial)
+        || moamala?.currentStep == MoamalaSteps.Department" routerLinkActive="router-link-active"
+          routerLinkActive="router-link-active">
+          اسناد
+        </button>
+        <button mat-raised-button color="primary" (click)="changeStatus(moamala, MoamalaStatuses.MoamalaReturned)"
+          *ngIf="moamala?.currentStep != MoamalaSteps.Initial" routerLinkActive="router-link-active"
+          routerLinkActive="router-link-active">
+          إعادة
+        </button>
+        <button mat-raised-button color="primary" *ngIf="moamala?.status?.id == MoamalaStatuses.Assigned && moamala?.assignedToId == authService.currentUser?.id 
+          && moamala?.workItemType.name !== 'قضية' && moamala?.workItemType.name !== 'تحقيق' 
+          && (!moamala?.consultationId || moamala.consultationStatus == ConsultationStatus.Draft || moamala.consultationStatus == ConsultationStatus.Returned)
+          " (click)="onCreateConsultation(moamala?.id,moamala?.workItemType.name)"
+          routerLinkActive="router-link-active">
+          {{moamala?.consultationId ? 'تعديل' : 'اعداد'}} النموذج
+        </button>
+
+        <button mat-raised-button (click)="onBack()" class="float-left">
+          العودة
+        </button>
+      </section>
+    </section>
+  </mat-card-content>
+</mat-card>

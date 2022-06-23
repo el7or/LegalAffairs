@@ -1,0 +1,11 @@
+
+.cdk-global-overlay-wrapper, .cdk-overlay-container {
+    z-index: 99999 !important;
+  }
+  button{
+      margin: .5em;
+  }
+   
+  .entity-details>div{
+    margin-bottom: 1.1em;
+  }

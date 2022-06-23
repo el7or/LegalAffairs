@@ -1,0 +1,43 @@
+<section class="screen-actions">
+  <button type="button" (click)="onSearchParty()" mat-raised-button color="primary">
+    اختر طرف
+  </button>&nbsp;
+  <button type="button" mat-raised-button (click)="onAddNewParty()" color="primary">
+    إضافة طرف جديد
+  </button>
+</section>
+
+<section class="screen-table responsive-table">
+  <table mat-table [dataSource]="partiesDataSource" multiTemplateDataRows class="mat-elevation-z0">
+    <ng-container matColumnDef="name">
+      <th mat-header-cell *matHeaderCellDef> الاسم </th>
+      <td mat-cell *matCellDef="let caseParty"> {{(caseParty.party.name != '' || caseParty.party.name != null) ?
+          caseParty.party.name : ""}} {{caseParty.party.organizationName != null ? caseParty.party.organizationName :
+          ""}} {{(caseParty.party.companyName == '' || caseParty.party.companyName != '') ? caseParty.party.companyName
+          : ""}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="partyType">
+      <th mat-header-cell *matHeaderCellDef> نوع الطرف </th>
+      <td mat-cell *matCellDef="let caseParty">
+        {{caseParty.party.partyTypeName}}
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="actions">
+      <th class="w-50 th-center" mat-header-cell *matHeaderCellDef></th>
+      <td mat-cell *matCellDef="let caseParty" style="text-align: left;">
+        <button type="button" mat-icon-button color="warn" matTooltip="حذف" matTooltipPosition="above"
+          (click)="onDelete(caseParty)">
+          <mat-icon>clear</mat-icon>
+        </button>
+      </td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+    <tr class="mat-row" *matNoDataRow>
+      <td class="mat-cell" colspan="4" style="text-align: center;">يجب إدخال الأطراف.</td>
+    </tr>
+  </table>
+</section>

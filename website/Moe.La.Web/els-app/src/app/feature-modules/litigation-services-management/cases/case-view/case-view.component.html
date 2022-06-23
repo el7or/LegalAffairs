@@ -1,0 +1,90 @@
+<mat-card>
+  <mat-card-content>
+    <section fxLayout="row wrap" class="screen" *ngIf="case">
+
+      <section fxFlex="100" class="screen-header">
+        <div fxFlex="50"></div>
+        <div fxFlex="50" fxLayoutAlign="end center">
+          <button mat-button color="primary" (click)="onBack()">
+            العودة إلى القائمة
+          </button>
+          <span
+            [matTooltip]="!case.court || !case.circleNumber ? 'تصدير بيانات القضية غير متاح إلا بعد استكمال بياناتها' : ''"
+            matTooltipPosition="right">
+            <button mat-stroked-button color="primary" [matMenuTriggerFor]="menu"
+              [disabled]="!case.court || !case.circleNumber">
+              تصدير
+              <mat-icon>expand_more</mat-icon>
+            </button>
+          </span>
+          <mat-menu #menu="matMenu">
+            <button mat-menu-item (click)="onPrint()">
+              <mat-icon>picture_as_pdf</mat-icon>
+              ملف PDF
+            </button>
+          </mat-menu>
+        </div>
+      </section>
+
+      <mat-tab-group>
+
+        <mat-tab label="بيانات القضية">
+
+          <app-case-details [case]='case'></app-case-details>
+
+          <section class="screen-actions">
+            <button mat-raised-button color="primary" type="button"
+              [routerLink]="['/requests/change-researcher-request']" [queryParams]="{caseId: case.id}"
+              *ngIf="isResearcher && caseResearcher && case?.status?.id != CaseStatus.ClosedCase">
+              <span>طلب تغيير الباحث</span>
+            </button>
+            <button mat-raised-button color="primary" type="button" (click)="addNextCaseCheckModal(case)" *ngIf="isResearcher
+                      && !case.isFinalJudgment
+                      && case.litigationType?.id!= LitigationTypes.Supreme
+                      && case.remainingObjetcion>=0
+                      && case.status.id==CaseStatus.DoneJudgment
+                      && case.finishedPronouncedHearing
+                      ">
+              <span *ngIf="case.litigationType?.id == LitigationTypes.FirstInstance">إنشاء قضية استئناف</span>
+              <span *ngIf="case.litigationType?.id == LitigationTypes.Appeal">إنشاء قضية عليا</span>
+
+            </button>
+
+            <button mat-raised-button color="primary" type="button"
+              *ngIf="(isDataEntry && case.status?.id == CaseStatus.Draft) || ((isLitigationManager || isResearcher) && !case.caseRule)"
+              [routerLink]="['/cases/edit',case.id]">
+              <span>تعديل</span>
+            </button>
+
+            <button mat-raised-button color="primary" [routerLink]="['/cases/create']" *ngIf="isDataEntry">
+              إضافة قضية جديدة
+            </button>
+          </section>
+        </mat-tab>
+
+        <mat-tab label="الجلسات" *ngIf="case.hearings">
+          <app-case-hearings [hearings]="hearings" [case]="case"></app-case-hearings>
+        </mat-tab>
+
+        <mat-tab label="المعاملات المرتبطة" *ngIf="case.caseMoamalat?.length > 0">
+          <app-case-moamalat [moamalat]="moamalat" [case]="case"></app-case-moamalat>
+        </mat-tab>
+
+        <!-- مؤجل لحين وجود أي حركات على القضايا في النظام -->
+        <!-- <mat-tab label="حركات القضية">
+        </mat-tab> -->
+
+        <mat-tab label="القضايا المرتبطة" *ngIf="case.relatedCaseId">
+          <app-case-relateds [caseRelateds]='caseRelateds'></app-case-relateds>
+        </mat-tab>
+
+        <!-- <mat-tab label="المرفقات" *ngIf="case.attachmentsCount">
+          <app-attachments *ngIf="case.id" [groupName]="GroupNames.Case" [readOnly]="true"
+            [attachmentsToUpdate]="case.attachments">
+          </app-attachments>
+        </mat-tab> -->
+      </mat-tab-group>
+
+    </section>
+  </mat-card-content>
+</mat-card>

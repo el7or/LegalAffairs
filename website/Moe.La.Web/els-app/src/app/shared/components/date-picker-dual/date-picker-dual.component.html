@@ -1,0 +1,32 @@
+<!-- <div fxLayout="row wrap" fxFlexAlign="center" class="row" fxFlex="100"> -->
+  <div fxFlex.gt-sm="50" fxFlex="100" class="subFlex">
+    <form>
+      <mat-form-field
+        [class]="parentFormGroup.form.controls[controlName].hasError('required')?'hijri-datepicker-field':''">
+        <jdn-datepicker [activeCalendar]="'Islamic'" class="mat-form-field-flex">
+          <input matInput [matDatepicker]="picker" [required]="required" name="hijriDate" [ngModel]="hijriDate"
+            [placeholder]="placeholder+' هجري'" (dateChange)="onSelecteHijri($event)" readonly>
+          <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+          <mat-datepicker #picker></mat-datepicker>
+        </jdn-datepicker>
+        <mat-error> {{placeholder}} هجري مطلوب </mat-error>
+      </mat-form-field>
+    </form>
+  </div>
+
+  <div fxFlex.gt-sm="50" fxFlex="100" class="subFlex">
+    <mat-form-field>
+      <jdn-datepicker [activeCalendar]="'Gregorian'" class="mat-form-field-flex">
+        <input matInput [matDatepicker]="picker2" [required]="required" [placeholder]="placeholder+' ميلادي'"
+          [formControlName]="controlName" (dateChange)="onSelectGregorian($event)" readonly>
+        <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
+        <mat-datepicker #picker2></mat-datepicker>
+      </jdn-datepicker>
+      <mat-error *ngIf="parentFormGroup.form.controls[controlName].hasError('required')"> {{placeholder}} ميلادي مطلوب
+      </mat-error>
+      <mat-error *ngIf="parentFormGroup.form.controls[controlName].hasError('notValidDate')"> تاريخ {{placeholder}} غير
+        صحيح
+      </mat-error>
+    </mat-form-field>
+  </div>
+<!-- </div> -->

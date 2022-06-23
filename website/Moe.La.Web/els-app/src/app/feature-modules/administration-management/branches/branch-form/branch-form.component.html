@@ -1,0 +1,72 @@
+<h3 mat-dialog-title *ngIf="departmentId">
+  تعديل
+</h3>
+<h3 mat-dialog-title *ngIf="!departmentId">
+   إضافة
+</h3>
+<div mat-dialog-content>
+  <form [formGroup]="form">
+    <div fxLayout="row wrap" fxFlexAlign="center" class="row">
+
+      <div fxFlex.gt-sm="100" fxFlex="100" class="p-10">
+
+        <mat-form-field [ngClass]="
+          form.controls['name'].hasError('nameExists')
+            ? 'mat-form-field-invalid'
+            : ''
+        ">
+          <input matInput formControlName="name" placeholder="اسم الفرع" (blur)="onNameBlur()" maxlength="100" autocomplete="off" required />
+          <mat-error *ngIf="form.controls['name'].hasError('required')"> اسم الفرع مطلوب</mat-error>
+          <mat-hint *ngIf="form.controls['name'].status === 'PENDING'">جاري التحقق...</mat-hint>
+          <mat-error *ngIf="form.controls['name'].hasError('uniqueName')"> اسم الفرع موجود مسبقاً</mat-error>
+        </mat-form-field>
+      </div>
+      <div fxFlex.gt-sm="100" fxFlex="100" class="p-10">
+
+        <mat-form-field>
+          <mat-select matInput formControlName="departmentTypeId" placeholder="النوع" required
+            (selectionChange)="onSelectDepartmentType()">
+            <ng-container>
+              <mat-option value="">--اختر--</mat-option>
+              <mat-option value="1">منطقة</mat-option>
+              <mat-option value="2">إدارة</mat-option>
+            </ng-container>
+          </mat-select>
+          <mat-error *ngIf="form.controls['departmentTypeId'].hasError('required')"> النوع مطلوب</mat-error>
+        </mat-form-field>
+      </div>
+      <div fxFlex.gt-sm="100" fxFlex="100" class="p-10"
+        *ngIf="form.value.departmentTypeId == departmentType.Administration">
+        <mat-form-field>
+          <mat-select matInput formControlName="parentId" placeholder="المنطقة التابعة لها">
+
+              <mat-option value="">--اختر--</mat-option>
+              <ng-container *ngFor="let type of parents">
+              <mat-option *ngIf="type.id != departmentId" [value]="type.id">
+                {{ type.name }}</mat-option>
+            </ng-container>
+          </mat-select>
+        </mat-form-field>
+      </div>
+      <div fxFlex.gt-sm="100" fxFlex="100" class="p-10">
+        <mat-form-field>
+          <mat-select formControlName="departments" multiple required placeholder="الإدارات التخصصية">
+            <mat-option *ngFor="let department of departments" [value]="department.id">
+              {{ department.name }}</mat-option>
+          </mat-select>
+          <mat-error *ngIf="form.controls['departments'].hasError('required')">الإدارات التخصصية مطلوبة
+          </mat-error>
+        </mat-form-field>
+      </div>
+    </div>
+  </form>
+</div>
+<div mat-dialog-actions>
+  <button mat-raised-button color="primary" [disabled]="!form.valid || form.pristine" (click)="onSubmit()">
+    <span *ngIf="!departmentId">إضافة</span>
+    <span *ngIf="departmentId"> تعديل</span>
+  </button>
+  <button type="button" mat-raised-button (click)="onCancel()">
+    إلغاء
+  </button>
+</div>

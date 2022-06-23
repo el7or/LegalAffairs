@@ -1,0 +1,30 @@
+<section class="screen-actions">
+  <button mat-raised-button color="primary" type="button" (click)="editGround(null)">
+    إضافة
+  </button>
+</section>
+<section class="responsive-table screen-table">
+  <table mat-table [dataSource]="groundsDataSource">
+    <ng-container matColumnDef="text">
+      <th mat-header-cell *matHeaderCellDef>أسانيد القضية</th>
+      <td mat-cell *matCellDef="let item"> {{item.text}} </td>
+    </ng-container>
+    <ng-container matColumnDef="actions">
+      <th mat-header-cell *matHeaderCellDef> </th>
+      <td mat-cell *matCellDef="let item; let i = index" style="text-align: left;">
+        <button mat-icon-button color="primary" (click)="editGround(item)" type="button" matTooltip="تعديل">
+          <mat-icon>edit</mat-icon>
+        </button>
+        <button mat-icon-button color="warn" (click)="removeGround(item.id,i)" type="button" matTooltip="حذف">
+          <mat-icon>clear</mat-icon>
+        </button>
+      </td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="displayedGroundsColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedGroundsColumns;"></tr>
+    <tr class="mat-row" *matNoDataRow>
+      <td class="mat-cell" colspan="5" style="text-align: center;">لا يوجد نتائج للبيانات.</td>
+    </tr>
+  </table>
+</section>

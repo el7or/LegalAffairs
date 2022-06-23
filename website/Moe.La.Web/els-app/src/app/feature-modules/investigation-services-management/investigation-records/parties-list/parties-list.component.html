@@ -1,0 +1,77 @@
+<strong>الأطراف</strong>
+<fieldset>
+  <button class="add-btn m-b-10" mat-raised-button type="button" (click)="onAdd()">
+    إضافة
+  </button>
+
+  <div class="responsive-table screen-table">
+    <table mat-table [dataSource]="partiesDataSource">
+      <ng-container matColumnDef="fullName">
+        <th mat-header-cell *matHeaderCellDef> الاسم </th>
+        <td mat-cell *matCellDef="let party"> {{party.partyName}} </td>
+      </ng-container>
+      <ng-container matColumnDef="birthDate">
+        <th mat-header-cell *matHeaderCellDef> تاريخ  الميلاد </th>
+        <td mat-cell *matCellDef="let party">
+          {{party.birthDate | date:"yyyy-MM-dd"}} &nbsp; {{party.birthDateOnHijri}}</td>
+      </ng-container>
+      <ng-container matColumnDef="assignedWork">
+        <th mat-header-cell *matHeaderCellDef> العمل المكلف به </th>
+        <td mat-cell *matCellDef="let party" >
+          <span  *ngIf="party.assignedWork">{{party.assignedWork}}</span>
+          <span  *ngIf="!party.assignedWork"> لا يوجد</span>
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="workLocation">
+        <th mat-header-cell *matHeaderCellDef> مقر العمل </th>
+        <td mat-cell *matCellDef="let party">
+          <span  *ngIf="party.workLocation">{{party.workLocation}}</span>
+          <span *ngIf="!party.workLocation">لا يوجد</span>
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="staffType">
+        <th mat-header-cell *matHeaderCellDef> نوع الكادر </th>
+        <td mat-cell *matCellDef="let party">
+          {{party.staffTypeName}}
+        </td>
+
+      </ng-container>
+
+      <ng-container matColumnDef="partyType">
+        <th mat-header-cell *matHeaderCellDef> نوع الطرف </th>
+        <td mat-cell *matCellDef="let party">
+          {{party.investigationRecordPartyTypeName}}
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="actions">
+        <th mat-header-cell *matHeaderCellDef> </th>
+        <td mat-cell *matCellDef="let party; let i = index">
+
+          <button [matMenuTriggerFor]="profile" mat-icon-button class="m-r-5">
+            <mat-icon>more_vert</mat-icon>
+          </button>
+          <mat-menu #profile="matMenu" class="mymegamenu">
+            <button mat-menu-item (click)="onView(party,i)" type="button">
+             تفاصيل
+            </button>
+            <button mat-menu-item (click)="onDelete(i)" type="button" >
+              حذف
+            </button>
+            <button mat-menu-item (click)="onEdit(party, i)" type="button"  >
+              تعديل
+            </button>
+          </mat-menu>
+        </td>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+      <tr class="mat-row" *matNoDataRow>
+        <td class="mat-cell" colspan="6" style="text-align: center;">لا يوجد نتائج للبيانات.</td>
+      </tr>
+    </table>
+  </div>
+</fieldset>

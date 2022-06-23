@@ -1,0 +1,41 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="Moe.La.Core.Entities.Notification">
+    <Position X="5.5" Y="4.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAACAAIAAAAAAAAAAAAAAAAAAAAAAACABAAAE=</HashCode>
+      <FileName>Entities\Notifications\Notification.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Moe.La.Core.Entities.NotificationEmail">
+    <Position X="5.5" Y="1.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAABgAAAAAAAAAAAAAAAAAgAAQAAQACAAAAAAAAAAAA=</HashCode>
+      <FileName>Entities\Notifications\NotificationEmail.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Property Name="Notification" />
+    </ShowAsAssociation>
+  </Class>
+  <Class Name="Moe.La.Core.Entities.NotificationSMS">
+    <Position X="8.5" Y="3.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAABgAAAAAAAAAAAAAAAAAgAAQAAQACAAAAAAAAAAAA=</HashCode>
+      <FileName>Entities\Notifications\NotificationSMS.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Property Name="Notification" />
+    </ShowAsAssociation>
+  </Class>
+  <Class Name="Moe.La.Core.Entities.NotificationSystem">
+    <Position X="2.5" Y="3.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAABAAAAAAAAAAAAAAAAEAgAACAAQACAAQAAAAAAAAA=</HashCode>
+      <FileName>Entities\Notifications\NotificationSystem.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Property Name="Notification" />
+    </ShowAsAssociation>
+  </Class>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>

@@ -1,0 +1,13 @@
+<h3 mat-dialog-title>
+  {{name}}
+  <mat-icon style="float: left; padding-left:10px;cursor: pointer;" color="warn" (click)="closeDialog()">close
+  </mat-icon>
+</h3>
+<div mat-dialog-content>
+  <img style="width:650;height: 640px;" src="{{thumbnail}}">
+  <section class="screen-actions">
+    <button type="button" mat-raised-button (click)="closeDialog()">
+      إلغاء
+    </button>
+  </section>
+</div>

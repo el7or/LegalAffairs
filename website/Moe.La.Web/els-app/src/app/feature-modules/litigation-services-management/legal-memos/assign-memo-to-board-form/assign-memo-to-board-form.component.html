@@ -1,0 +1,32 @@
+<h3 mat-dialog-title>
+ إضافة
+</h3>
+<div mat-dialog-content>
+    <form (submit)="onSubmit()" [formGroup]="form">
+        <div fxLayout="row wrap" fxFlexAlign="center" class="row">
+
+            <div fxFlex.gt-sm="100" fxFlex="100" >
+                <mat-form-field>
+                    <mat-select name="legalBoardId" formControlName="legalBoardId" placeholder="اللجنة الفرعية">
+                        <mat-option value="">--اختر--</mat-option>
+                        <mat-option *ngFor="let board of legalBoards" [value]="board.id">
+                            {{ board.name }}</mat-option>
+                    </mat-select>
+                    <mat-error *ngIf="form.controls['legalBoardId'].hasError('required')"> اللجنة الفرعية مطلوبة</mat-error>
+
+                </mat-form-field>
+            </div>
+        </div>
+        <section class="screen-actions">
+            <div class="button-row">
+                <button mat-raised-button color="primary" [disabled]="!form.valid">
+                    <span >إضافة</span>
+                </button>
+
+                <button type="button" mat-raised-button (click)="onCancel()" >
+                    إلغاء
+                </button>
+            </div>
+        </section>
+    </form>
+</div>

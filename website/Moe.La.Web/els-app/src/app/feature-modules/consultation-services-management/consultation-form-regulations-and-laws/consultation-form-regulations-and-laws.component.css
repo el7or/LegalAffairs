@@ -1,0 +1,12 @@
+span.section-head {
+  font-weight: bold;
+  font-size: 1.25rem;
+  color: gray;
+}
+
+section.screen-content {
+  border: 2px solid #08b0a1;
+  padding: 0.5rem;
+  margin: 1rem 0;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+}

@@ -1,0 +1,283 @@
+<mat-accordion class="example-headers-align" multi *ngIf="case">
+  <mat-expansion-panel expanded hideToggle (opened)="basicPanelOpenState=true" (closed)="basicPanelOpenState=false">
+    <mat-expansion-panel-header class="panel-header">
+      <mat-panel-title class="text-color">
+        <mat-icon *ngIf="!basicPanelOpenState">add_circle</mat-icon>
+        <mat-icon *ngIf="basicPanelOpenState">remove_circle</mat-icon>
+        البيانات الأساسية
+      </mat-panel-title>
+      <mat-panel-description>
+      </mat-panel-description>
+    </mat-expansion-panel-header>
+    <section class="screen">
+      <section class="screen-content row" fxLayout="row wrap" fxFlexAlign="center">
+        <div fxFlex.gt-sm="33" fxFlex="33" class="p-10">
+          <mat-label>
+            <b>مصدر القضية</b>
+          </mat-label>
+        </div>
+        <div fxFlex.gt-sm="33" fxFlex="33" class="p-10">
+          <mat-label>
+            <b>رقم القضية</b>
+          </mat-label>
+        </div>
+        <div fxFlex.gt-sm="33" fxFlex="33" class="p-10">
+          <mat-label>
+            <b>تصنيفات القضية</b>
+          </mat-label>
+        </div>
+      </section>
+      <section class="screen-content row" fxLayout="row wrap" fxFlexAlign="center">
+        <div fxFlex.gt-sm="33" fxFlex="33" class="p-10">
+          <mat-label class="text-color">
+            {{case.caseSource.name}}
+          </mat-label>
+        </div>
+        <div fxFlex.gt-sm="33" fxFlex="33" class="p-10">
+          <mat-label class="text-color">
+            {{case.caseNumberInSource}}
+          </mat-label>
+        </div>
+        <div fxFlex.gt-sm="33" fxFlex="33" class="p-10">
+          <mat-chip-list>
+            <mat-chip>{{ case.subCategory.mainCategory.name}}</mat-chip>
+            <mat-chip>{{ case.subCategory.firstSubCategory.name}}</mat-chip>
+            <mat-chip>{{ case.subCategory.name}}</mat-chip>
+          </mat-chip-list>
+        </div>
+      </section>
+      <mat-divider></mat-divider>
+      <section class="screen-content row" fxLayout="row wrap" fxFlexAlign="center">
+        <div fxFlex.gt-sm="25" fxFlex="25" class="p-10">
+          <mat-label>
+            <b>المحكمة</b>
+          </mat-label>
+        </div>
+        <div fxFlex.gt-sm="25" fxFlex="25" class="p-10">
+          <mat-label>
+            <b>الدائرة</b>
+          </mat-label>
+        </div>
+        <div fxFlex.gt-sm="25" fxFlex="25" class="p-10">
+          <mat-label>
+            <b>درجة الترافع</b>
+          </mat-label>
+        </div>
+        <div fxFlex.gt-sm="25" fxFlex="25" class="p-10">
+          <mat-label>
+            <b>صفة الوزارة القانونية</b>
+          </mat-label>
+        </div>
+      </section>
+      <section class="screen-content row" fxLayout="row wrap" fxFlexAlign="center">
+        <div fxFlex.gt-sm="25" fxFlex="25" class="p-10">
+          <mat-label class="text-color">
+            {{case.court?.name}}
+          </mat-label>
+        </div>
+        <div fxFlex.gt-sm="25" fxFlex="25" class="p-10">
+          <mat-label class="text-color">
+            {{case.circleNumber}}
+          </mat-label>
+        </div>
+        <div fxFlex.gt-sm="25" fxFlex="25" class="p-10">
+          <mat-label class="text-color">
+            {{case.litigationType.name}}
+          </mat-label>
+        </div>
+        <div fxFlex.gt-sm="25" fxFlex="25" class="p-10">
+          <mat-label class="text-color">
+            {{case.legalStatus.name}}
+          </mat-label>
+        </div>
+      </section>
+      <mat-divider></mat-divider>
+      <section class="screen-content row" fxLayout="row wrap" fxFlexAlign="center">
+        <div fxFlex.gt-sm="33" fxFlex="33" class="p-10">
+          <mat-label>
+            <b>تاريخ بداية القضية هجرى</b>
+          </mat-label>
+        </div>
+        <div fxFlex.gt-sm="33" fxFlex="33" class="p-10">
+          <mat-label>
+            <b>تاريخ بداية القضية ميلادى</b>
+          </mat-label>
+        </div>
+        <div fxFlex.gt-sm="33" fxFlex="33" class="p-10">
+          <mat-label>
+            <b>عنوان الدعوى</b>
+          </mat-label>
+        </div>
+      </section>
+      <section class="screen-content row" fxLayout="row wrap" fxFlexAlign="center">
+        <div fxFlex.gt-sm="33" fxFlex="33" class="p-10">
+          <mat-label class="text-color">
+            {{ case.startDateHigri }}
+          </mat-label>
+        </div>
+        <div fxFlex.gt-sm="33" fxFlex="33" class="p-10">
+          <mat-label class="text-color">
+            {{case.startDate | date : 'yyyy-MM-dd'}}
+          </mat-label>
+        </div>
+        <div fxFlex.gt-sm="33" fxFlex="33" class="p-10">
+          <mat-label class="text-color">
+            {{ case.subject }}
+          </mat-label>
+        </div>
+      </section>
+      <mat-divider></mat-divider>
+      <section class="screen-content row" fxLayout="row wrap" fxFlexAlign="center">
+        <div fxFlex.gt-sm="33" fxFlex="100" class="p-10">
+          <mat-label>
+            <b>وصف الدعوى</b>
+          </mat-label>
+        </div>
+      </section>
+      <section class="screen-content row" fxLayout="row wrap" fxFlexAlign="center">
+        <div fxFlex.gt-sm="33" fxFlex="100" class="p-10">
+          <mat-label class="text-color">
+            {{case.caseDescription}}
+          </mat-label>
+        </div>
+      </section>
+      <mat-divider></mat-divider>
+      <section class="screen-content row" fxLayout="row wrap" fxFlexAlign="center">
+        <div fxFlex.gt-sm="33" fxFlex="33" class="p-10">
+          <mat-label>
+            <b>اسم القاضى</b>
+          </mat-label>
+        </div>
+        <div fxFlex.gt-sm="33" fxFlex="33" class="p-10" *ngIf="case.litigationType.id == LitigationTypes.Appeal || case.litigationType.id == LitigationTypes.Supreme">
+          <mat-label>
+            <b>رقم القضية السابقة</b>
+          </mat-label>
+        </div>
+      </section>
+      <section class="screen-content row" fxLayout="row wrap" fxFlexAlign="center">
+        <div fxFlex.gt-sm="33" fxFlex="33" class="p-10">
+          <mat-label class="text-color">
+            {{case.judgeName}}
+          </mat-label>
+        </div>
+        <div fxFlex.gt-sm="33" fxFlex="33" class="p-10" *ngIf="case.litigationType.id == LitigationTypes.Appeal || case.litigationType.id == LitigationTypes.Supreme">
+          <mat-label class="text-color">
+            {{ case.relatedCase?.caseNumberInSource }}
+          </mat-label>
+        </div>
+      </section>
+    </section>
+  </mat-expansion-panel>
+
+  <mat-expansion-panel hideToggle (opened)="partyPanelOpenState=true" (closed)="partyPanelOpenState=false">
+    <mat-expansion-panel-header class="panel-header">
+      <mat-panel-title class="text-color">
+        <mat-icon *ngIf="!partyPanelOpenState">add_circle</mat-icon>
+        <mat-icon *ngIf="partyPanelOpenState">remove_circle</mat-icon>
+        أطراف القضية
+      </mat-panel-title>
+      <mat-panel-description>
+      </mat-panel-description>
+    </mat-expansion-panel-header>
+    <section class="screen">
+      <section class="screen-table responsive-table">
+        <table mat-table [dataSource]="partiesDataSource" multiTemplateDataRows class="mat-elevation-z0">
+          <ng-container matColumnDef="name">
+            <th mat-header-cell *matHeaderCellDef> الاسم </th>
+            <td mat-cell *matCellDef="let caseParty"> {{caseParty.party.name}} </td>
+          </ng-container>
+
+          <ng-container matColumnDef="partyType">
+            <th mat-header-cell *matHeaderCellDef> نوع الطرف </th>
+            <td mat-cell *matCellDef="let caseParty">
+              {{caseParty.party.partyTypeName}}
+            </td>
+          </ng-container>
+
+          <!-- <ng-container matColumnDef="partyStatusName">
+            <th mat-header-cell *matHeaderCellDef> صفة الطرف </th>
+            <td mat-cell *matCellDef="let caseParty">
+              {{caseParty.partyStatusName}}
+            </td>
+          </ng-container> -->
+
+          <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+          <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+          <tr class="mat-row" *matNoDataRow>
+            <td class="mat-cell" colspan="4" style="text-align: center;">يجب إدخال الأطراف.</td>
+          </tr>
+        </table>
+      </section>
+    </section>
+  </mat-expansion-panel>
+
+  <mat-expansion-panel hideToggle (opened)="groundsPanelOpenState=true" (closed)="groundsPanelOpenState=false">
+    <mat-expansion-panel-header class="panel-header">
+      <mat-panel-title class="text-color">
+        <mat-icon *ngIf="!groundsPanelOpenState">add_circle</mat-icon>
+        <mat-icon *ngIf="groundsPanelOpenState">remove_circle</mat-icon>
+        أسانيد القضية
+      </mat-panel-title>
+      <mat-panel-description>
+      </mat-panel-description>
+    </mat-expansion-panel-header>
+    <section class="screen">
+      <section class="responsive-table screen-table">
+        <ng-container>
+          <table mat-table [dataSource]="groundsDataSource" multiTemplateDataRows class="mat-elevation-z0">
+            <ng-container matColumnDef="text">
+              <th mat-header-cell *matHeaderCellDef> الأسانيد </th>
+              <td mat-cell *matCellDef="let caseParty">
+                {{caseParty.text}}
+              </td>
+            </ng-container>
+
+            <tr mat-header-row *matHeaderRowDef="caseGroundsDisplayedColumns"></tr>
+            <tr mat-row *matRowDef="let row;let groundsIndex = index; columns: caseGroundsDisplayedColumns;">
+            </tr>
+          </table>
+        </ng-container>
+      </section>
+    </section>
+  </mat-expansion-panel>
+
+  <mat-expansion-panel hideToggle (opened)="hearingsPanelOpenState=true" (closed)="hearingsPanelOpenState=false">
+    <mat-expansion-panel-header class="panel-header">
+      <mat-panel-title class="text-color">
+        <mat-icon *ngIf="!hearingsPanelOpenState">add_circle</mat-icon>
+        <mat-icon *ngIf="hearingsPanelOpenState">remove_circle</mat-icon>
+        الجلسات
+      </mat-panel-title>
+      <mat-panel-description>
+      </mat-panel-description>
+    </mat-expansion-panel-header>
+    <section class="screen">
+      <section class="responsive-table screen-table">
+        <ng-container>
+          <app-case-hearings *ngIf="caseId" [hearings]="hearings" [case]="case"></app-case-hearings>
+        </ng-container>
+      </section>
+    </section>
+  </mat-expansion-panel>
+
+  <mat-expansion-panel hideToggle (opened)="attachmentPanelOpenState=true" (closed)="attachmentPanelOpenState=false">
+    <mat-expansion-panel-header class="panel-header">
+      <mat-panel-title class="text-color">
+        <mat-icon *ngIf="!attachmentPanelOpenState">add_circle</mat-icon>
+        <mat-icon *ngIf="attachmentPanelOpenState">remove_circle</mat-icon>
+        المرفقات
+      </mat-panel-title>
+      <mat-panel-description>
+      </mat-panel-description>
+    </mat-expansion-panel-header>
+    <section class="screen">
+      <section class="responsive-table screen-table">
+        <ng-container>
+          <app-attachments *ngIf="caseId" [groupName]="GroupNames.Case" [readOnly]="true"
+            [attachmentsToUpdate]="case.attachments">
+          </app-attachments>
+        </ng-container>
+      </section>
+    </section>
+  </mat-expansion-panel>
+</mat-accordion>

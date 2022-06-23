@@ -1,0 +1,49 @@
+<div fxLayout="row wrap" fxFlexAlign="center" class="row" *ngIf="hearing">
+  <div fxFlex.gt-sm="50" fxFlex="100" class="p-10">
+    <b>القضية</b> : {{caseSubject}}
+  </div>
+  <!-- <div fxFlex.gt-sm="50" fxFlex="100" class="p-10">
+    <b>رقم الجلسة</b> : {{hearing?.hearingNumber}}
+  </div> -->
+  <div fxFlex.gt-sm="50" fxFlex="100" class="p-10">
+    <b>حالة الجلسة</b> : {{hearing?.status?.name}}
+  </div>
+  <div fxFlex.gt-sm="50" fxFlex="100" class="p-10">
+    <b>تاريخ الجلسة</b>
+    :{{hearing?.hearingDate | date : 'yyyy-MM-dd'}}
+     {{hearing?.hearingDate | arDayOfWeek}}
+     {{hearing?.hearingDateHigri }}
+  </div>
+  <div fxFlex.gt-sm="50" fxFlex="100" class="p-10">
+    <b>وقت الجلسة</b> : {{hearing?.hearingTime}}
+  </div>
+  <div fxFlex.gt-sm="50" fxFlex="100" class="p-10">
+    <b>محكمة/لجنة</b> : {{hearing?.court?.name}}
+  </div>
+  <div fxFlex.gt-sm="50" fxFlex="100" class="p-10">
+    <b>الدائرة</b> : {{hearing?.circleNumber}}
+  </div>
+  <div fxFlex.gt-sm="50" fxFlex="100" class="p-10">
+    <b>نوع الجلسة</b> : {{hearing?.type?.name}}
+  </div>
+  <div fxFlex.gt-sm="100" fxFlex="100" class="p-10">
+    <b>الطلبات</b> : {{hearing?.motions}}
+  </div>
+  <div fxFlex.gt-sm="100" fxFlex="100" class="p-10">
+    <b>ملخص الجلسة</b> : {{hearing?.summary}}
+  </div>
+  <div fxFlex.gt-sm="100" fxFlex="100" class="p-10">
+    <b>محضر الجلسة</b> : {{hearing?.sessionMinutes}}
+  </div>
+  <div fxFlex.gt-sm="100" fxFlex="100" class="p-10">
+    <app-attachments *ngIf="hearing?.id" [groupName]="GroupNames.Hearing" [attachmentsToUpdate]="hearing.id" [readOnly]="true" [attachmentsToUpdate]="attachmentsToUpdate">
+    </app-attachments>
+  </div>
+</div>
+<section class="screen-actions">
+  <div class="button-row">
+    <button mat-raised-button type="button" (click)="location.back()">
+      رجوع
+    </button>
+  </div>
+</section>

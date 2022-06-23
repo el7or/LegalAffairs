@@ -1,0 +1,96 @@
+<mat-card>
+  <mat-card-content>
+    <ng-container *ngIf="requestFull">
+      <section class="screen">
+
+        <section class="screen-header"
+          *ngIf="requestFull.request.requestType.id==RequestTypes.RequestObjection
+           && requestFull.isObjectionPeriodEnd &&(requestFull.request.requestStatus.id!=RequestStatus.Accepted&&requestFull.request.requestStatus.id!=RequestStatus.CaseCreation) ">
+          <div fxFlex="100" fxLayoutAlign="start center" class="alert" style="color: red;">
+            <span> انتهت مهلة الاعتراض فى</span> &nbsp;
+            <span>{{objectionJudgmentLimitDate | date : "yyyy-MM-dd" }} &nbsp;
+              {{requestFull.case.objectionJudgmentLimitDateHijri}}
+            </span>
+          </div>
+        </section>
+        <section class="screen-header"
+          *ngIf="requestFull.request.requestType.id==RequestTypes.RequestObjection
+         && !requestFull.isObjectionPeriodEnd && (requestFull.request.requestStatus.id!=RequestStatus.Accepted&&requestFull.request.requestStatus.id!=RequestStatus.CaseCreation)">
+          <!-- && !isLitigationManager -->
+          <div fxFlex="100" fxLayoutAlign="start center" class="alert" style="color: red;">
+            <span> تاريخ مهلة الاعتراض </span> &nbsp;
+            <span>{{objectionJudgmentLimitDate | date : "yyyy-MM-dd" }}
+              {{objectionJudgmentLimitDate | arDayOfWeek }}
+              {{requestFull.case.objectionJudgmentLimitDateHijri}} &nbsp;
+              باقى عليها
+              &nbsp; {{daysDiffPipe(objectionJudgmentLimitDate)}} &nbsp; يوم
+            </span>
+          </div>
+        </section>
+
+        <!-- *ngIf="(requestFull.request.requestType.id==RequestTypes.RequestSupportingDocuments && (requestFull.request.requestStatus.id==RequestStatus.Approved || requestFull.request.requestStatus.id==RequestStatus.AcceptedFromConsultant))
+        ||(requestFull.request.requestType.id==RequestTypes.RequestCaseClosing && requestFull.request.requestStatus.id==RequestStatus.Approved )">
+    -->
+        <section class="screen-header"
+          *ngIf="requestFull.request.requestType.id==RequestTypes.RequestSupportingDocuments
+        || requestFull.request.requestType.id==RequestTypes.RequestExportCaseJudgment|| requestFull.request.requestType.id==RequestTypes.RequestAttachedLetter">
+          <div fxFlex="50"></div>
+          <div fxFlex="50" fxLayoutAlign="end center">
+            <button mat-stroked-button color="primary" [matMenuTriggerFor]="menu">
+              تصدير
+              <mat-icon>expand_more</mat-icon>
+            </button>
+            <mat-menu #menu="matMenu">
+              <button mat-menu-item (click)="onPrint()">
+                <mat-icon>picture_as_pdf</mat-icon>
+                ملف PDF
+              </button>
+            </mat-menu>
+          </div>
+        </section>
+
+        <div *ngIf="requestFull.request">
+          <app-request-details [request]='requestFull.request' [history]='requestFull.history'>
+          </app-request-details>
+
+          <app-change-researcher-request-details
+            *ngIf="requestFull.request.requestType.id==RequestTypes.RequestResearcherChange" [request]='requestFull'>
+          </app-change-researcher-request-details>
+
+          <app-change-hearing-researcher-request-details
+            *ngIf="requestFull.request.requestType.id==RequestTypes.RequestResearcherChangeToHearing"
+            [request]='requestFull'>
+          </app-change-hearing-researcher-request-details>
+
+          <app-document-request-details
+            *ngIf="requestFull.request.requestType.id==RequestTypes.RequestSupportingDocuments||requestFull.request.requestType.id==RequestTypes.RequestAttachedLetter"
+            [request]='requestFull'>
+          </app-document-request-details>
+
+          <app-hearing-legal-memo-request-details
+            *ngIf="requestFull.request.requestType.id==RequestTypes.RequestAddHearingMemo" [request]='requestFull'>
+          </app-hearing-legal-memo-request-details>
+
+          <app-objection-permit-request-details *ngIf="requestType==RequestTypes.ObjectionPermitRequest"
+            [request]='requestFull'>
+          </app-objection-permit-request-details>
+
+          <app-objection-legal-memo-request-details *ngIf="requestFull.request.requestType.id==RequestTypes.ObjectionLegalMemoRequest"
+          [request]='requestFull'>
+          </app-objection-legal-memo-request-details>
+
+          <app-export-case-judgment-request-details *ngIf="requestFull.request.requestType.id==RequestTypes.RequestExportCaseJudgment"
+            [request]='requestFull'>
+          </app-export-case-judgment-request-details>
+
+          <app-consultation-request-details
+            *ngIf="requestFull.request.requestType.id==RequestTypes.ConsultationSupportingDocument"
+            [request]='requestFull'>
+          </app-consultation-request-details>
+
+        </div>
+
+      </section>
+    </ng-container>
+  </mat-card-content>
+</mat-card>

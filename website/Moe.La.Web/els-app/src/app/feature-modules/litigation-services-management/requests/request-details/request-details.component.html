@@ -1,0 +1,176 @@
+<fieldset>
+  <h2 class="heading">بيانات الطلب الأساسية</h2>
+  <div *ngIf="request" fxLayout="row wrap" fxFlexAlign="center" class="entity-details p-10">
+
+    <div fxLayout="column" fxFlex.gt-sm="33" fxFlex="100">
+      <span>رقم الطلب</span>
+      <span>{{request.id}}</span>
+    </div>
+
+    <div fxLayout="column" fxFlex.gt-sm="33" fxFlex="100">
+      <span>نوع الطلب</span>
+      <span>{{request.requestType.name}}</span>
+    </div>
+
+    <div fxLayout="column" fxFlex.gt-sm="33" fxFlex="100">
+      <span>حالة الطلب</span>
+      <span>{{request.requestStatus.name}}</span>
+    </div>
+
+    <div fxLayout="column" fxFlex.gt-sm="33" fxFlex="100">
+      <span>تاريخ تقديم الطلب</span>
+      <span>
+        {{request.createdOn | date : 'yyyy-MM-dd'}}
+        {{request.createdOn | arDayOfWeek}}
+        {{request.createdOnHigri}}
+      </span>
+    </div>
+
+    <div fxLayout="column" fxFlex.gt-sm="33" fxFlex="100">
+      <span>مقدم الطلب</span>
+      <span>{{request.createdBy?.name}}</span>
+    </div>
+
+  </div>
+</fieldset>
+
+<fieldset *ngIf="request?.requestTransactions?.length > 0">
+  <h2 class="heading">حركات الطلب</h2>
+  <div class="screen-table responsive-table p-10">
+    <table mat-table [dataSource]="request.requestTransactions" class="mat-elevation-z0">
+      <ng-container matColumnDef="position">
+        <th mat-header-cell *matHeaderCellDef> #</th>
+        <td mat-cell *matCellDef="let transaction; let i = index">
+          {{(i+1)}}
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="createdOn">
+        <th mat-header-cell *matHeaderCellDef>
+          تاريخ الحركة
+        </th>
+        <td mat-cell *matCellDef="let transaction">
+          {{transaction.createdOn | date : 'yyyy-MM-dd'}}
+          {{transaction.createdOn | arDayOfWeek}}
+          {{ transaction.createdOnHigri }}
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="createdOnTime">
+        <th mat-header-cell *matHeaderCellDef>
+          وقت الحركة
+        </th>
+        <td mat-cell *matCellDef="let transaction">
+          {{transaction.createdOnTime}}
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="transactionType">
+        <th mat-header-cell *matHeaderCellDef>
+          نوع الحركة
+        </th>
+        <td mat-cell *matCellDef="let transaction">
+          {{transaction.transactionType?.name}}</td>
+      </ng-container>
+      <ng-container matColumnDef="createdBy">
+        <th mat-header-cell *matHeaderCellDef>
+          القائم بالحركة
+        </th>
+        <td mat-cell *matCellDef="let transaction">
+          {{transaction.createdByUser}}</td>
+        <!-- {{transaction.createdByRole}} / -->
+      </ng-container>
+
+      <ng-container matColumnDef="description">
+        <th mat-header-cell *matHeaderCellDef style="width: 40%;">
+          تفاصيل
+        </th>
+        <td mat-cell *matCellDef="let transaction" class="note-text">
+          {{ transaction.description | sliceWords : 5 : transaction }}
+          <a mat-button color="primary" *ngIf="transaction.isWithViewMore"
+            (click)="transaction.showViewMore = !transaction.showViewMore;">
+            <span *ngIf="transaction.showViewMore">المزيد</span>
+            <span *ngIf="!transaction.showViewMore">أقل</span>
+          </a>
+        </td>
+      </ng-container>
+      <!--  <td mat-cell *matCellDef="let legalMemoNotes" class="note-text">
+        <span *ngIf="!viewMoreIds.includes(legalMemoNotes.id)">
+          {{ (legalMemoNotes.text | slice:0:50) + (legalMemoNotes.text.length > 50?' ...':'') }}
+        </span>
+        <span *ngIf="viewMoreIds.includes(legalMemoNotes.id)">
+          {{ legalMemoNotes.text}}
+        </span>
+        <a mat-button color="primary" (click)="addViewMore(legalMemoNotes.id)"
+          *ngIf="wordCount(legalMemoNotes.text) > 5">
+          <span *ngIf="!viewMoreIds.includes(legalMemoNotes.id)">المزيد</span>
+          <span *ngIf="viewMoreIds.includes(legalMemoNotes.id)">أقل</span>
+        </a>
+      </td> -->
+      <tr mat-header-row *matHeaderRowDef="transactionsDisplayedColumns"></tr>
+
+      <tr mat-row [ngClass]="{'make-beige': row.createdOn==request.lastTransactionDate}"
+        *matRowDef="let row; columns: transactionsDisplayedColumns;"></tr>
+
+        <tr class="mat-row no-data" *matNoDataRow>
+          <td class="mat-cell" [colSpan]="transactionsDisplayedColumns.length">
+            لا يوجد نتائج .
+          </td>
+        </tr>
+    </table>
+  </div>
+</fieldset>
+
+<fieldset *ngIf="history?.length > 0">
+  <h2 class="heading">الطلبات المعدلة سابقاً</h2>
+  <div class="screen-table responsive-table p-10">
+    <table mat-table [dataSource]="history" class="mat-elevation-z0">
+
+      <ng-container matColumnDef="position">
+        <th mat-header-cell *matHeaderCellDef> #</th>
+        <td mat-cell *matCellDef="let element; let i = index">
+          {{(i+1)}}
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="requestStatus">
+        <th mat-header-cell *matHeaderCellDef>حالة الطلب</th>
+        <td mat-cell *matCellDef="let element">
+          {{ element.request.requestStatus.name }}
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="createdByFullName">
+        <th mat-header-cell *matHeaderCellDef>القائم بتعديل الطلب</th>
+        <td mat-cell *matCellDef="let element">
+          {{element.request.createdBy.name }}
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="createdOn">
+        <th mat-header-cell *matHeaderCellDef>تاريخ تعديل الطلب</th>
+        <td mat-cell *matCellDef="let element">
+          {{element.request.createdOn | date : 'yyyy-MM-dd'}}
+          {{element.request.createdOn | arDayOfWeek}}
+          {{element.request.createdOnHigri}}
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="actions">
+        <th mat-header-cell *matHeaderCellDef></th>
+        <td mat-cell *matCellDef="let element" style="text-align: center">
+          <button mat-raised-button type="button" (click)="onCompare(request.id, element.id)"
+            color="basic">مقارنة</button>
+        </td>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="historyDisplayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: historyDisplayedColumns;"></tr>
+      <tr class="mat-row no-data" *matNoDataRow>
+        <td class="mat-cell" [colSpan]="historyDisplayedColumns.length">
+          لا يوجد نتائج .
+        </td>
+      </tr>
+    </table>
+  </div>
+</fieldset>

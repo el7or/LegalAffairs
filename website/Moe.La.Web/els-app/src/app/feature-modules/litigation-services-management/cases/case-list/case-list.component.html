@@ -1,0 +1,490 @@
+<mat-card>
+  <mat-card-content>
+
+    <section class="screen">
+
+      <section class="screen-header">
+        <div fxLayout="row" fxFlex="70">
+          <button mat-raised-button color="primary" [routerLink]="['/cases/create']" *ngIf="isDataEntry">
+            إضافة قضية جديدة
+          </button>
+        </div>
+        <div fxFlex="30" fxLayoutAlign="end center">
+          <button mat-stroked-button color="primary" [matMenuTriggerFor]="menu" [disabled]="!totalItems">
+            تصدير
+            <mat-icon>expand_more</mat-icon>
+          </button>
+          <mat-menu #menu="matMenu">
+            <button mat-menu-item (click)="onExportExcel()">
+              <mat-icon>description</mat-icon>
+              ملف اكسل
+            </button>
+            <button mat-menu-item (click)="onPrint()">
+              <mat-icon>picture_as_pdf</mat-icon>
+              ملف PDF
+            </button>
+          </mat-menu>
+        </div>
+      </section>
+
+      <section class="screen-table responsive-table extendable">
+        <div fxLayout="row wrap" fxLayoutAlign="space-between center">
+          <div fxLayout="row" fxFlex.gt-sm="50" fxFlex="100">
+            <div class="filter-results">
+              <button type="button" mat-flat-button (click)="onShowFilter()">
+                <span *ngIf="!showFilter">
+                  تصفية النتائج
+                </span>
+                <span *ngIf="showFilter">
+                  اخفاء التصفية
+                </span>
+              </button>
+            </div>
+            <div class="free-search">
+              <form [formGroup]="freeSearchForm">
+                <mat-form-field appearance="outline" [hideRequiredMarker]="true" floatLabel="always">
+                  <span matPrefix>
+                    <mat-icon>search</mat-icon>
+                  </span>
+                  <input matInput placeholder="بحث" formControlName="searchText" (keyup.enter)="onSearch()"
+                    matTooltipPosition="above" autocomplete="off" matTooltip="اكتب النص واضغط Enter للبحث">
+                </mat-form-field>
+              </form>
+            </div>
+
+          </div>
+          <div fxFlex.gt-sm="50" fxFlex="100" fxHide.sm fxHide.xs>
+            <mat-paginator #paginator [length]="totalItems" [pageIndex]="queryObject.page - 1" showFirstLastButtons
+              [pageSize]="queryObject.pageSize" (page)="onPageChange($event.pageIndex)" hidePageSize="true">
+            </mat-paginator>
+          </div>
+        </div>
+
+        <div *ngIf="showFilter" fxLayout="row wrap">
+          <div fxFlex.gt-sm="100" fxFlex="100">
+            <form class="filter-form" [formGroup]="searchForm" (submit)="onFilter()">
+              <div class="filter-container p-10" fxLayout="row wrap">
+
+                <div fxFlex.gt-sm="50" fxFlex="100">
+                  <date-picker-dual controlName="startDateFrom" [placeholder]="'تاريخ القضية من'"></date-picker-dual>
+                </div>
+
+                <div fxFlex.gt-sm="50" fxFlex="100">
+                  <date-picker-dual controlName="startDateTo" [placeholder]="'تاريخ القضية إلى'"></date-picker-dual>
+                </div>
+
+                <div fxFlex.gt-sm="50" fxFlex="100" class="p-10">
+                  <mat-form-field>
+                    <mat-select formControlName="legalStatus" placeholder="صفة الوزارة">
+                      <mat-option value="">--اختر--</mat-option>
+                      <mat-option value="1">مدعى عليها</mat-option>
+                      <mat-option value="2">مدعية</mat-option>
+                    </mat-select>
+                  </mat-form-field>
+                </div>
+
+                <div fxFlex.gt-sm="50" fxFlex="100" class="p-10">
+                  <mat-form-field>
+                    <input matInput formControlName="partyName" placeholder="الطرف" autocomplete="off" lettersOnly />
+                  </mat-form-field>
+                </div>
+
+                <div fxFlex="100" class="screen-actions">
+                  <button type="submit" mat-raised-button color="primary">
+                    تصفية
+                  </button>
+                  <button type="button" mat-raised-button (click)="onClearFilter()">
+                    مسح التصفية
+                  </button>
+                </div>
+
+              </div>
+            </form>
+          </div>
+        </div>
+
+        <table mat-table [dataSource]="dataSource" multiTemplateDataRows class="mat-elevation-z0" matSort
+          matSortActive="createdOn" matSortDirection="asc" matSortDisableClear>
+          <ng-container matColumnDef="position">
+            <th mat-header-cell *matHeaderCellDef>#</th>
+            <td mat-cell *matCellDef="let element; let i = dataIndex" class="nowrap">
+              <div>
+                {{(i + 1 + queryObject.pageSize * ((queryObject.page || 1) -1))}}
+                <button mat-icon-button (click)="onClickRow(i)">
+                  <mat-icon>
+                    {{ expandedIndexes.includes(i) ? 'keyboard_arrow_down': 'keyboard_arrow_left'}}
+                  </mat-icon>
+                </button>
+              </div>
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="id">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>رقم القضية في المحكمة</th>
+            <td mat-cell *matCellDef="let element">
+              {{ element.caseNumberInSource}}
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="startDate">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>تاريخ بداية القضية</th>
+            <td mat-cell *matCellDef="let element" class="nowrap">
+              <span *ngIf="element.startDate!=null">
+                {{element.startDate | date : 'yyyy-MM-dd'}}
+                {{element.startDate |arDayOfWeek}}
+                {{ element.startDateHigri }}
+              </span>
+              <span *ngIf="element.startDate==null">
+                &nbsp;;
+              </span>
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="caseSource">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>
+              المصدر
+            </th>
+            <td mat-cell *matCellDef="let element">
+              {{ element.caseSource.name }}
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="court">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>محكمة/لجنة</th>
+            <td mat-cell *matCellDef="let element">
+              {{ element.court }}
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="hearingsCount">
+            <th mat-header-cell *matHeaderCellDef>عدد الجلسات</th>
+            <td mat-cell *matCellDef="let element">
+              {{ element.hearingsCount }}
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="circleNumber">
+            <th mat-header-cell *matHeaderCellDef>الدائرة</th>
+            <td mat-cell *matCellDef="let element">
+              {{ element.circleNumber }}
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="status">
+            <th mat-header-cell *matHeaderCellDef>الحالة</th>
+            <td mat-cell *matCellDef="let element">
+              {{ element.status.name }}
+              <span *ngIf="element.isFinalJudgment && element.status.id==CaseStatus.DoneJudgment"
+                class="badge badge-primary">نهائي</span>
+              <span *ngIf="(!element.isFinalJudgment && element.remainingObjetcion>=0
+                 && element.status.id==CaseStatus.DoneJudgment)
+                 && element.litigationType.id!=  LitigationTypes.Supreme" class="badge badge-danger">متبقى
+                {{element.remainingObjetcion}}
+                يوم للاعتراض</span>
+              <span *ngIf="!element.isFinalJudgment && element.remainingObjetcion<0 &&
+               element.status.id==CaseStatus.DoneJudgment && element.litigationType.id!=  LitigationTypes.Supreme"
+                class="badge badge-danger">انتهت مهلة الاعتراض</span>
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="actions">
+            <th mat-header-cell *matHeaderCellDef></th>
+            <td mat-cell *matCellDef="let element">
+              <button mat-icon-button [matMenuTriggerFor]="menu" aria-label="Example icon-button with a menu">
+                <mat-icon>more_vert</mat-icon>
+              </button>
+              <mat-menu #menu="matMenu">
+
+                <button type="button" mat-menu-item [routerLink]="['/cases/view', element.id]">
+                  <span>عرض</span>
+                </button>
+                <button type="menu" mat-menu-item [routerLink]="['/cases/edit', element.id]"
+                  *ngIf="(isDataEntry && element.status.id == CaseStatus.Draft) || ((isLitigationManager || isResearcher) && !element.caseRule)">
+                  <span>تعديل</span>
+                </button>
+                <button type="menu" mat-menu-item aria-label="Delete" (click)="onDelete(element.id)"
+                  *ngIf="isDataEntry && element.status.id == CaseStatus.Draft">
+                  <span>حذف</span>
+                </button>
+                <button type="button" mat-menu-item [routerLink]="['/hearings/']" [queryParams]="{ case:  element.id }"
+                  *ngIf="element.isCaseDataCompleted && !isDataEntry">
+                  <span>الجلسات</span>
+                </button>
+                <button type="button" mat-menu-item (click)="onReceipt(element, CaseStatus.ReceivedByLitigationManager)"
+                  *ngIf="isLitigationManager && (element.status.id == CaseStatus.NewCase)">
+                  <span>استلام</span>
+                </button>
+
+                <button type="button" mat-menu-item
+                  (click)="onChangeCaseStatus(element, CaseStatus.SentToRegionsSupervisor)"
+                  *ngIf="isLitigationManager && (element.status.id == CaseStatus.NewCase) && !element.isManual">
+                  <span>إحالة لمشرف المناطق</span>
+                </button>
+                <button type="button" mat-menu-item (click)="onReceipt(element, CaseStatus.ReceivedByRegionsSupervisor)"
+                  *ngIf="isRegionsSupervisor && (element.status.id == CaseStatus.SentToRegionsSupervisor || element.status.id == CaseStatus.ReturnedToRegionsSupervisor)">
+                  <span>استلام</span>
+                </button>
+                <button type="button" mat-menu-item (click)="sendToBranchManager(element)"
+                  *ngIf="isRegionsSupervisor && element.status.id == CaseStatus.ReceivedByRegionsSupervisor">
+                  <span>تحديد الإدارة المختصة</span>
+                </button>
+                <button type="button" mat-menu-item color="primary"
+                  (click)="onReceipt(element, CaseStatus.ReceivedByBranchManager)"
+                  *ngIf="isBranchManager && element.status.id == CaseStatus.SentToBranchManager">
+                  <span>استلام</span>
+                </button>
+                <button type="button" mat-menu-item
+                  (click)="onChangeCaseStatus(element, CaseStatus.ReturnedToRegionsSupervisor)"
+                  *ngIf="isBranchManager && element.status.id == CaseStatus.ReceivedByBranchManager">
+                  <span>إعادة إلى مشرف المناطق</span>
+                </button>
+                <button type="button" mat-menu-item
+                  (click)="onChangeCaseStatus(element, CaseStatus.ReceivedByLitigationManager)"
+                  *ngIf="isRegionsSupervisor && element.status.id == CaseStatus.ReceivedByRegionsSupervisor">
+                  <span>إعادة إلى مدير الترافع </span>
+                </button>
+                <button type="button" mat-menu-item (click)="onChooseResearcher(element)" *ngIf=" (isLitigationManager && element.status.id == CaseStatus.ReceivedByLitigationManager)
+                    || (isBranchManager && element.status.id == CaseStatus.ReceivedByBranchManager)
+                    || (isRegionsSupervisor && element.status.id == CaseStatus.ReceivedByRegionsSupervisor)">
+                  <span>اختيار باحث</span>
+                </button>
+                <button type="button" mat-menu-item [routerLink]="['/requests/change-researcher-request']"
+                  [queryParams]="{caseId: element.id}" *ngIf="isResearcher
+                  && isCaseResearcher(element.researchers) && element.status?.id != CaseStatus.ClosedCase">
+                  <span>طلب تغيير الباحث</span>
+                </button>
+
+                <button type="button" mat-menu-item (click)="addNextCaseCheckModal(element)" *ngIf="isResearcher
+                      && !element.isFinalJudgment
+                      && element.litigationType.id!= LitigationTypes.Supreme
+                      && element.remainingObjetcion>=0
+                      && element.status?.id==CaseStatus.DoneJudgment
+                      && element.finishedPronouncedHearing
+                      ">
+                  <span *ngIf="element.litigationType?.id == LitigationTypes.FirstInstance">إنشاء قضية استئناف</span>
+                  <span *ngIf="element.litigationType?.id == LitigationTypes.Appeal">إنشاء قضية عليا</span>
+
+                </button>
+              </mat-menu>
+            </td>
+          </ng-container>
+
+          <!-- Expanded Content Column - The detail row is made up of this one column that spans across all columns -->
+          <ng-container matColumnDef="caseDetails">
+            <td mat-cell *matCellDef="let element" class="borderless-td" [attr.colspan]="columnsToDisplay.length">
+
+              <div fxLayout="row wrap" fxFlexAlign="center" class="p-10 filter-container">
+
+                <div fxFlex="100" class="star">
+                  <span>الباحث المكلف بالقضية</span>
+                  <span *ngFor="let researcher of element.researchers">
+                    {{ researcher.name }}
+                  </span>
+                </div>
+
+                <!-- <ng-container *ngIf="element.caseSource.id == CaseSource.Najiz">
+                  <div fxLayout="column" fxFlex.gt-sm="25" fxFlex="100">
+                    <span>رقم المعاملة في ناجز</span>
+                    <span>
+                      {{ element.najizRef }}
+                    </span>
+                  </div>
+                  <div fxLayout="column" fxFlex.gt-sm="25" fxFlex="100">
+                    <span>رقم القضية في ناجز</span>
+                    <span>
+                      {{ element.caseSourceNumber }}
+                    </span>
+                  </div>
+                  <div fxLayout="column" fxFlex.gt-sm="25" fxFlex="100">
+                    <span>رقم الطلب في ناجز</span>
+                    <span>
+                      {{ element.najizId }}
+                    </span>
+                  </div>
+                </ng-container>
+
+                <ng-container *ngIf="element.caseSource.id == CaseSource.Moeen">
+                  <div fxLayout="column" fxFlex.gt-sm="25" fxFlex="100">
+                    <span>رقم المعاملة في معين</span>
+                    <span>
+                      {{ element.moeenRef }}
+                    </span>
+                  </div>
+                  <div fxLayout="column" fxFlex.gt-sm="25" fxFlex="100">
+                    <span>رقم الدعوى في معين</span>
+                    <span>
+                      {{ element.caseSourceNumber }}
+                    </span>
+                  </div>
+                </ng-container>
+
+                <ng-container *ngIf="element.caseSource.id == CaseSource.QuasiJudicialCommittee">
+                  <div fxLayout="column" fxFlex.gt-sm="25" fxFlex="100">
+                    <span>رقم القيد في راسل</span>
+                    <span>
+                      {{ element.raselRef }}
+                    </span>
+                  </div>
+                  <div fxLayout="column" fxFlex.gt-sm="25" fxFlex="100">
+                    <span>الرقم الموحد في راسل</span>
+                    <span>
+                      {{ element.raselUnifiedNo }}
+                    </span>
+                  </div>
+                  <div fxLayout="column" fxFlex.gt-sm="25" fxFlex="100">
+                    <span>رقم القضية في اللجنة</span>
+                    <span>
+                      {{ element.caseSourceNumber }}
+                    </span>
+                  </div>
+                </ng-container> -->
+
+                <div fxLayout="column" fxFlex.gt-sm="25" fxFlex="100">
+                  <span>مصدر القضية</span>
+                  <span>
+                    {{ element.caseSource?.name }}
+                  </span>
+                </div>
+
+                <!-- <div fxLayout="column" fxFlex.gt-sm="25" fxFlex="100">
+                  <span>رقم القضية في المصدر</span>
+                  <span>
+                    {{ element.caseNumberInSource }}
+                  </span>
+                </div> -->
+
+                <div fxLayout="column" fxFlex.gt-sm="25" fxFlex="100">
+                  <span>تاريخ إنشاء القضية</span>
+                  <span>
+                    {{element.createdOn | date : 'yyyy-MM-dd'}}
+                    {{element.createdOn | arDayOfWeek}}
+                    {{ element.createdOnHigri }}
+                    &nbsp; {{ element.createdOnTime }}
+                  </span>
+                </div>
+
+                <div fxLayout="column" fxFlex.gt-sm="25" fxFlex="100">
+                  <span>الفرع المحال إليها</span>
+                  <span>
+                    {{ element.branch }}
+                  </span>
+                </div>
+
+                <div fxLayout="column" fxFlex.gt-sm="25" fxFlex="100">
+                  <span>صفة الوزارة القانونية</span>
+                  <span>
+                    {{ element.legalStatus }}
+                  </span>
+                </div>
+
+                <div fxLayout="column" fxFlex.gt-sm="25" fxFlex="100">
+                  <span>درجة الترافع</span>
+                  <span>
+                    {{ element.litigationType.name }}
+                  </span>
+                </div>
+
+                <!-- <div fxLayout="column" fxFlex.gt-sm="25" fxFlex="100" *ngIf="element.parties?.length">
+                  <span>المدعي</span>
+                  <span *ngFor="let party of element.parties">
+                    {{ party.name }}
+                  </span>
+                </div> -->
+
+                <div fxLayout="column" fxFlex.gt-sm="25" fxFlex="100" *ngIf="element.pronouncingJudgmentDate!=null">
+                  <span>تاريخ نطق الحكم</span>
+                  <span *ngIf="element.pronouncingJudgmentDate!=null">
+                    {{ element.pronouncingJudgmentDate | date : 'yyyy-MM-dd'}}
+                    {{ element.pronouncingJudgmentDate | arDayOfWeek}}
+                    {{element.pronouncingJudgmentDateHigri }}
+                  </span>
+                  <span *ngIf="element.pronouncingJudgmentDate==null">
+                    &nbsp;
+                  </span>
+                </div>
+
+                <div fxLayout="column" fxFlex.gt-sm="25" fxFlex="100" *ngIf="element.receivingJudgmentDate!=null">
+                  <span>موعد استلام الحكم</span>
+                  <span *ngIf="element.receivingJudgmentDate!=null">
+                    {{ element.receivingJudgmentDate | date : 'yyyy-MM-dd'}}
+                    {{ element.receivingJudgmentDate | arDayOfWeek}}
+                    {{ element.receivingJudgmentDateHigri }}
+                  </span>
+                  <span *ngIf="element.receivingJudgmentDate==null">
+                    &nbsp;
+                  </span>
+                </div>
+
+                <div fxLayout="column" fxFlex.gt-sm="25" fxFlex="100">
+                  <span>طريقة الإدخال</span>
+                  <span *ngIf="element.isManual">
+                    يدويًا
+                  </span>
+                  <span *ngIf="!element.isManual">
+                    تكامل
+                  </span>
+                </div>
+
+                <div fxLayout="column" fxFlex.gt-sm="25" fxFlex="100" *ngIf="element.caseGrounds?.length">
+                  <span>أسانيد الدعوى</span>
+                  <span>
+                    <li *ngFor="let item of element.caseGrounds">
+                      {{ item }}
+                    </li>
+                  </span>
+                </div>
+
+                <div fxLayout="column" fxFlex.gt-sm="25" fxFlex="100" *ngIf="element.parties?.length">
+                  <span>الأطراف</span>
+                  <span>
+                    <li *ngFor="let item of element.parties">
+                      {{ item?.name }}
+                    </li>
+                  </span>
+                </div>
+
+                <div fxLayout="column" fxFlex.gt-sm="25" fxFlex="100"
+                  *ngIf="element.litigationType?.id == LitigationTypes.Appeal || element.litigationType?.id == LitigationTypes.Supreme">
+                  <span>رقم القضية المرتبطة</span>
+                  <span *ngIf="element.relatedCase">
+                    <a mat-button color="primary" [routerLink]="['/cases/view', element.relatedCase.id]">
+                      {{ element.relatedCase.caseNumberInSource }}</a>
+                  </span>
+                </div>
+
+                <div fxLayout="column" fxFlex="100">
+                  <span>موضوع الدعوى</span>
+
+                  <span *ngIf="element.subject!=null">
+                    {{ element.caseDescription | sliceWords : 5 : element }}
+                    <a mat-button color="primary" *ngIf="element.isWithViewMore"
+                      (click)="element.showViewMore = !element.showViewMore;">
+                      <span *ngIf="element.showViewMore">المزيد</span>
+                      <span *ngIf="!element.showViewMore">أقل</span>
+                    </a>
+                  </span>
+                </div>
+              </div>
+            </td>
+          </ng-container>
+
+          <tr mat-header-row *matHeaderRowDef="columnsToDisplay"></tr>
+          <tr mat-row *matRowDef="let element; columns: columnsToDisplay"></tr>
+          <tr mat-row *matRowDef="let element; let i = dataIndex; columns: expandedDetail"
+            [class.shrink-row]="expandedIndexes.length == 0 || !expandedIndexes.includes(i)" class="expanded-row"></tr>
+          <tr class="mat-row" *matNoDataRow>
+            <td class="mat-cell" colspan="9" style="text-align: center;">لا يوجد نتائج للبيانات.</td>
+          </tr>
+        </table>
+
+        <mat-paginator #paginator [length]="totalItems" [pageIndex]="queryObject.page - 1" showFirstLastButtons
+          [pageSize]="queryObject.pageSize" (page)="onPageChange($event.pageIndex)" hidePageSize="true">
+        </mat-paginator>
+      </section>
+
+      <section class="section-actions">
+      </section>
+
+    </section>
+  </mat-card-content>
+</mat-card>

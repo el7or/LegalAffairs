@@ -1,0 +1,28 @@
+<h3 mat-dialog-title *ngIf="caseRatingId">
+  تعديل
+</h3>
+<h3 mat-dialog-title *ngIf="!caseRatingId">
+  إضافة
+</h3>
+<div mat-dialog-content>
+  <form [formGroup]="form">
+    <div fxLayout="row wrap" fxFlexAlign="center" class="row">
+      <div fxFlex.gt-sm="100" fxFlex="100" class="p-10">
+        <mat-form-field>
+          <input matInput [formControl]="form.controls['name']" placeholder="اسم تصنيف القضية" autocomplete="off">
+          <mat-error *ngIf="form.controls['name'].hasError('required')"> اسم تصنيف القضية مطلوب
+          </mat-error>
+        </mat-form-field>
+      </div>
+    </div>
+  </form>
+</div>
+<div mat-dialog-actions>
+  <button mat-raised-button color="primary" [disabled]="!form.valid || form.pristine" (click)="onSubmit()">
+    <span *ngIf="!caseRatingId">إضافة</span>
+    <span *ngIf="caseRatingId"> تعديل</span>
+  </button>
+  <button type="button" mat-raised-button (click)="onCancel()">
+    إلغاء
+  </button>
+</div>

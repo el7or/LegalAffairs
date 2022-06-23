@@ -1,0 +1,43 @@
+<h3 mat-dialog-title>
+ اختيار الباحث
+</h3>
+
+<div mat-dialog-content>
+  <form [formGroup]="form">
+    <div fxLayout="row wrap" fxFlexAlign="center" class="row">
+
+      <div fxFlex.gt-sm="100" fxFlex="100" class="p-10">
+        <mat-form-field>
+          <mat-select matInput formControlName="researcherId" placeholder="الباحث">
+            <mat-option value="">--اختر--</mat-option>
+            <mat-option *ngFor="let researcher of researchers" [value]="researcher.id">
+              {{ researcher.name  }}</mat-option>
+            <!-- <mat-option *ngFor="let researcher of researchers" [value]="researcher.researcherId">
+                            {{ researcher.researcher  }}</mat-option> -->
+          </mat-select>
+          <mat-error *ngIf="form.controls['researcherId'].hasError('required')"> الباحث مطلوب</mat-error>
+        </mat-form-field>
+
+      </div>
+      <div fxFlex.gt-sm="100" fxFlex="100" class="p-10">
+        <mat-form-field>
+          <mat-label>ملاحظات</mat-label>
+          <textarea [value]="form.controls['notes'].value | replaceLineBreaks" matInput formControlName="notes" type="text" rows="3" maxlength="200"
+          #notes></textarea>
+          <!-- <mat-hint>عدد الاحرف يجب ان لا يزيد عن 200 حرف</mat-hint> -->
+          <mat-hint>200/{{notes.value?.length || 0}}</mat-hint>
+          <mat-error *ngIf="form.controls['notes'].hasError('required')"> الملاحظات مطلوبة</mat-error>
+        </mat-form-field>
+      </div>
+    </div>
+  </form>
+</div>
+
+<div mat-dialog-actions class="screen-actions">
+  <button type="button" mat-raised-button (click)="onSubmit()" color="primary" [disabled]="!form.valid">
+    <span>إضافة</span>
+  </button>
+  <button type="button" mat-raised-button (click)="onCancel()">
+    إلغاء
+  </button>
+</div>

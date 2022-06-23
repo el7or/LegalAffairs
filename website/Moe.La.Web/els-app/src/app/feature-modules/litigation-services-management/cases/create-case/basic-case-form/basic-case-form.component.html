@@ -1,0 +1,201 @@
+<form class="basic-form" (submit)="onSubmit()" [formGroup]="form">
+
+  <fieldset>
+    <legend><b>البيانات الأساسية</b></legend>
+    <section class="row" fxLayout="row wrap" fxFlexAlign="center">
+      <div fxFlex.gt-sm="25" fxFlex="100" class="p-10">
+        <mat-form-field>
+          <mat-select required matInput formControlName="caseSource" placeholder="مصدر القضية"
+            (selectionChange)="onChangeCaseSource($event.value)">
+            <mat-option value="">--اختر--</mat-option>
+            <mat-option *ngFor="let caseSource of caseSources" [value]="caseSource.value">
+              {{ caseSource.nameAr }}</mat-option>
+          </mat-select>
+          <mat-error *ngIf="form.controls['caseSource'].hasError('required')">
+            مصدر القضية في المحكمة مطلوب
+          </mat-error>
+        </mat-form-field>
+      </div>
+
+      <div fxFlex.gt-sm="25" fxFlex="100" class="p-10">
+        <mat-form-field>
+          <input matInput formControlName="caseNumberInSource" placeholder="رقم القضية في المحكمة" autocomplete="off"
+            digitsOnly required maxlength="30" />
+          <mat-error *ngIf="form.controls['caseNumberInSource'].hasError('required')">
+            رقم القضية في المحكمة مطلوب
+          </mat-error>
+        </mat-form-field>
+      </div>
+
+      <div fxFlex.gt-sm="50" fxFlex="100">
+        <date-picker-dual controlName="startDate" [placeholder]="'تاريخ القضية'" [required]="true">
+        </date-picker-dual>
+      </div>
+
+      <div fxFlex.gt-sm="25" fxFlex="100" class="p-10">
+        <mat-form-field>
+          <mat-select required formControlName="legalStatus" placeholder="صفة الوزارة القانونية">
+            <mat-option value="">--اختر--</mat-option>
+            <mat-option *ngFor="let legalState of ministryLegalStatus" [value]="legalState.value">
+              {{ legalState.nameAr }}</mat-option>
+          </mat-select>
+          <mat-error *ngIf="form.controls['legalStatus'].hasError('required')"> صفة الوزارة القانونية مطلوب
+          </mat-error>
+        </mat-form-field>
+      </div>
+
+      <div fxFlex.gt-sm="25" fxFlex="100" class="p-10">
+        <mat-form-field>
+          <mat-select required formControlName="litigationType" placeholder="درجة الترافع"
+            (selectionChange)="onChangeLitigationType($event.value)">
+            <mat-option value="">--اختر--</mat-option>
+            <mat-option *ngFor="let litigationType of litigationTypes" [value]="litigationType.value">
+              {{ litigationType.nameAr }}</mat-option>
+          </mat-select>
+          <mat-error *ngIf="form.controls['litigationType'].hasError('required')"> درجة الترافع مطلوب
+          </mat-error>
+        </mat-form-field>
+      </div>
+
+      <div fxFlex.gt-sm="25" fxFlex="100" class="p-10">
+        <mat-form-field>
+          <mat-select required formControlName="courtId" placeholder="محكمة/لجنة">
+            <mat-option value=""
+              [matTooltip]="!form.controls['litigationType'].value ? 'لابد من اختيار درجة الترافع أولاً': ''"
+              matTooltipPosition="above" matTooltipClass="tooltip-danger">--اختر--</mat-option>
+            <mat-option *ngFor="let court of courts" [value]="court.id">
+              {{ court.name }}</mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+
+      <div fxFlex.gt-sm="25" fxFlex="100" class="p-10">
+        <mat-form-field>
+          <input matInput formControlName="circleNumber" placeholder="الدائرة" autocomplete="off" maxlength="2"
+            digitsOnly required />
+          <mat-error *ngIf="form.controls['circleNumber'].hasError('required')">
+            رقم الدائرة مطلوب
+          </mat-error>
+        </mat-form-field>
+      </div>
+
+      <div fxFlex.gt-sm="25" fxFlex="100" class="p-10">
+        <mat-form-field>
+          <input matInput formControlName="judgeName" placeholder="اسم القاضي" maxlength="50" autocomplete="off" arabic-only />
+        </mat-form-field>
+      </div>
+
+      <div fxFlex.gt-sm="25" fxFlex="100" class="p-10"
+        *ngIf="form.controls['litigationType'].value && form.controls['litigationType'].value != LitigationTypes.FirstInstance">
+        <mat-form-field>
+          <input matInput formControlName="relatedCaseNumber" placeholder="رقم القضية السابقة" autocomplete="off" readonly
+            required />
+            <input matInput formControlName="relatedCaseId" placeholder="كود القضية السابقة" autocomplete="off" hidden />
+          <button mat-icon-button matSuffix type="button" (click)="onChooseCase()"
+            matTooltip="اختيار قضية سابقة">
+            <mat-icon>search</mat-icon>
+          </button>
+          <mat-error *ngIf="form.controls['relatedCaseId'].hasError('required')">
+            رقم القضية السابقة مطلوب
+          </mat-error>
+        </mat-form-field>
+      </div>
+    </section>
+  </fieldset>
+
+  <fieldset>
+    <legend><b>الدعوى</b></legend>
+    <section class="row" fxLayout="row wrap" fxFlexAlign="center">
+      <div fxFlex.gt-sm="100" fxFlex="100" class="p-10">
+        <mat-form-field>
+          <input matInput formControlName="subject" placeholder="عنوان الدعوى" maxlength="100" required
+            #subject autocomplete="off" />
+          <mat-error *ngIf="form.controls['subject'].hasError('required')">
+            عنوان الدعوى مطلوب
+          </mat-error>
+          <mat-hint>100/{{subject.value?.length || 0}}</mat-hint>
+        </mat-form-field>
+      </div>
+
+      <div fxFlex.gt-sm="100" fxFlex="100" class="p-10">
+        <mat-form-field>
+          <textarea [value]="form.controls['caseDescription'].value | replaceLineBreaks" matInput formControlName="caseDescription" placeholder="وصف الدعوى" rows="3" maxlength="2000"
+            required #caseDescription autocomplete="off"></textarea>
+          <mat-hint>2000/{{caseDescription.value?.length || 0}}</mat-hint>
+          <mat-error *ngIf="form.controls['caseDescription'].hasError('required')">
+            وصف الدعوى مطلوب
+          </mat-error>
+        </mat-form-field>
+      </div>
+
+      <div fxFlex.gt-sm="100" fxFlex="100" class="p-10">
+        <mat-form-field>
+          <textarea [value]="form.controls['notes'].value | replaceLineBreaks" matInput formControlName="notes" placeholder="ملاحظات" rows="3" maxlength="1000" autocomplete="off"
+            #notes></textarea>
+          <mat-hint>1000/{{ notes.value?.length || 0 }}</mat-hint>
+        </mat-form-field>
+      </div>
+    </section>
+  </fieldset>
+
+  <fieldset>
+    <legend><b>تصنيف القضية</b></legend>
+    <section class="row" fxLayout="row wrap" fxFlexAlign="center">
+      <div fxFlex.gt-sm="33" fxFlex="100" class="p-10">
+        <mat-form-field>
+          <mat-select required matInput formControlName="mainCategoryId" placeholder="التصنيف الأساسي"
+            (selectionChange)="onChangeMainCategory($event.value)">
+            <mat-option value=""
+              [matTooltip]="!form.controls['caseSource'].value ? 'لابد من اختيار مصدر القضية أولاً': ''"
+              matTooltipPosition="above" matTooltipClass="tooltip-danger">--اختر--</mat-option>
+            <mat-option *ngFor="let category of mainCategories" [value]="category.id">
+              {{ category.name }}</mat-option>
+          </mat-select>
+          <mat-error *ngIf="form.controls['mainCategoryId'].hasError('required')">
+            التصنيف الأساسي مطلوب
+          </mat-error>
+        </mat-form-field>
+      </div>
+
+      <div fxFlex.gt-sm="33" fxFlex="100" class="p-10">
+        <mat-form-field>
+          <mat-select required matInput formControlName="firstSubCategoryId" placeholder="التصنيف الفرعي 1"
+            (selectionChange)="onChangeFirstSubCategory($event.value)">
+            <mat-option value=""
+              [matTooltip]="!form.controls['mainCategoryId'].value ? 'لابد من اختيار التصنيف الأساسي أولاً': ''"
+              matTooltipPosition="above" matTooltipClass="tooltip-danger">--اختر--</mat-option>
+            <mat-option *ngFor="let category of firstSubCategories" [value]="category.id">
+              {{ category.name }}</mat-option>
+          </mat-select>
+          <mat-error *ngIf="form.controls['firstSubCategoryId'].hasError('required')">
+            التصنيف الفرعي 1 مطلوب
+          </mat-error>
+        </mat-form-field>
+      </div>
+
+      <div fxFlex.gt-sm="33" fxFlex="100" class="p-10">
+        <mat-form-field>
+          <mat-select required matInput formControlName="secondSubCategoryId" placeholder="التصنيف الفرعي 2"
+            (selectionChange)="onChangeSecondSubCategory()">
+            <mat-option value=""
+              [matTooltip]="!form.controls['firstSubCategoryId'].value ? 'لابد من اختيار التصنيف الفرعي 1 أولاً': ''"
+              matTooltipPosition="above" matTooltipClass="tooltip-danger">--اختر--</mat-option>
+            <mat-option *ngFor="let category of secondSubCategories" [value]="category.id">
+              {{ category.name }}</mat-option>
+          </mat-select>
+          <mat-error *ngIf="form.controls['secondSubCategoryId'].hasError('required')">
+            التصنيف الفرعي 2 مطلوب
+          </mat-error>
+        </mat-form-field>
+      </div>
+    </section>
+  </fieldset>
+
+  <section class="screen-actions">
+    <button mat-raised-button color="primary" type="submit" [disabled]="!form.valid">حفظ</button>
+    <button mat-raised-button matStepperNext type="button" [disabled]="!form.controls['id'].value || !form.valid"
+      class="float-left">
+      التالي
+    </button>
+  </section>
+</form>

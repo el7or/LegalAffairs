@@ -1,0 +1,29 @@
+<fieldset>
+  <h2 class="heading">بيانات طلب توجيه الاعتراض </h2>
+  <div *ngIf="request" fxLayout="row wrap" fxFlexAlign="center" class="entity-details p-10">
+    <div fxLayout="column" fxFlex.gt-sm="50" fxFlex="100">
+      <b>طلب الباحث</b>
+      <span>{{request.suggestedOpinon.name}}</span>
+    </div>
+    <div fxLayout="column" fxFlex.gt-sm="50" fxFlex="100">
+      <b>رأى الباحث</b>
+      <span>{{request.note}}</span>
+    </div>
+    <div fxLayout="column" fxFlex="100">
+      <b>ملاحظات مراجعة الطلب من مدير الترافع</b>
+      <span>{{request.replyNote}}</span>
+    </div>
+  </div>
+</fieldset>
+
+<section class="screen-actions">
+  <button mat-raised-button color="primary"  type="button" (click)="ReplyObjectionRequest(RequestStatus.AcceptedFromLitigationManager)"
+    *ngIf="request.request.requestStatus.id==RequestStatus.New && authService.checkRole(AppRole.DepartmentManager, Department.Litigation)">
+    موافقة
+  </button>
+  <button mat-raised-button color="primary" type="button" (click)="ReplyObjectionRequest(RequestStatus.Rejected)"
+    *ngIf="request.request.requestStatus.id==RequestStatus.New && authService.checkRole(AppRole.DepartmentManager,Department.Litigation)">
+    رفض
+  </button>
+  <button mat-raised-button (click)="location.back()" class="float-left">العودة</button>
+</section>

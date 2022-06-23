@@ -1,0 +1,198 @@
+<mat-card>
+    <mat-card-content>
+        <mat-horizontal-stepper labelPosition="bottom" [linear]="true" #stepper="matHorizontalStepper">
+            <mat-step [completed]="false" [editable]="false" label="إعداد الطلب" state="basic">
+                <section class="screen">
+
+                    <form class="basic-form" [formGroup]="form">
+
+                        <div fxLayout="row wrap">
+                            <div fxFlex.gt-sm="50" fxFlex="100" class="p-10" *ngIf="!caseId">
+                                <button mat-raised-button color="primary" type="button" (click)="onChooseCase()">
+                                    اختيار قضية *
+                                </button>
+                                <mat-error *ngIf="form.controls['caseId'].hasError('required')">
+                                    اختيار القضية مطلوب</mat-error>
+                            </div>
+                        </div>
+
+
+                        <div fxLayout="row wrap" fxFlexAlign="center" class="entity-details"
+                            *ngIf="caseDetails?.caseRule">
+
+                            <div fxLayout="column" fxFlex.gt-sm="50" fxFlex="100">
+                                <span>مصدر القضية</span>
+                                <span>
+                                    {{ caseDetails.caseSource.name }}
+                                </span>
+                            </div>
+                            <div fxLayout="column" fxFlex.gt-sm="50" fxFlex="100">
+                                <span>رقم القضية </span>
+                                <span>
+                                    {{ caseDetails.caseNumberInSource }}
+                                </span>
+                            </div>
+                            <div fxLayout="column" fxFlex.gt-sm="50" fxFlex="100">
+                                <span>المحكمة</span>
+                                <span>
+                                    {{ caseDetails.court.name }}
+                                </span>
+                            </div>
+                            <div fxLayout="column" fxFlex.gt-sm="50" fxFlex="100">
+                                <span>درجة الترافع</span>
+                                <span>
+                                    {{ caseDetails.litigationType.name }}
+                                </span>
+                            </div>
+                            <div fxLayout="column" fxFlex.gt-sm="50" fxFlex="100">
+                                <span>رقم الحكم</span>
+                                <span>{{caseDetails?.caseRule?.id}}</span>
+                            </div>
+                            <div fxLayout="column" fxFlex.gt-sm="50" fxFlex="100">
+                                <span>نوع الحكم</span>
+                                <span>{{caseDetails.caseRule.judgementResult.name}}</span>
+                            </div>
+                            <div fxLayout="column" fxFlex.gt-sm="50" fxFlex="100">
+                                <span>درجة الحكم</span>
+                                <span>{{caseDetails.litigationType.name}}</span>
+                            </div>
+                            <div fxLayout="column" fxFlex.gt-sm="50" fxFlex="100"
+                                *ngIf="caseDetails.caseRule.caseRuleMinistryDepartments?.length">
+                                <span>الجهة المعنية بالحكم</span>
+                                <span>القطاع : {{caseDetails.caseRule.ministrySector}}</span>
+                                <span>
+                                    الإدارة :
+                                    <li *ngFor="let department of caseDetails.caseRule.caseRuleMinistryDepartments">
+
+                                        {{department?.name}}
+                                    </li>
+                                </span>
+                            </div>
+                            <div fxLayout="column" fxFlex.gt-sm="100" fxFlex="100">
+                                <span>منطوق الحكم</span>
+                                <span>{{caseDetails.caseRule.judgementText}}</span>
+                            </div>
+
+                            <div fxLayout="column" fxFlex.gt-sm="100" fxFlex="100">
+                                <span>مختصر الحكم</span>
+                                <span>{{caseDetails.caseRule.judgmentBrief}}</span>
+                            </div>
+
+                            <!-- <div fxLayout="column" fxFlex.gt-sm="50" fxFlex="100">
+                                        <span>رقم المعاملة الوارد في الاتصالات الادارية</span>
+                                        <span>{{caseDetails.caseRule.importRefNo}}</span>
+                                    </div>
+
+                                    <div fxLayout="column" fxFlex.gt-sm="50" fxFlex="100">
+                                        <span>تاريخ المعاملة الوارد في الاتصالات الادارية</span>
+                                        <span *ngIf="caseDetails?.caseRule?.importRefDate">
+                                            {{caseDetails.caseRule.importRefDate | date : 'yyyy-MM-dd'}}
+                                            {{caseDetails.caseRule.importRefDate | arDayOfWeek}}
+                                            {{caseDetails.caseRule.importRefDateHigri}}</span>
+                                    </div>
+                                    <div fxLayout="column" fxFlex.gt-sm="50" fxFlex="100">
+                                        <span>رقم المعاملة الصادر في الاتصالات الادارية</span>
+                                        <span>{{caseDetails.caseRule.exportRefNo}}</span>
+                                    </div>
+
+                                    <div fxLayout="column" fxFlex.gt-sm="50" fxFlex="100">
+                                        <span>تاريخ المعاملة الصادر في الاتصالات الادارية</span>
+                                        <span *ngIf="caseDetails?.caseRule?.exportRefDate">
+                                            {{caseDetails.caseRule.exportRefDate | date : 'yyyy-MM-dd'}}
+                                            {{caseDetails.caseRule.exportRefDate |arDayOfWeek}}
+                                            {{caseDetails.caseRule.exportRefDateHigri}}</span>
+                                    </div> -->
+
+                        </div>
+                        <div fxLayout="row wrap">
+
+                            <div fxFlex.gt-sm="100" fxFlex="100" class="p-10">
+                                <mat-form-field>
+                                    <textarea matInput appearance="fill" formControlName="note" [value]="form.controls['note'].value | replaceLineBreaks" required
+                                        placeholder="الملاحظات " rows="3" maxlength="500" #note>
+                              </textarea>
+                                    <!-- <mat-hint>عدد الاحرف يجب ان لا يزيد عن 500 حرف</mat-hint> -->
+                                    <mat-hint>500/{{note.value?.length || 0}}</mat-hint>
+                                    <mat-error
+                                        *ngIf="form.controls['note'].hasError('required') && form.controls['note'].touched"
+                                        class="text-danger ">الملاحظات مطلوبة</mat-error>
+                                </mat-form-field>
+                            </div>
+
+                        </div>
+                        <div fxLayout="row wrap" fxFlexAlign="center" class="row">
+                            <section class="screen-actions">
+                                <div class="button-row">
+                                    <button mat-raised-button color="primary" type="submit" [disabled]="!form.valid"
+                                        (click)="onSubmit(form.value.requestStatus, true)">
+                                        <span>حفظ واستكمال</span>
+                                    </button>
+                                    <button mat-raised-button type="button" [routerLink]="['/requests']">
+                                        إلغاء
+                                    </button>
+                                </div>
+                            </section>
+                        </div>
+
+
+                    </form>
+
+                </section>
+            </mat-step>
+            <mat-step label="اختيار النموذج" state="basic">
+                <section *ngIf="isNext">
+                    <form class="basic-form" [formGroup]="requestLetterform">
+
+                        <section class="screen-content row" fxLayout="row wrap" fxFlexAlign="center">
+
+                            <div fxLayout="row" fxLayoutWrap>
+                                <div *ngFor="let item of letterTemplates" style="width: 300px;" fxFlex.xs="40"
+                                    class="card">
+                                    <img mat-card-image style="height: 60px;width:80px ;"
+                                        (click)="openImageDialog(item.name, baseUrl + item.thumbnail)" class="letterimg"
+                                        src="{{baseUrl + item.thumbnail}}">
+                                    <div style="margin-top: 10px;" fxFlex.lg="70" fxFlex.lt-lg="70">
+                                        <a style="color: black;cursor: pointer; font-weight: bold;"> {{ item.name }}</a>
+                                        <button style="margin-top: 5px; width:60px;height: 35px;" mat-raised-button
+                                            type="button" (click)="getContent(item.id)">
+                                            اختر
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                            <div fxFlex.gt-sm="100" fxFlex="100" class="p-10" *ngIf="caseId">
+                                <ckeditor formControlName="text" [editor]="Editor" style="height: 400px;"
+                                    maxlength="2000" [config]="config">
+                                </ckeditor>
+                            </div>
+
+                        </section>
+                        <section class="screen-actions">
+                            <div class="button-row">
+                                <button mat-raised-button color="primary" type="button"
+                                    [disabled]="!requestLetterform.valid" (click)="onSubmit(RequestStatus.Modified)"
+                                    *ngIf="form.value.requestStatus == RequestStatus.Returned">
+                                    <span>تقديم الطلب</span>
+                                </button>
+                                <button mat-raised-button color="primary" type="button"
+                                    [disabled]="!requestLetterform.valid" (click)="onSubmit(RequestStatus.New)"
+                                    *ngIf="form.value.requestStatus == RequestStatus.Draft">
+                                    <span>تقديم الطلب</span>
+                                </button>
+                                <button mat-raised-button color="primary" type="button" [disabled]="!requestLetterform.valid"
+                                    (click)="onSubmit(form.value.requestStatus)">
+                                    <span>حفظ</span>
+                                </button>
+                                <button mat-raised-button type="button" (click)="location.back()">
+                                    إلغاء
+                                </button>
+                            </div>
+                        </section>
+
+
+                    </form>
+                </section>
+            </mat-step>
+        </mat-horizontal-stepper>
+    </mat-card-content>
+</mat-card>

@@ -1,0 +1,105 @@
+<mat-card>
+    <mat-card-content>
+        <section class="screen">
+
+            <form class="basic-form" [formGroup]="form">
+                <!-- بيانات المحضر -->
+
+                <div fxLayout="row wrap" fxFlexAlign="center" class="entity-details p-10">
+
+                    <div fxLayout="column" fxFlex.gt-sm="30" fxFlex="100">
+                        <span>رقم محضر التحقيق</span>
+                        <span>{{investigationRecordNumber}}</span>
+                    </div>
+                    <div fxLayout="column" fxFlex.gt-sm="30" fxFlex="100">
+                        <span>اسم المحقق</span>
+                        <span>{{authService.currentUser?.given_name }}</span>
+                    </div>
+                    <div fxLayout="column" fxFlex.gt-sm="30" fxFlex="100">
+                        <span>حالة المحضر</span>
+                        <span>مسودة</span>
+                    </div>
+                </div>
+                <section class="screen-content row" fxLayout="row wrap" fxFlexAlign="center">
+                    <!-- تاريخ ووقت المحضر -->
+                    <div fxFlex.gt-sm="40" fxFlex="100">
+                        <date-picker-dual controlName="recordDate" [placeholder]="'تاريخ المحضر'">
+                        </date-picker-dual>
+                    </div>
+
+                    <div fxFlex.gt-sm="25" fxFlex="100" class="p-10">
+                        <span>وقت بداية التحقيق:</span>
+                        <timepicker formControlName="startTime" showMeridian="true" labelMinutes="Minutes"
+                            style="direction: ltr;"></timepicker>
+                    </div>
+
+                    <div fxFlex.gt-sm="25" fxFlex="100" class="p-10">
+                        <span>وقت نهاية التحقيق:</span>
+                        <timepicker formControlName="endTime" showMeridian="true" labelMinutes="Minutes"
+                            style="direction: ltr;" [min]="form.value.startTime"></timepicker>
+                    </div>
+
+                    <!-- الحضور -->
+                    <div fxFlex.gt-sm="100" fxFlex="100" class="p-10">
+                        <app-attendants-list (set-attendants-list)="onRecordAttendant($event)"
+                            [attendantsToUpdate]="attendants">
+                        </app-attendants-list>
+                    </div>
+
+                    <!-- اطراف التحقيق -->
+                    <div fxFlex.gt-sm="100" fxFlex="100" class="p-10">
+                        <app-parties-list (set-parties-list)="onUpdateParties($event)" [partiesToUpdate]="parties">
+                        </app-parties-list>
+                    </div>
+
+                    <!-- الاسئلة -->
+                    <div fxFlex.gt-sm="100" fxFlex="100" class="p-10">
+                        <app-investigation-question-form (questions-list)="onUpdateQuestions($event)"
+                            [partiesToUpdate]="parties" [questionsToUpdate]="questions">
+                        </app-investigation-question-form>
+                    </div>
+
+                    <!-- المرفقات -->
+                    <div fxFlex.gt-sm="100" fxFlex="100" class="p-10">
+                        <strong>المرفقات</strong>
+                        <app-attachments [groupName]="GroupNames.InvestigationRecord"
+                            (set-attachments-list)="onRecordAttachment($event)" [attachmentsToUpdate]="attachments">
+                        </app-attachments>
+                    </div>
+
+                    <!-- المرئيات -->
+                    <div fxFlex.gt-sm="100" fxFlex="100" class="p-10">
+                        <strong>المرئيات</strong>
+                        <fieldset>
+
+                            <mat-form-field>
+                                <mat-label>مرئيات المحضر</mat-label>
+                                <textarea [value]="form.controls['visuals'].value | replaceLineBreaks" matInput formControlName="visuals" type="text" rows="3" maxlength="2000"
+                                #visuals></textarea>
+                                <!-- <mat-hint>عدد الاحرف يجب ان لا يزيد عن 2000 حرف</mat-hint> -->
+                                <mat-hint>500/{{visuals.value?.length || 0}}</mat-hint>
+                                <mat-error *ngIf="form.controls['visuals'].hasError('required')"> الملاحظات مطلوبة
+                                                    </mat-error>
+                            </mat-form-field>
+                        </fieldset>
+                    </div>
+
+                    <div fxFlex.gt-sm="100" fxFlex="100" class="p-10">
+                        <mat-checkbox controlName="isRemote">المحضر عن بعد</mat-checkbox>
+                    </div>
+
+                </section>
+                <section class="screen-actions">
+                    <div class="button-row">
+                        <button mat-raised-button color="primary" type="button" (click)="onSubmit()"
+                            [disabled]="!form.valid">حفظ</button>
+                        <button mat-raised-button type="button" (click)="location.back()">
+                            إلغاء
+                        </button>
+                    </div>
+                </section>
+            </form>
+
+        </section>
+    </mat-card-content>
+</mat-card>

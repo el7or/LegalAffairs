@@ -1,0 +1,420 @@
+body {
+  font-family: 'DINNextLTArabic', sans-serif;
+  background: $color1;
+}
+
+//side menu
+#snav {
+  &.mat-sidenav {
+    // width: 320px;
+    width: 18em;
+    padding-top: 1.3em;
+    background: rgb(8, 176, 162);
+    background: -moz-linear-gradient(
+      73deg,
+      rgba(8, 176, 162, 1) 0%,
+      rgba(0, 144, 129, 1) 100%
+    );
+    background: -webkit-linear-gradient(
+      73deg,
+      rgba(8, 176, 162, 1) 0%,
+      rgba(0, 144, 129, 1) 100%
+    );
+    background: linear-gradient(
+      73deg,
+      rgba(8, 176, 162, 1) 0%,
+      rgba(0, 144, 129, 1) 100%
+    );
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr="#08b0a2", endColorstr="#009081", GradientType=1);
+    border-left: 0px !important;
+    box-shadow: 0px 10px 20px rgba(217, 238, 236, 0.75);
+
+    .mat-nav-list:not(.sub-item) {
+      background-image: url(../images/background/1.png);
+      background-position: bottom;
+    }
+
+    .saperator {
+      color: $color4;
+      font-size: 1.1em;
+      padding: 0 30px;
+    }
+
+    .mat-nav-list {
+      .mat-list-item {
+        a {
+          font-size: 0.9em;
+          padding: 0 30px;
+          font-weight: 500;
+          border-bottom: 1px solid #5bc0b6;
+          height: 55px;
+          margin-bottom: 0px;
+
+          mat-icon {
+            color: #fff;
+          }
+
+          i {
+            transition: 0.2s ease-in;
+          }
+        }
+
+        &:last-child {
+          a {
+            border-bottom: 0px solid #5bc0b6;
+          }
+        }
+
+        &.selected {
+          .mat-list-item-content {
+            a {
+              border-radius: 0px;
+
+              i {
+                transform: rotate(-90deg);
+              }
+            }
+
+            &:hover > a {
+              color: #009081;
+            }
+          }
+
+          .sub-item {
+            background-color: rgba(190, 190, 190, 0.5);
+            margin-top: 0;
+
+            a {
+              font-size: 0.8em;
+              border-bottom: 0;
+              height: 40px;
+
+              i {
+                font-size: 7px;
+                margin-top: 5px;
+              }
+
+              &:hover {
+                color: $color5;
+              }
+
+              .label {
+                padding: 0;
+                width: 22px;
+                height: 22px;
+                line-height: 19px;
+                color: #ffffff;
+                font-weight: bold;
+                border-radius: 50%;
+                font-size: 16px;
+                text-align: center;
+              }
+            }
+          }
+        }
+
+        .mat-list-item-content:hover > a {
+          color: $color4;
+        }
+      }
+    }
+  }
+}
+
+//toolbar header
+
+.sidebar-toggle.mat-icon-button {
+  // right: 1em;
+  right: 15px;
+  background: $color4;
+  width: 30px;
+  height: 30px;
+  line-height: 16px;
+  font-size: 19px;
+  text-align: center;
+  top: 20px;
+  z-index: 8;
+  position: absolute;
+  transition: 0.2s ease-in;
+  color: #fff;
+
+  &.open {
+    right: 13.4em;
+    // right: 305px;
+  }
+}
+
+.Notifications {
+  .mat-icon {
+    color: $color2;
+    font-size: 30px;
+  }
+
+  .notify .point {
+    width: 20px;
+    height: 20px;
+    background-color: $color3;
+    position: absolute;
+    right: -5px;
+    top: -18px;
+    line-height: 18px;
+    font-weight: bold;
+    font-size: 13px;
+    color: #ffffff;
+  }
+}
+
+.mailbox .message-center a .round {
+  margin: 0 0px 0 10px;
+}
+
+.mat-toolbar.mat-primary {
+  background: #fff;
+  color: #464646;
+  height: 65px;
+  // margin-bottom: 8px;
+  box-shadow: 1px 1px 8px rgba(217, 238, 236, 0.75);
+}
+
+.mat-menu-trigger span {
+  color: $color-farid;
+}
+
+.mat-button-disabled.mat-menu-trigger span{
+  color: rgba(0, 0, 0, 0.26) !important;
+}
+
+.page-breadcrumb {
+  background: transparent;
+
+  .breadcrumb {
+    float: left;
+
+    [class^='ti-'],
+    [class*=' ti-'] {
+      font-size: 21px;
+    }
+
+    .breadcrumb-item + .breadcrumb-item {
+      &.active {
+        color: #999999;
+        font-weight: 500;
+      }
+
+      &::before {
+        content: '/';
+        font-family: arial;
+        color: #b7b7b9;
+        font-size: 15px;
+        padding: 0 0.5rem;
+        font-weight: bold;
+      }
+    }
+  }
+}
+
+.footer {
+  margin-top: auto;
+
+  .mat-card {
+    margin: 0;
+    border-radius: 0px;
+    font-weight: bold;
+    color: $color2;
+
+    span {
+      padding: 0 2px;
+      color: $color4;
+    }
+  }
+}
+
+// for any check box
+mat-checkbox {
+  &.mat-checkbox-checked:not(.mat-checkbox-disabled).mat-warn
+    .mat-ripple-element,
+  &.mat-checkbox:active:not(.mat-checkbox-disabled).mat-warn
+    .mat-ripple-element {
+    background-color: $color4;
+  }
+
+  .mat-checkbox-checkmark-path {
+    stroke: $color4 !important;
+  }
+
+  .mat-checkbox-inner-container {
+    margin-right: 0;
+    margin-left: 10px;
+    width: 20px;
+    height: 20px;
+    margin-top: 5px;
+  }
+
+  .mat-checkbox-frame {
+    border-color: #ececec;
+    border-radius: 5px;
+  }
+
+  &.mat-checkbox-indeterminate.mat-warn .mat-checkbox-background,
+  &.mat-checkbox-checked.mat-warn .mat-checkbox-background {
+    background-color: transparent;
+  }
+
+  .mat-checkbox-layout .mat-checkbox-label {
+    line-height: 24px;
+    font-weight: 500;
+    color: #000;
+    font-size: 16px;
+  }
+}
+
+.login-form {
+  .mat-raised-button.mat-primary {
+    background-color: rgb(98, 195, 182);
+    background: linear-gradient(
+      180deg,
+      rgba(98, 195, 182, 1) 0%,
+      rgba(0, 144, 129, 1) 100%
+    );
+    color: #fff;
+    box-shadow: 0px 10px 10px rgba(229, 229, 229, 0.75);
+    opacity: 1;
+    font-weight: bold;
+    font-size: 18px;
+    height: 50px;
+
+    &.mat-button-disabled {
+      opacity: 0.5;
+    }
+
+    i {
+      transform: rotate(-90deg);
+      padding-top: 10px;
+    }
+  }
+
+  .mat-form-field.mat-focused .mat-form-field-ripple {
+    background-color: $color4 !important;
+  }
+
+  .mat-form-field.mat-focused .mat-form-field-label {
+    color: $color2;
+  }
+}
+
+input:-internal-autofill-selected {
+  appearance: menulist-button;
+  background-color: blue !important;
+}
+
+.mat-menu-trigger {
+  cursor: pointer;
+}
+
+.mat-menu-content {
+  background: #ffffff;
+
+  .mat-menu-item {
+    color: #009081;
+    font-size: 14px;
+    font-weight: 500;
+    border-bottom: 1px solid #e6e6e6;
+    height: 54px;
+
+    // &:last-child {
+    //   border-bottom: 0px solid #e6e6e6;
+    // }
+
+    .mat-icon-no-color,
+    .mat-menu-item-submenu-trigger::after {
+      color: #009081;
+    }
+
+    &:hover:not([disabled]) .mat-icon-no-color,
+    .mat-menu-item-submenu-trigger::after {
+      color: #fff !important;
+    }
+
+    &:hover:not([disabled]),
+    .mat-menu-item.cdk-program-focused:not([disabled]),
+    .mat-menu-item.cdk-keyboard-focused:not([disabled]),
+    .mat-menu-item-highlighted:not([disabled]) {
+      background: #f6b34f;
+      color: #fff;
+    }
+  }
+
+  .mat-menu-item[disabled],
+  .mat-menu-item[disabled]::after {
+    color: rgba(0, 0, 0, 0.38) !important;
+  }
+
+  .mat-menu-item[disabled] .mat-icon-no-color, .mat-menu-item-submenu-trigger::after {
+    color: rgba(0, 0, 0, 0.54);
+}
+}
+
+/*-- ==============================================================
+ Ipad & above all(768px)
+ ============================================================== */
+
+@media (max-width: 768px) {
+  .mat-menu-trigger {
+    display: none;
+  }
+
+  .sidebar-toggle.mat-icon-button.open {
+    right: 125px !important;
+  }
+}
+
+.nowrap {
+  white-space: nowrap;
+}
+
+/** Alerts */
+.alert {
+  font-size: 1em;
+  font-weight: 900;
+  text-align: center;
+}
+
+.alert-primary {
+  color: $color-farid;
+}
+
+// .alert-success {
+// }
+
+// .alert-danger {
+// }
+
+// .alert-warning {
+// }
+
+.badge {
+  display: inline-block;
+  padding: 7px 12px;
+  font-size: 0.9rem;
+  font-weight: 500;
+  text-align: center;
+  white-space: nowrap;
+  vertical-align: baseline;
+  border-radius: 16px;
+  transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out, border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+}
+
+.badge-warning {
+  color: $color10 !important;
+  background-color: $color7;
+}
+
+.badge-danger {
+  color: $color10 !important;
+  background-color: $color3;
+}
+
+.badge-primary {
+  color: $color10 !important;
+  background-color: $color2;
+}

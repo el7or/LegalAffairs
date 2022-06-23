@@ -1,0 +1,63 @@
+<h4>عرض النموذج</h4>
+<div *ngIf="moamalaDetails" fxLayout="row wrap" fxFlexAlign="center" class="entity-details p-10">
+  <div fxLayout="column" fxFlex.gt-sm="25" fxFlex="100">
+    <span>رقم المعاملة</span>
+    <span>{{ moamalaDetails.moamalaNumber }}</span>
+  </div>
+
+  <div fxLayout="column" fxFlex.gt-sm="25" fxFlex="100">
+    <span>تاريخ المعاملة</span>
+    <span>{{ moamalaDetails.passDate | date: "yyyy-MM-dd" }} - {{ moamalaDetails.passDateHigri }}</span>
+  </div>
+
+  <div fxLayout="column" fxFlex.gt-sm="25" fxFlex="100">
+    <span>نوع المعاملة</span>
+    <span>{{ moamalaDetails.workItemType?.name }}</span>
+  </div>
+
+  <div fxLayout="column" fxFlex.gt-sm="25" fxFlex="100">
+    <span>التصنيف الفرعي للمعاملة</span>
+    <ng-container>
+      <span>{{ moamalaDetails.subWorkItemType?.name }}</span>
+    </ng-container>
+  </div>
+
+  <div fxLayout="column" fxFlex.gt-sm="25" fxFlex="100">
+    <span>الموظف</span>
+    <ng-container>
+      <span>{{ moamalaDetails.createdBy}}</span>
+    </ng-container>
+  </div>
+
+  <div fxLayout="column" fxFlex.gt-sm="25" fxFlex="100">
+    <span>الإدارة</span>
+    <ng-container>
+      <span>{{ moamalaDetails.senderDepartment?.name }}</span>
+    </ng-container>
+  </div>
+
+  <div fxLayout="column" fxFlex.gt-sm="25" fxFlex="100">
+    <span>حالة المعاملة</span>
+    <ng-container>
+      <span>{{ moamalaDetails.status?.name }}</span>
+    </ng-container>
+  </div>
+
+  <div fxLayout="column" fxFlex.gt-sm="100" fxFlex="100">
+    <span>عنوان المعاملة</span>
+    <span>{{ moamalaDetails.subject }}</span>
+  </div>
+
+  <div fxLayout="column" fxFlex.gt-sm="100" fxFlex="100">
+    <span>محتوى المعاملة</span>
+    <span>{{ moamalaDetails.description }}</span>
+  </div>
+
+  <div fxLayout="column" fxFlex.gt-sm="100" fxFlex="100" *ngIf="showAttachments">
+    <span>المرفقات</span>
+    <app-attachments [groupName]="GroupNames.Moamala" [readOnly]="true"
+      [attachmentsToUpdate]="moamalaDetails.attachments">
+    </app-attachments>
+  </div>
+
+</div>

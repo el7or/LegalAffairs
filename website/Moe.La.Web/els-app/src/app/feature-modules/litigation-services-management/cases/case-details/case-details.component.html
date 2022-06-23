@@ -1,0 +1,291 @@
+<ng-container *ngIf="case">
+  <div fxLayout="row wrap" fxFlexAlign="center" class="entity-details p-10">
+
+    <div fxFlex="25" class="star">
+      <span>رقم القضية</span>
+      <span>
+        {{ case.caseNumberInSource }}
+      </span>
+    </div>
+
+    <div fxFlex="75" *ngIf="case.researchers?.length > 0" class="star">
+      <span>الباحث المكلف بالقضية</span>
+      <span *ngFor="let researcher of case.researchers">
+        {{ researcher.name }}
+      </span>
+    </div>
+
+    <div fxLayout="column" fxFlex.gt-sm="25" fxFlex="100">
+      <span>المصدر</span>
+      <span>{{case.caseSource?.name}}</span>
+    </div>
+
+    <!-- <div fxLayout="column" fxFlex.gt-sm="25" fxFlex="100">
+      <span>رقم القضية في المصدر</span>
+      <span>{{case.caseNumberInSource}}</span>
+    </div> -->
+
+    <!-- <div fxLayout="column" fxFlex.gt-sm="25" fxFlex="100" *ngIf="case.caseSource?.id!==3">
+      <ng-container *ngIf="case.caseSource?.id==CaseSources.Moeen">
+        <span>رقم المعاملة</span>
+        <span>{{case.moeenRef}}</span>
+      </ng-container>
+      <ng-container *ngIf="case.caseSource?.id==CaseSources.Najiz">
+        <span>رقم المعاملة</span>
+        <span>{{case.najizRef}}</span>
+      </ng-container>
+    </div> -->
+
+    <!-- <div fxLayout="column" fxFlex.gt-sm="25" fxFlex="100" *ngIf="case.caseSource?.id==3">
+      <span>رقم القيد في راسل</span>
+      <span>{{case.raselRef}}</span>
+    </div> -->
+
+    <!-- <div fxLayout="column" fxFlex.gt-sm="25" fxFlex="100" *ngIf="case.caseSource?.id==3">
+      <span>الرقم الموحد في راسل</span>
+      <span>{{case.raselUnifiedNo}}</span>
+    </div>
+
+    <div fxLayout="column" fxFlex.gt-sm="25" fxFlex="100" *ngIf="case.caseSource?.id==3">
+      <span>رقم القضية في اللجنة</span>
+      <span>{{case.caseSourceNumber}}</span>
+    </div> -->
+
+    <div fxLayout="column" fxFlex.gt-sm="25" fxFlex="100">
+      <span>تصنيفات القضية</span>
+      <mat-chip-list aria-label="Fish selection">
+        <mat-chip>{{ case.subCategory?.mainCategory.name}}</mat-chip>
+        <mat-chip>{{ case.subCategory?.firstSubCategory.name}}</mat-chip>
+        <mat-chip>{{ case.subCategory?.name}}</mat-chip>
+      </mat-chip-list>
+    </div>
+
+    <div fxLayout="column" fxFlex.gt-sm="25" fxFlex="100">
+      <span>حالة القضية</span>
+      <span>{{case.status?.name}}</span>
+    </div>
+
+    <!-- <div fxLayout="column" fxFlex.gt-sm="25" fxFlex="100" *ngIf="case.caseSource?.id==2">
+      <span>رقم الدعوى في معين</span>
+      <span>{{case.caseSourceNumber}}</span>
+    </div> -->
+
+    <div fxLayout="column" fxFlex.gt-sm="25" fxFlex="100">
+      <span>تاريخ بداية القضية</span>
+      <span>
+        {{case.startDate | date : 'yyyy-MM-dd'}}
+        {{case.startDate | arDayOfWeek}}
+        {{ case.startDateHigri }}
+      </span>
+    </div>
+
+    <!-- <div fxLayout="column" fxFlex.gt-sm="25" fxFlex="100" *ngIf="case.caseSource?.id==1">
+      <span>رقم القضية في ناجز</span>
+      <span>{{case.caseSourceNumber}}</span>
+    </div> -->
+
+    <!-- <div fxLayout="column" fxFlex.gt-sm="25" fxFlex="100" *ngIf="case.caseSource?.id==1">
+      <span>رقم الطلب في ناجز</span>
+      <span>{{case.najizId}}</span>
+    </div> -->
+
+    <div fxLayout="column" fxFlex.gt-sm="25" fxFlex="100">
+      <span>صفة الوزارة القانونية</span>
+      <span>{{case.legalStatus?.name}}</span>
+    </div>
+
+    <div fxLayout="column" fxFlex.gt-sm="25" fxFlex="100">
+      <span>محكمة/لجنة</span>
+      <span>{{case.court?.name}}</span>
+    </div>
+
+    <div fxLayout="column" fxFlex.gt-sm="25" fxFlex="100">
+      <span>الدائرة</span>
+      <span>{{case.circleNumber}}</span>
+    </div>
+
+    <div fxLayout="column" fxFlex.gt-sm="25" fxFlex="100">
+      <span>درجة الترافع</span>
+      <span>{{case.litigationType?.name}}</span>
+    </div>
+
+    <!-- <div fxLayout="column" fxFlex.gt-sm="25" fxFlex="100">
+      <span>رقم القضية المرجعية</span>
+      <span>{{case.referenceCaseNo}}</span>
+    </div> -->
+
+    <div fxLayout="column" fxFlex.gt-sm="25" fxFlex="100" *ngIf="case.litigationType?.id == LitigationTypes.Appeal || case.litigationType?.id == LitigationTypes.Supreme">
+      <span>رقم القضية المرتبطة</span>
+      <span>{{case.relatedCase?.caseNumberInSource}}</span>
+
+      <!-- <span><a [routerLink]="['/cases/view', case.relatedCaseId]">{{case.relatedCaseId}}</a></span> -->
+    </div>
+
+    <!-- <div fxLayout="column" fxFlex.gt-sm="25" fxFlex="100">
+      <span>الرقم الرئيسي</span>
+      <span>{{case.mainNo}}</span>
+    </div> -->
+
+    <div fxLayout="column" fxFlex.gt-sm="25" fxFlex="100">
+      <span>اسم القاضي</span>
+      <span>{{case.judgeName}}</span>
+    </div>
+
+    <div fxLayout="column" fxFlex.gt-sm="50" fxFlex="100">
+      <span>عنوان الدعوى</span>
+      <span>{{case.subject}}</span>
+    </div>
+
+    <div fxLayout="column" fxFlex.gt-sm="50" fxFlex="100">
+      <span>وصف الدعوى</span>
+      <span>{{case.caseDescription}}</span>
+    </div>
+
+    <div fxLayout="column" fxFlex.gt-sm="50" fxFlex="100">
+      <span>ملاحظات</span>
+      <span>{{case.notes}}</span>
+    </div>
+
+    <div fxLayout="column" fxFlex="100">
+      <span>أسانيد الدعوى</span>
+      <span>
+        <li *ngFor="let item of case.caseGrounds">
+          {{ item.text }}
+        </li>
+      </span>
+    </div>
+
+  </div>
+
+  <fieldset>
+    <h2 class="heading">أطراف القضية</h2>
+    <section class="responsive-table screen-table">
+      <table mat-table [dataSource]="case.caseParties" class="mat-elevation-z0">
+        <ng-container matColumnDef="position">
+          <th mat-header-cell *matHeaderCellDef> #</th>
+          <td mat-cell *matCellDef="let caseParty; let i = index">
+            {{(i+1)}}
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="name">
+          <th mat-header-cell *matHeaderCellDef> الاسم </th>
+          <td mat-cell *matCellDef="let caseParty"> {{caseParty.party.name}} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="partyType">
+          <th mat-header-cell *matHeaderCellDef> نوع الطرف </th>
+          <td mat-cell *matCellDef="let caseParty">
+            {{caseParty.party.partyTypeName}}
+          </td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="partiesDisplayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: partiesDisplayedColumns;"></tr>
+        <tr class="mat-row no-data" *matNoDataRow>
+          <td class="mat-cell" [colSpan]="partiesDisplayedColumns.length">
+            لا يوجد نتائج .
+          </td>
+        </tr>
+      </table>
+    </section>
+  </fieldset>
+
+  <fieldset>
+    <h2 class="heading">حركات القضية</h2>
+    <section class="responsive-table screen-table">
+      <table mat-table [dataSource]="case.caseTransactions" class="mat-elevation-z0">
+        <ng-container matColumnDef="position">
+          <th mat-header-cell *matHeaderCellDef> #</th>
+          <td mat-cell *matCellDef="let transaction; let i = index">
+            {{(i+1)}}
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="createdOn" width="20px">
+          <th mat-header-cell *matHeaderCellDef>
+            التاريخ
+          </th>
+          <td mat-cell *matCellDef="let transaction">
+            {{transaction.createdOn | date : 'yyyy-MM-dd'}}
+            {{transaction.createdOn |arDayOfWeek}}
+            {{ transaction.createdOnHigri }}
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="createdOnTime">
+          <th mat-header-cell *matHeaderCellDef>
+            الوقت
+          </th>
+          <td mat-cell *matCellDef="let transaction">
+            {{transaction.createdOnTime}}
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="createdBy">
+          <th mat-header-cell *matHeaderCellDef>
+            المستخدم
+          </th>
+          <td mat-cell *matCellDef="let transaction">
+            <!-- {{transaction.createdByRole}} /  -->
+            {{transaction.createdByUser}}
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="TransactionType">
+          <th mat-header-cell *matHeaderCellDef>
+            نوع الحركة
+          </th>
+          <td mat-cell *matCellDef="let transaction"> {{transaction.transactionType}}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="transactionText">
+          <th mat-header-cell *matHeaderCellDef>
+            ملاحظة
+          </th>
+          <td mat-cell *matCellDef="let transaction" style="max-width: 300px;"><span>&nbsp;{{transaction.note}}</span>
+          </td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="transactionsDisplayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: transactionsDisplayedColumns;"></tr>
+        <tr class="mat-row no-data" *matNoDataRow>
+          <td class="mat-cell" [colSpan]="transactionsDisplayedColumns.length">
+            لا يوجد نتائج .
+          </td>
+        </tr>
+      </table>
+    </section>
+  </fieldset>
+
+  <div fxLayout="row wrap" fxFlexAlign="center" class="entity-details p-10"
+    *ngIf="case.status?.id==3 || case.status?.id==4 || case.status?.id==5">
+    <div fxLayout="column" fxFlex.gt-sm="33" fxFlex="100">
+      <span>
+        <b>تاريخ نطق الحكم :</b>
+      </span>
+      <span>
+        {{case.pronouncingJudgmentDate | date:'yyyy-MM-dd' }}
+        {{case.pronouncingJudgmentDate | arDayOfWeek }}
+        {{ case.pronouncingJudgmentDateHijri }}
+      </span>
+    </div>
+    <div fxLayout="column" fxFlex.gt-sm="33" fxFlex="100">
+      <span>
+        <b>موعد استلام الحكم</b> :
+      </span>
+      <span>
+        {{case.receivingJudgmentDate | date:'yyyy-MM-dd'}}
+        {{case.receivingJudgmentDate | arDayOfWeek }}
+        {{ case.receivingJudgmentDateHijri }}
+      </span>
+    </div>
+  </div>
+</ng-container>
+
+<fieldset>
+  <h2 class="heading">المرفقات</h2>
+  <app-attachments *ngIf="case?.id" [groupName]="GroupNames.Case" [readOnly]="true"
+    [attachmentsToUpdate]="case.attachments">
+  </app-attachments>
+</fieldset>

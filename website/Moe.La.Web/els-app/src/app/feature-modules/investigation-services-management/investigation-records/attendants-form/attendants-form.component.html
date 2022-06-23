@@ -1,0 +1,78 @@
+<h3 mat-dialog-title *ngIf="editMode">
+ تعديل
+</h3>
+<h3 mat-dialog-title *ngIf="!editMode">
+ إضافة
+</h3>
+<div mat-dialog-content>
+  <form (submit)="onSubmit()" [formGroup]="form">
+    <div fxLayout="row wrap" fxFlexAlign="center">
+
+      <div fxFlex.gt-sm="100" fxFlex.gt-xs="100" fxFlex="100">
+        <mat-form-field>
+          <input matInput placeholder="رقم الهوية" maxlength="10" [formControl]="form.controls['identityNumber']"
+            autocomplete="off" (keyup.enter)="onSearch()">
+          <mat-error *ngIf="form.controls['identityNumber'].hasError('required')"> رقم الهوية مطلوب.
+          </mat-error>
+          <mat-error
+            *ngIf="form.controls['identityNumber'].errors?.pattern||form.controls['identityNumber'].errors?.minlength">
+            رقم الهوية غير صحيح.
+          </mat-error>
+          <mat-error *ngIf="form.controls['identityNumber'].hasError('notExists')"> المستخدم غير موجود.
+          </mat-error>
+        </mat-form-field>
+      </div>
+    </div>
+    <div fxLayout="row wrap" fxFlexAlign="center" class="entity-details">
+
+      <div fxLayout="column" fxFlex.gt-sm="100" fxFlex="100" *ngIf="attendant.fullName">
+        <span>الاسم</span>
+        <span>{{attendant.fullName}}</span>
+      </div>
+      <div fxLayout="column" fxFlex.gt-sm="100" fxFlex="100" *ngIf="attendant.assignedWork">
+        <span>العمل المكلف به</span>
+        <span>{{attendant.assignedWork}}</span>
+      </div>
+      <div fxLayout="column" fxFlex.gt-sm="100" fxFlex="100" *ngIf="attendant.workLocation">
+        <span>مقر العمل</span>
+        <span>{{attendant.workLocation}}</span>
+      </div>
+    </div>
+    <div fxLayout="row wrap" fxFlexAlign="center">
+
+      <div fxFlex.gt-sm="100" fxFlex="100">
+        <mat-form-field>
+          <input placeholder="ممثل عن" matInput formControlName="representativeOf" [matAutocomplete]="auto"
+            (keyup)="filterMinistryDepartments()">
+          <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayFn">
+            <mat-option *ngFor="let ministryDepartment of filteredMinistryDepartments" [value]="ministryDepartment">
+              {{ministryDepartment.name}}
+            </mat-option>
+          </mat-autocomplete>
+          <mat-error
+            *ngIf="form.controls['representativeOf'].hasError('required') || form.controls['representativeOf'].hasError('selectedValue')">
+            الممثل عنه مطلوب
+          </mat-error>
+        </mat-form-field>
+      </div>
+
+      <div fxFlex.gt-sm="100" fxFlex="100">
+        <mat-form-field>
+          <textarea [value]="form.controls['details'].value | replaceLineBreaks" matInput formControlName="details" placeholder="تفاصيل عن الحاضر" rows="3"
+            maxlength="500" #details></textarea>
+            <!-- <mat-hint>عدد الاحرف يجب ان لا يزيد عن 500 حرف</mat-hint> -->
+            <mat-hint>500/{{details.value?.length || 0}}</mat-hint>
+          </mat-form-field>
+      </div>
+    </div>
+    <div mat-dialog-actions>
+      <button mat-raised-button color="primary" [disabled]="!form.valid" type="submit">
+        <span *ngIf="!editMode">إضافة</span>
+        <span *ngIf="editMode"> تعديل</span>
+      </button>
+      <button type="button" mat-raised-button (click)="onCancel()">
+        إلغاء
+      </button>
+    </div>
+  </form>
+</div>

@@ -1,0 +1,153 @@
+<h3 mat-dialog-title>
+  اختيار قضية للإضافة
+  <span *ngIf="queryObject.legalMemoType == LegalMemoTypes.Pleading"> إلى مذكرة مرافعة</span>
+  <span *ngIf="queryObject.legalMemoType == LegalMemoTypes.Objection"> إلى مذكرة اعتراضية</span>
+</h3>
+
+<div mat-dialog-content>
+  <section class="screen">
+
+    <section class="screen-table responsive-table extendable">
+      <div fxLayout="row wrap">
+        <div fxFlex.gt-sm="100" fxFlex="100">
+          <form class="filter-form" [formGroup]="searchForm" (submit)="onFilter()">
+            <div class="filter-container p-10" fxLayout="row wrap">
+
+              <div fxFlex.gt-sm="50" fxFlex="100">
+                <date-picker-dual controlName="startDateFrom" [placeholder]="'تاريخ القضية من'"></date-picker-dual>
+              </div>
+
+              <div fxFlex.gt-sm="50" fxFlex="100">
+                <date-picker-dual controlName="startDateTo" [placeholder]="'تاريخ القضية إلى'"></date-picker-dual>
+              </div>
+
+              <div fxFlex.gt-sm="50" fxFlex="100" class="p-10">
+                <mat-form-field>
+                  <mat-select formControlName="legalStatus" placeholder="صفة الوزارة">
+                    <mat-option value="">--اختر--</mat-option>
+                    <mat-option value="1">مدعى عليها</mat-option>
+                    <mat-option value="2">مدعية</mat-option>
+                  </mat-select>
+                </mat-form-field>
+              </div>
+
+              <div fxFlex.gt-sm="50" fxFlex="100" class="p-10">
+                <mat-form-field>
+                  <input matInput formControlName="partyName" placeholder="الطرف" autocomplete="off" lettersOnly />
+                </mat-form-field>
+              </div>
+
+              <div fxFlex="100" class="p-10 screen-actions">
+                <button class="m-b-10 m-r-5" type="submit" mat-raised-button color="primary">
+                  تصفية
+                </button>
+                <button class="m-b-10" type="button" mat-raised-button (click)="onClearFilter()">
+                  مسح التصفية
+                </button>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+
+      <table mat-table [dataSource]="dataSource" multiTemplateDataRows class="mat-elevation-z0" matSort
+        matSortActive="createdOn" matSortDirection="asc" matSortDisableClear>
+        <ng-container matColumnDef="position">
+          <th mat-header-cell *matHeaderCellDef>#</th>
+          <td mat-cell *matCellDef="let element; let i = dataIndex" class="nowrap">
+            <div>
+              {{(i + 1 + queryObject.pageSize * ((queryObject.page || 1) -1))}}
+            </div>
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="id">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>رقم القضية</th>
+          <td mat-cell *matCellDef="let element">
+            {{ element.caseNumberInSource}}
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="startDate">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>تاريخ الإنشاء</th>
+          <td mat-cell *matCellDef="let element" class="nowrap">
+            {{element.startDate | date : 'yyyy-MM-dd'}}
+            {{element.startDate | arDayOfWeek}}
+            {{ element.startDateHigri }}
+            &nbsp; {{ element.startDateTime }}
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="caseSource">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>
+            المصدر
+          </th>
+          <td mat-cell *matCellDef="let element">
+            {{ element.caseSource.name }}
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="court">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>محكمة/لجنة</th>
+          <td mat-cell *matCellDef="let element">
+            {{ element.court }}
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="circleNumber">
+          <th mat-header-cell *matHeaderCellDef>الدائرة</th>
+          <td mat-cell *matCellDef="let element">
+            {{ element.circleNumber }}
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="hearingsCount">
+          <th mat-header-cell *matHeaderCellDef>عدد الجلسات</th>
+          <td mat-cell *matCellDef="let element">
+            {{ element.hearingsCount }}
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="status">
+          <th mat-header-cell *matHeaderCellDef>الحالة</th>
+          <td mat-cell *matCellDef="let element">
+            {{ element.status.name }}
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="actions">
+          <th mat-header-cell *matHeaderCellDef></th>
+          <td mat-cell *matCellDef="let element">
+            <span
+              [matTooltip]="!element.isCaseDataCompleted ? 'لا يمكن اختيار قضية لإضافة جلسة قبل استكمال بيانات القضية' :''"
+              matTooltipPosition="right" matTooltipClass="tooltip-danger">
+              <button color="primary" style="margin: .5em;" mat-raised-button (click)="onSubmit(element)"
+                [disabled]="!element.isCaseDataCompleted">
+                اختيار
+              </button>
+            </span>
+          </td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="columnsToDisplay"></tr>
+        <tr mat-row *matRowDef="let element; columns: columnsToDisplay"></tr>
+        <tr class="mat-row" *matNoDataRow>
+          <td class="mat-cell" colspan="9" style="text-align: center;" *ngIf="!errorMsg">لا يوجد نتائج للبيانات.</td>
+          <td class="mat-cell" colspan="9" style="text-align: center;" *ngIf="errorMsg">{{errorMsg}}</td>
+
+        </tr>
+      </table>
+
+      <mat-paginator #paginator [length]="totalItems" [pageIndex]="queryObject.page - 1" showFirstLastButtons
+        [pageSize]="queryObject.pageSize" (page)="onPageChange($event.pageIndex)" hidePageSize="true">
+      </mat-paginator>
+    </section>
+
+  </section>
+</div>
+
+<div mat-dialog-actions>
+  <button type="button" mat-raised-button (click)="onCancel()">
+    إلغاء
+  </button>
+</div>

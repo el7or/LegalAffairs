@@ -1,0 +1,51 @@
+<fieldset>
+  <h2 class="heading">معاملات القضية</h2>
+
+  <div class="responsive-table screen-table">
+    <table mat-table [dataSource]="moamalat">
+
+      <ng-container matColumnDef="unifiedNo">
+        <th mat-header-cell *matHeaderCellDef>الرقم الموحد</th>
+        <td mat-cell *matCellDef="let caseMoamala">
+          {{caseMoamala.moamala.unifiedNo}}
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="moamalaNumber">
+        <th mat-header-cell *matHeaderCellDef>رقم المعاملة</th>
+        <td mat-cell *matCellDef="let caseMoamala">
+          {{caseMoamala.moamala.moamalaNumber}}
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="createdOn">
+        <th mat-header-cell *matHeaderCellDef>تاريخ ووقت المعاملة</th>
+        <td mat-cell *matCellDef="let caseMoamala">
+          <span>{{ caseMoamala.moamala.createdOn | date: "yyyy-MM-dd" }} &nbsp;
+            {{ caseMoamala.moamala.createdOnHigri }} &nbsp;
+            {{ caseMoamala.moamala.createdOnTime }}</span>
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="subject">
+        <th mat-header-cell *matHeaderCellDef>عنوان المعاملة</th>
+        <td mat-cell *matCellDef="let caseMoamala">
+          {{caseMoamala.moamala.subject}}
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="moamalaDetails">
+        <th mat-header-cell *matHeaderCellDef> تفاصيل المعاملة </th>
+        <td mat-cell *matCellDef="let caseMoamala">
+          <a [routerLink]="['/moamalat/view/',caseMoamala.moamala.id]">التفاصيل</a>
+        </td>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+      <tr class="mat-row" *matNoDataRow>
+        <td class="mat-cell" colspan="5" style="text-align: center;">لا يوجد نتائج للبيانات.</td>
+      </tr>
+    </table>
+  </div>
+</fieldset>

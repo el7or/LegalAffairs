@@ -1,0 +1,51 @@
+﻿<div fxLayout="row wrap" class="screen">
+  <div fxFlex.gt-sm="100" fxFlex="100">
+    <mat-card>
+      <mat-card-content>
+
+        <form (submit)="onSubmit()" [formGroup]="form">
+          <div fxLayout="row wrap" fxFlexAlign="center" class="row">
+
+            <div fxFlex.gt-sm="50" fxFlex="100" class="p-10">
+              <mat-form-field>
+                <mat-select matInput formControlName="newResearcherId" placeholder="الباحث" requiredF>
+                  <mat-option value="">--اختر--</mat-option>
+                  <mat-option *ngFor="let researcher of researchers" [value]="researcher.id">
+                    {{ researcher.name }}</mat-option>
+                </mat-select>
+                <mat-error *ngIf="form.controls['newResearcherId'].hasError('required')"> الباحث مطلوب</mat-error>
+              </mat-form-field>
+            </div>
+
+            <div fxFlex.gt-sm="100" fxFlex="100" class="p-10">
+              <mat-form-field>
+                <textarea matInput formControlName="note" [value]="form.controls['note'].value | replaceLineBreaks" placeholder="سبب الطلب" rows="3" maxlength="400"
+                  required #note></textarea>
+                <!-- <mat-hint>عدد الاحرف يجب ان لا يزيد عن 400 حرف</mat-hint> -->
+                <mat-hint>400/{{note.value?.length || 0}}</mat-hint>
+                <mat-error *ngIf="form.controls['note'].hasError('required')"> سبب الطلب
+                </mat-error>
+                <mat-error *ngIf="form.controls['note'].errors?.maxlength">سبب الطلب يجب الا يزيد عن
+                  {{noteMaxValue}} حرف
+                </mat-error>
+              </mat-form-field>
+            </div>
+
+            <section class="screen-actions">
+              <div class="button-row">
+
+                <button mat-raised-button color="primary" type="submit" [disabled]="!form.valid">
+                  تقديم الطلب
+                </button>
+                <button mat-raised-button type="button" (click)="location.back()">
+                  إلغاء
+                </button>
+              </div>
+            </section>
+          </div>
+        </form>
+
+      </mat-card-content>
+    </mat-card>
+  </div>
+</div>

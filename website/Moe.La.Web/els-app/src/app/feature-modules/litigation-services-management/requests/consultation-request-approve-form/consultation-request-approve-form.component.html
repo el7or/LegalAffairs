@@ -1,0 +1,36 @@
+<h3 mat-dialog-title class="modal-title">
+ اعتماد طلب نواقص
+</h3>
+<h3 mat-dialog-title class="modal-title" *ngIf="requestStatus==RequestStatus.Returned">
+ إعادة الطلب للصياغة
+</h3>
+
+<div mat-dialog-content>
+    <form (submit)="onSubmit()" [formGroup]="form">
+        <div fxLayout="row wrap" fxFlexAlign="center" class="row">
+            <div fxFlex.gt-sm="100" fxFlex="100" class="p-10">
+                <mat-form-field>
+                    <mat-label>
+                        رقم المعاملة في الاتصالات الادارية
+                    </mat-label>
+                    <input matInput formControlName="transactionNumberInAdministrativeCommunications" type="text" maxlength="400">
+                    <mat-error *ngIf="form.controls['transactionNumberInAdministrativeCommunications'].hasError('required')">رقم المعاملة في الاتصالات الادارية مطلوب</mat-error>
+                </mat-form-field>
+            </div>
+            <div fxFlex.gt-sm="100" fxFlex="100">
+                <date-picker-dual controlName="transactionDateInAdministrativeCommunications" [placeholder]="'تاريخ المعاملة في الاتصالات الادارية :'" required>
+                </date-picker-dual>
+                <span *ngIf="form.controls['transactionDateInAdministrativeCommunications'].hasError('required')&&form.controls['transactionDateInAdministrativeCommunications'].touched">
+                    تاريخ المعاملة في الاتصالات الادارية مطلوب
+                </span>
+              </div>
+        </div>
+        <section class="screen-actions">
+            <div class="button-row">
+                <button mat-raised-button type="submit" color="primary" [disabled]="!form.valid">حفظ</button>
+                &nbsp;
+                <button mat-raised-button type="button" (click)="onCancel()" >إلغاء</button>
+            </div>
+        </section>
+    </form>
+</div>

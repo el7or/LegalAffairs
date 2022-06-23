@@ -1,0 +1,101 @@
+<h3 mat-dialog-title *ngIf="moamalaChangeStatusData.status == MoamalaStatuses.Referred">إحالة</h3>
+<h3 mat-dialog-title *ngIf="moamalaChangeStatusData.status == MoamalaStatuses.MoamalaReturned">إعادة</h3>
+<h3 mat-dialog-title *ngIf="moamalaChangeStatusData.status == MoamalaStatuses.Assigned">اسناد</h3>
+
+<div mat-dialog-content>
+  <form [formGroup]="form">
+    <div fxLayout="row wrap" fxFlexAlign="center" class="row">
+      <div fxFlex.gt-sm="100" fxFlex="100" class="p-10"
+        *ngIf="moamalaChangeStatusData.status == MoamalaStatuses.Referred ||moamalaChangeStatusData.status == MoamalaStatuses.Assigned">
+        <mat-form-field>
+          <mat-select formControlName="branchId" placeholder="فرع"
+            (selectionChange)="populatedepartments($event.value);" required
+            [attr.disabled]="(moamalaChangeStatusData.status == MoamalaStatuses.Assigned && moamalaChangeStatusData.confidentialDegree!=ConfidentialDegrees.Confidential)?true:false">
+            <mat-option value="">--اختر--</mat-option>
+            <mat-option *ngFor="let item of branches" [value]="item.id">
+              {{ item.name }}
+            </mat-option>
+          </mat-select>
+          <mat-error *ngIf="form.controls['branchId'].hasError('required')">الفرع مطلوب.
+          </mat-error>
+        </mat-form-field>
+      </div>
+      <div fxFlex.gt-sm="100" fxFlex="100" class="p-10"
+        *ngIf="moamalaChangeStatusData.status == MoamalaStatuses.Referred  || moamalaChangeStatusData.status == MoamalaStatuses.Assigned ">
+        <mat-form-field>
+          <mat-select formControlName="departmentId" placeholder="إدارة تخصصية"
+            (selectionChange)="populateWorkItemTypes($event.value);" [required]="moamalaChangeStatusData.currentStep == MoamalaSteps.Department || moamalaChangeStatusData.status == MoamalaStatuses.Assigned"
+            [attr.disabled]="(moamalaChangeStatusData.status == MoamalaStatuses.Assigned && moamalaChangeStatusData.confidentialDegree!=ConfidentialDegrees.Confidential)?true:false">
+            <mat-option value="">--اختر--</mat-option>
+            <mat-option *ngFor="let item of departments" [value]="item.id">
+              {{ item.name }}
+            </mat-option>
+          </mat-select>
+          <mat-error *ngIf="form.controls['departmentId'].hasError('required')">الإدارة مطلوب.
+          </mat-error>
+        </mat-form-field>
+      </div>
+      <div fxFlex.gt-sm="100" fxFlex="100" class="p-10"
+      *ngIf="moamalaChangeStatusData.status == MoamalaStatuses.Referred  || moamalaChangeStatusData.status == MoamalaStatuses.Assigned ">
+        <mat-form-field>
+          <mat-select formControlName="workItemTypeId" placeholder="نوع المعاملة" [required]="moamalaChangeStatusData.status == MoamalaStatuses.Assigned"
+            (selectionChange)="populateUsers($event.value);populateSubWorkItemTypes($event.value)">
+            <mat-option value="">--اختر--</mat-option>
+            <mat-option *ngFor="let item of workItemTypes" [value]="item.id">
+              {{ item.name}}
+            </mat-option>
+          </mat-select>
+          <mat-error *ngIf="form.controls['workItemTypeId'].hasError('required')">نوع المعاملة مطلوب.
+          </mat-error>
+        </mat-form-field>
+      </div>
+      <div fxFlex.gt-sm="100" fxFlex="100" class="p-10"
+      *ngIf="moamalaChangeStatusData.status == MoamalaStatuses.Referred  || moamalaChangeStatusData.status == MoamalaStatuses.Assigned ">
+        <mat-form-field>
+          <mat-select formControlName="subWorkItemTypeId" placeholder="نوع المعاملة الفرعية">
+            <mat-option value="">--اختر--</mat-option>
+            <mat-option *ngFor="let item of subWorkItemTypes" [value]="item.id">
+              {{ item.name}}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+      <ng-container *ngIf="moamalaChangeStatusData.status == MoamalaStatuses.Assigned">
+        <div fxFlex.gt-sm="100" fxFlex="100" class="p-10">
+          <mat-form-field>
+            <input placeholder="اسناد إلى" matInput formControlName="assignedTo" type="text" [matAutocomplete]="auto"
+            [required]="moamalaChangeStatusData.status == MoamalaStatuses.Assigned" (keyup)="filterUsers()">
+            <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayFn">
+              <mat-option *ngFor="let item of filteredUsers" [value]="item">
+                <!-- {{ item.firstName }} {{ item.lastName }} -->
+                {{optionUserName(item)}}
+              </mat-option>
+            </mat-autocomplete>
+            <mat-error
+              *ngIf="form.controls['assignedTo'].hasError('required') || form.controls['assignedTo'].hasError('selectedValue')">
+              اسم الموظف مطلوب
+            </mat-error>
+          </mat-form-field>
+        </div>
+      </ng-container>
+      <div fxFlex.gt-sm="100" fxFlex="100" class="p-10">
+        <mat-form-field>
+          <input matInput formControlName="note" placeholder="ملاحظة" autocomplete="off" />
+          <mat-error *ngIf="form.controls['note'].hasError('required')">
+            الملاحظة مطلوبة
+          </mat-error>
+        </mat-form-field>
+      </div>
+    </div>
+  </form>
+</div>
+
+<div mat-dialog-actions class="screen-actions">
+  <button type="button" mat-raised-button color="primary" (click)="onSubmit()" [disabled]="!form.valid">
+    حفظ
+
+  </button>
+  <button type="button" mat-raised-button (click)="onCancel()">
+    إلغاء
+  </button>
+</div>

@@ -1,0 +1,10 @@
+﻿{
+  "profiles": {
+    "Moe.La.MockIntegrationService": {
+      "commandName": "Project",
+      "environmentVariables": {
+        "DOTNET_ENVIRONMENT": "Development"
+      }
+    }
+  }
+}

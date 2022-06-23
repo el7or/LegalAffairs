@@ -1,0 +1,17 @@
+<div class="responsive-table screen-table m-t-20 " style="overflow: visible;">
+    <table>
+        <tr>
+            <th>#</th>
+            <th>اسم المذكرة</th>
+            <th>حالة المذكرة</th>
+            <th>أنواع القضايا المرتيطة</th>            
+        </tr>
+        <tbody>
+            <tr *ngFor="let legalMemo of legalMemos;let i = index;">
+                <td class="text-center">{{(i+1)}}</td>
+                <td class="text-center">{{legalMemo.name}}</td>
+                <td class="text-center">{{legalMemo.status.name}}</td>
+            </tr>
+        </tbody>
+    </table>
+</div>

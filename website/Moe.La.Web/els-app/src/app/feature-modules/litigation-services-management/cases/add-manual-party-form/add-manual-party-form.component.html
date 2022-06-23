@@ -1,0 +1,274 @@
+<h3 mat-dialog-title *ngIf="!party">
+ إضافة
+</h3>
+<h3 mat-dialog-title *ngIf="party">
+ تعديل
+</h3>
+<div mat-dialog-content>
+  <form [formGroup]="form">
+
+    <div fxLayout="row wrap" fxFlexAlign="center" class="row">
+      <div fxFlex.gt-sm="100" fxFlex="100" class="p-10">
+        <mat-form-field>
+          <mat-select matInput formControlName="partyType" required placeholder="نوع الطرف"
+            (selectionChange)="changePartyType($event.value)">
+            <mat-option value="">--اختر--</mat-option>
+            <mat-option *ngFor="let partyType of partyTypes" [value]="partyType.value">
+              {{ partyType.nameAr }}</mat-option>
+          </mat-select>
+          <mat-error *ngIf="form.controls['partyType'].hasError('required')"> نوع الطرف مطلوب</mat-error>
+        </mat-form-field>
+      </div>
+    </div>
+    <div fxLayout="row wrap" fxFlexAlign="center" class="row"
+      *ngIf="form.controls['partyType'].value == PartyTypes.Person">
+      <div fxFlex.gt-sm="100" fxFlex="100" class="p-10">
+        <mat-form-field>
+          <input matInput formControlName="name" placeholder="الاسم" autocomplete="off" required lettersOnly />
+          <mat-error *ngIf="form.controls['name'].hasError('required')"> الاسم مطلوب</mat-error>
+        </mat-form-field>
+      </div>
+
+      <div fxFlex.gt-sm="100" fxFlex="100" class="p-10">
+        <mat-form-field>
+          <mat-select matInput formControlName="identityTypeId" required placeholder="نوع الهوية">
+            <mat-option value="">--اختر--</mat-option>
+            <mat-option *ngFor="let identityType of filteredidentityTypes" [value]="identityType.id">
+              {{ identityType.name }}</mat-option>
+          </mat-select>
+          <mat-error *ngIf="form.controls['identityTypeId'].hasError('required')"> نوع الهوية مطلوبة</mat-error>
+        </mat-form-field>
+      </div>
+
+      <div fxFlex.gt-sm="100" fxFlex="100" class="p-10">
+        <mat-form-field *ngIf="form.controls['identityTypeId'].value != 5">
+          <input required matInput formControlName="identityValue" placeholder="رقم الهوية" autocomplete="off"
+            digitsOnly />
+          <mat-error *ngIf="form.controls['identityValue'].hasError('required')"> رقم الهوية مطلوب.
+          </mat-error>
+          <mat-error
+            *ngIf="form.controls['identityValue'].errors?.pattern||form.controls['identityValue'].errors?.minlength||form.controls['identityValue'].errors?.maxlength||form.controls['identityValue'].errors?.wrongPattern">
+            رقم الهوية غير صحيح.
+          </mat-error>
+          <mat-error *ngIf="form.controls['identityValue'].errors?.maxLength">رقم الهوية يجب ان يحتوى على
+            {{identityTypeMaxValue}} أرقام
+          </mat-error>
+          <mat-error *ngIf="form.controls['identityValue'].errors?.notValid">
+            {{identityValueError}}
+          </mat-error>
+        </mat-form-field>
+        <mat-form-field *ngIf="form.controls['identityTypeId'].value == 5">
+          <input required matInput formControlName="identityValue" placeholder="رقم الهوية" autocomplete="off" />
+          <mat-error *ngIf="form.controls['identityValue'].hasError('required')"> رقم الهوية مطلوب.
+          </mat-error>
+        </mat-form-field>
+      </div>
+    </div>
+    <div fxLayout="row wrap" fxFlexAlign="center" class="row"
+      *ngIf="form.controls['partyType'].value == PartyTypes.CompanyOrInstitution">
+      <div fxFlex.gt-sm="100" fxFlex="100" class="p-10">
+        <mat-form-field>
+          <input matInput formControlName="companyName" placeholder="اسم الشركة أو المؤسسة" autocomplete="off" required
+            lettersOnly />
+          <mat-error *ngIf="form.controls['companyName'].hasError('required')"> اسم الشركة أو المؤسسة مطلوب</mat-error>
+        </mat-form-field>
+      </div>
+    </div>
+    <div fxLayout="row wrap" fxFlexAlign="center" class="row"
+      *ngIf="form.controls['partyType'].value == PartyTypes.GovernmentalEntity">
+      <div fxFlex.gt-sm="100" fxFlex="100" class="p-10">
+        <mat-form-field>
+          <mat-select matInput formControlName="organizationId" placeholder="الجهة">
+            <mat-option value="">--اختر--</mat-option>
+            <mat-option *ngFor="let governmentOrganization of governmentOrganizations"
+              [value]="governmentOrganization.id"> {{governmentOrganization.name}} </mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+    </div>
+
+
+
+    <div fxLayout="row wrap" fxFlexAlign="center" class="row"
+      *ngIf="form.controls['partyType'].value == PartyTypes.CompanyOrInstitution">
+      <div fxFlex.gt-sm="100" fxFlex="100" class="p-10">
+        <mat-form-field>
+          <input matInput required formControlName="commertialRegistrationNumber" placeholder="رقم السجل التجارى"
+            autocomplete="off" maxlength="10" digitsOnly />
+          <mat-error *ngIf="form.controls['commertialRegistrationNumber'].hasError('required')"> رقم السجل التجارى
+            مطلوب.
+          </mat-error>
+        </mat-form-field>
+      </div>
+    </div>
+
+    <div fxLayout="row wrap" fxFlexAlign="center" class="row"
+      *ngIf="form.controls['partyType'].value == PartyTypes.Person">
+      <div fxFlex.gt-sm="100" fxFlex="100">
+        <date-picker-dual controlName="identityStartDate" [placeholder]="'تاريخ اصدار الهوية'">
+        </date-picker-dual>
+      </div>
+      <div fxFlex.gt-sm="100" fxFlex="100">
+        <date-picker-dual controlName="identityExpireDate" [placeholder]="'تاريخ انتهاء الهوية'">
+        </date-picker-dual>
+      </div>
+      <div fxFlex.gt-sm="100" fxFlex="100" class="p-10">
+        <mat-form-field>
+          <input matInput formControlName="identitySource" placeholder="مصدر الهوية" autocomplete="off" lettersOnly />
+        </mat-form-field>
+      </div>
+      <div fxFlex.gt-sm="100" fxFlex="100" class="p-10">
+        <mat-form-field>
+          <mat-select matInput formControlName="nationalityId" placeholder="الجنسية">
+            <mat-option value="">--اختر--</mat-option>
+            <mat-option *ngFor="let country of countries" [value]="country.id">
+              {{ country.nationalityAr ? country.nationalityAr : country.nameAr }}</mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+      <div fxFlex.gt-sm="100" fxFlex="100" class="p-10">
+        <mat-form-field>
+          <mat-select matInput formControlName="gender" placeholder="النوع">
+            <mat-option value="">--اختر--</mat-option>
+            <mat-option value="1">
+              ذكر</mat-option>
+            <mat-option value="2">
+              أنثى</mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+    </div>
+
+    <div fxLayout="row wrap" fxFlexAlign="center" class="row" *ngIf="form.controls['partyType'].value == PartyTypes.Person || form.controls['partyType'].value == PartyTypes.CompanyOrInstitution">
+      <div fxFlex.gt-sm="100" fxFlex="100" class="p-10"
+        *ngIf="form.controls['identityTypeId'].value == 2 || form.controls['identityTypeId'].value == 1">
+        <mat-form-field style="direction: ltr !important;">
+          <span matSuffix>966+ &nbsp;</span>
+          <input matInput formControlName="mobile" placeholder="5xxxxxxxx" numbersOnlyValidator
+            mobileValidator2 minlength="9" maxlength="9" autocomplete="off" digitsOnly />
+          <mat-error *ngIf="form.controls['mobile'].hasError('maxlength')">رقم الجوال يجب ان لايزيد عن 9 أرقام
+          </mat-error>
+          <mat-error *ngIf="form.controls['mobile'].hasError('minlength')">رقم الجوال يجب ان لايقل عن
+            {{form.controls['mobile'].errors.minlength.requiredLength}} خانات
+          </mat-error>
+          <mat-error *ngIf="form.controls['mobile'].hasError('numbersOnlyValidator')">
+            رقم الجوال يجب ان لايحوي احرف
+          </mat-error>
+          <mat-error *ngIf="form.controls['mobile'].hasError('mobileValidator2')">
+            رقم الجوال غير صحيح
+          </mat-error>
+        </mat-form-field>
+      </div>
+      <div fxFlex.gt-sm="100" fxFlex="100" class="p-10"
+        *ngIf="form.controls['identityTypeId'].value != 2 && form.controls['identityTypeId'].value != 1">
+        <mat-form-field style="direction: ltr !important;">
+          <input matInput formControlName="mobile" placeholder="رقم الجوال" autocomplete="off" digitsOnly />
+        </mat-form-field>
+      </div>
+    </div>
+
+    <div fxLayout="row wrap" fxFlexAlign="center" class="row" *ngIf="form.controls['partyType'].value == PartyTypes.Person || form.controls['partyType'].value == PartyTypes.CompanyOrInstitution">
+      <div fxFlex.gt-sm="100" fxFlex="100" class="p-10">
+        <mat-form-field>
+          <mat-select matInput formControlName="provinceId" placeholder="المنطقة"
+            (selectionChange)="populateCities($event.value)">
+            <mat-option value="">--اختر--</mat-option>
+            <mat-option *ngFor="let province of provinces" [value]="province.id">
+              {{ province.name }}</mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+    </div>
+
+    <div fxLayout="row wrap" fxFlexAlign="center" class="row" *ngIf="form.controls['partyType'].value == PartyTypes.Person || form.controls['partyType'].value == PartyTypes.CompanyOrInstitution">
+      <div fxFlex.gt-sm="100" fxFlex="100" class="p-10">
+        <mat-form-field>
+          <mat-select matInput formControlName="cityId" placeholder="المدينة"
+            (selectionChange)="populateDistricts($event.value)">
+            <mat-option value="">--اختر--</mat-option>
+            <mat-option *ngFor="let city of cities" [value]="city.id">
+              {{ city.name }}</mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+    </div>
+
+    <div fxLayout="row wrap" fxFlexAlign="center" class="row" *ngIf="form.controls['partyType'].value == PartyTypes.Person || form.controls['partyType'].value == PartyTypes.CompanyOrInstitution">
+      <div fxFlex.gt-sm="100" fxFlex="100" class="p-10">
+        <mat-form-field>
+          <mat-select matInput formControlName="districtId" placeholder="الحى">
+            <mat-option value="">--اختر--</mat-option>
+            <mat-option *ngFor="let district of districts" [value]="district.id">
+              {{ district.name }}</mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+    </div>
+
+    <div fxLayout="row wrap" fxFlexAlign="center" class="row" *ngIf="form.controls['partyType'].value == PartyTypes.Person || form.controls['partyType'].value == PartyTypes.CompanyOrInstitution">
+      <div fxFlex.gt-sm="100" fxFlex="100" class="p-10">
+        <mat-form-field>
+          <input matInput formControlName="street" placeholder="الشارع" autocomplete="off" maxlength="20" />
+        </mat-form-field>
+      </div>
+    </div>
+
+    <div fxLayout="row wrap" fxFlexAlign="center" class="row" *ngIf="form.controls['partyType'].value == PartyTypes.Person || form.controls['partyType'].value == PartyTypes.CompanyOrInstitution">
+      <div fxFlex.gt-sm="100" fxFlex="100" class="p-10">
+        <mat-form-field>
+          <input matInput formControlName="buidlingNumber" placeholder="رقم العقار" autocomplete="off" maxlength="10"
+            digitsOnly />
+        </mat-form-field>
+      </div>
+    </div>
+
+    <div fxLayout="row wrap" fxFlexAlign="center" class="row" *ngIf="form.controls['partyType'].value == PartyTypes.Person || form.controls['partyType'].value == PartyTypes.CompanyOrInstitution">
+      <div fxFlex.gt-sm="100" fxFlex="100" class="p-10">
+        <mat-form-field>
+          <input matInput formControlName="postalCode" placeholder="الرقم البريدي" autocomplete="off" maxlength="8"
+            digitsOnly />
+        </mat-form-field>
+      </div>
+    </div>
+
+    <div fxLayout="row wrap" fxFlexAlign="center" class="row" *ngIf="form.controls['partyType'].value == PartyTypes.Person || form.controls['partyType'].value == PartyTypes.CompanyOrInstitution">
+      <div fxFlex.gt-sm="100" fxFlex="100" class="p-10">
+        <mat-form-field>
+          <input matInput formControlName="addressDetails" placeholder="تفاصيل" autocomplete="off" maxlength="50"
+            lettersOnly />
+        </mat-form-field>
+      </div>
+    </div>
+
+    <div fxLayout="row wrap" fxFlexAlign="center" class="row" *ngIf="form.controls['partyType'].value == PartyTypes.Person || form.controls['partyType'].value == PartyTypes.CompanyOrInstitution">
+      <div fxFlex.gt-sm="100" fxFlex="100" class="p-10">
+        <mat-form-field>
+          <input matInput formControlName="telephoneNumber" placeholder="رقم الهاتف" numbersOnlyValidator
+            mobileValidator2 minlength="9" maxlength="9" autocomplete="off" digitsOnly />
+
+          <mat-error *ngIf="form.controls['telephoneNumber'].hasError('maxlength')">رقم الهاتف يجب ان لايزيد عن 9 أرقام
+          </mat-error>
+          <mat-error *ngIf="form.controls['telephoneNumber'].hasError('minlength')">رقم الهاتف يجب ان لايقل عن
+            {{form.controls['telephoneNumber'].errors.minlength.requiredLength}} خانات
+          </mat-error>
+          <mat-error *ngIf="form.controls['telephoneNumber'].hasError('numbersOnlyValidator')">
+            رقم الهاتف يجب ان لايحوي احرف
+          </mat-error>
+          <mat-error *ngIf="form.controls['telephoneNumber'].hasError('mobileValidator2')">
+            رقم الهاتف غير صحيح
+          </mat-error>
+        </mat-form-field>
+      </div>
+    </div>
+
+    <section class="screen-actions">
+      <button type="button" (click)="onSubmit()" mat-raised-button color="primary" [disabled]="!form.valid">
+        <span *ngIf="party">تعديل</span>
+        <span *ngIf="!party">إضافة</span>
+      </button>
+      <button type="button" mat-raised-button (click)="onCancel()">
+        إلغاء
+      </button>
+    </section>
+  </form>
+</div>

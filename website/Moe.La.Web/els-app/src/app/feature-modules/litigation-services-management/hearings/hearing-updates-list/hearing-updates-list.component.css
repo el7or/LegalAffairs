@@ -1,0 +1,24 @@
+a.bg-danger{
+    color: white;
+  }
+
+  .attach-column {
+    column-count:3
+   }
+
+   td  {
+    width: auto;
+}
+
+a.clickable{
+  cursor: pointer;
+  cursor: hand;
+}
+
+.note-text{
+  white-space: normal;
+  word-wrap: break-word;
+  max-width: 200px;
+  text-align: justify;
+  padding-left:20px;
+}

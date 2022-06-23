@@ -1,0 +1,79 @@
+<h3 mat-dialog-title *ngIf="editMode">
+ تعديل
+</h3>
+<h3 mat-dialog-title *ngIf="!editMode">
+ إضافة
+</h3>
+<div mat-dialog-content>
+  <mat-form-field>
+    <mat-placeholder>البحث باستخدم رقم الهوية أواسم المستخدم
+    </mat-placeholder>
+    <input matInput type="search" [(ngModel)]="searchText" autocomplete="off" (keyup.enter)="onSearch()"  [disabled]="editMode">
+    <button mat-button matSuffix mat-stroked-button aria-label="search" type="button" color="primary" *ngIf="!editMode"
+      [disabled]="!searchText" (click)="onSearch()">
+      <mat-icon>search</mat-icon>
+    </button>
+  </mat-form-field>
+  <!-- <span *ngIf="form.controls['identityNumber'].hasError('notExists')" style="color: red;"> هذا  الطرف غير موجود</span>   -->
+  <form (submit)="onSubmit()" [formGroup]="form">
+    <div fxLayout="row wrap" fxFlexAlign="center" class="row" class="p-10">
+
+      <!-- <div fxFlex.gt-sm="100" fxFlex.gt-xs="100" fxFlex="100">
+        <mat-form-field>
+          <input matInput placeholder="رقم الهوية" maxlength="10" [formControl]="form.controls['identityNumber']"
+            autocomplete="off">
+          <mat-error *ngIf="form.controls['identityNumber'].hasError('required')"> رقم الهوية مطلوب.
+          </mat-error>
+          <mat-error *ngIf="form.controls['identityNumber'].errors?.pattern||form.controls['identityNumber'].errors?.minlength"> رقم الهوية غير صحيح.
+          </mat-error>
+        </mat-form-field>
+      </div> -->
+    </div>
+    <div fxLayout="row wrap" fxFlexAlign="center" class="entity-details p-10">
+
+
+      <div fxLayout="column" fxFlex.gt-sm="50" fxFlex="100" *ngIf="partyForSubmit.partyName">
+        <span>الاسم</span>
+        <span>{{partyForSubmit.partyName}}</span>
+      </div>
+      <div fxLayout="column" fxFlex.gt-sm="50" fxFlex="100" *ngIf="partyForSubmit.birthDate">
+        <span>تاريخ الميلاد</span>
+        <span>{{partyForSubmit.birthDate| date:"yyyy-MM-dd" }} &nbsp; {{partyForSubmit.birthDateOnHijri}}</span>
+      </div>
+      <div fxLayout="column" fxFlex.gt-sm="50" fxFlex="100" *ngIf="partyForSubmit.assignedWork">
+        <span>العمل المكلف به</span>
+        <span>{{partyForSubmit.assignedWork}}</span>
+      </div>
+      <div fxLayout="column" fxFlex.gt-sm="50" fxFlex="100"  *ngIf="partyForSubmit.workLocation">
+        <span>مقر العمل</span>
+        <span>{{partyForSubmit.workLocation}}</span>
+      </div>
+      <div fxLayout="column" fxFlex.gt-sm="50" fxFlex="100"  *ngIf="partyForSubmit.staffType">
+        <span>توع الكادر</span>
+        <span>{{partyForSubmit.staffType}}</span>
+      </div>
+    </div>
+    <div fxLayout="row wrap" fxFlexAlign="center" class="row" class="p-10">
+
+      <div fxFlex.gt-sm="100" fxFlex="100" class="p-10">
+        <mat-form-field>
+          <mat-select matInput formControlName="partyTypeId" placeholder="نوع الطرف">
+            <mat-option value="">--اختر--</mat-option>
+            <mat-option *ngFor="let partyType of partyTypes" [value]="partyType.id">
+              {{ partyType.name }}</mat-option>
+          </mat-select>
+          <mat-error *ngIf="form.controls['partyTypeId'].hasError('required')"> نوع الطرف مطلوبة</mat-error>
+        </mat-form-field>
+      </div>
+    </div>
+    <section class="screen-actions">
+      <button mat-raised-button color="primary" [disabled]="!form.valid" type="submit">
+        <span *ngIf="!editMode">إضافة</span>
+        <span *ngIf="editMode"> تعديل</span>
+      </button>
+      <button type="button" mat-raised-button (click)="onCancel()">
+        إلغاء
+      </button>
+    </section>
+  </form>
+</div>

@@ -1,0 +1,10 @@
+EF CORE
+-------
+- Install EF Core
+$ dotnet tool install --global dotnet-ef
+
+- ADD MIGRATIONS
+$ dotnet ef migrations add initialModel --context CommandDbContext -p ./src/Moe.La.Infrastructure/Moe.La.Infrastructure.csproj -s ./src/Moe.La.WebApi/Moe.La.WebApi.csproj -o Migrations
+
+- UPDATE DATABASE
+$ dotnet ef database update -c CommandDbContext -p ./src/Moe.La.Infrastructure/Moe.La.Infrastructure.csproj -s ./src/Moe.La.WebApi/Moe.La.WebApi.csproj

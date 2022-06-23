@@ -1,0 +1,32 @@
+<h3 mat-dialog-title *ngIf="legalMemoNote.id">
+  تعديل
+</h3>
+<h3 mat-dialog-title *ngIf="!legalMemoNote.id">
+  إضافة
+</h3>
+<div mat-dialog-content>
+  <form [formGroup]="form">
+    <div fxLayout="row wrap" fxFlexAlign="center" class="row">
+
+      <div fxFlex.gt-sm="100" fxFlex="100" class="p-10">
+
+        <mat-form-field>
+          <textarea matInput [value]="form.controls['text'].value | replaceLineBreaks" formControlName="text" placeholder="نص الملاحظة" rows="5" maxlength="2000"
+            #text></textarea>
+          <!-- <mat-hint>عدد الاحرف يجب ان لا يزيد عن 2000 حرف</mat-hint> -->
+          <mat-hint>2000/{{text.value?.length || 0}}</mat-hint>
+          <mat-error *ngIf="form.controls['text'].hasError('required')">نص الملاحظة مطلوب</mat-error>
+        </mat-form-field>
+      </div>
+    </div>
+
+  </form>
+</div>
+<div mat-dialog-actions>
+  <button mat-raised-button type="button" (click)="onSubmit()" color="primary" [disabled]="!form.valid">
+    <span *ngIf="!legalMemoNote.id">إضافة</span>
+    <span *ngIf="legalMemoNote.id"> تعديل</span>
+  </button>
+  &nbsp;
+  <button mat-raised-button type="button" (click)="onCancel()">إلغاء</button>
+</div>

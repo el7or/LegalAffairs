@@ -1,0 +1,41 @@
+<h3 mat-dialog-title *ngIf="subWorkItemTypeId">
+  تعديل
+</h3>
+<h3 mat-dialog-title *ngIf="!subWorkItemTypeId">
+  إضافة
+</h3>
+<div mat-dialog-content>
+  <form [formGroup]="form">
+    <div fxLayout="row wrap" fxFlexAlign="center" class="row">
+      <div fxFlex.gt-sm="100" fxFlex="100" class="p-10">
+        <mat-form-field>
+          <input matInput formControlName="name" placeholder="اسم الإدارة" autocomplete="off" />
+          <mat-error *ngIf="form.controls['name'].hasError('required')">اسم الإدارة مطلوب</mat-error>
+          <mat-hint *ngIf="form.controls['name'].status === 'PENDING'">جاري التحقق...</mat-hint>
+          <mat-error *ngIf="form.controls['name'].hasError('uniqueName')"> اسم الإدارة موجود مسبقاً</mat-error>
+        </mat-form-field>
+      </div>
+      <div fxFlex.gt-sm="100" fxFlex="100" class="p-10">
+        <mat-form-field>
+          <mat-select matInput formControlName="workItemTypeId" placeholder="نوع العمل">
+            <ng-container>
+              <mat-option value="">--اختر--</mat-option>
+              <mat-option *ngFor="let workItemType of  workItemTypes" [value]="workItemType.id">{{workItemType.name}}
+              </mat-option>
+            </ng-container>
+          </mat-select>
+          <mat-error *ngIf="form.controls['workItemTypeId'].hasError('required')"> النوع مطلوب</mat-error>
+        </mat-form-field>
+      </div>
+    </div>
+  </form>
+</div>
+<div mat-dialog-actions>
+  <button mat-raised-button color="primary" [disabled]="!form.valid || form.pristine" (click)="onSubmit()">
+    <span *ngIf="!subWorkItemTypeId">إضافة</span>
+    <span *ngIf="subWorkItemTypeId"> تعديل</span>
+  </button>
+  <button type="button" mat-raised-button (click)="onCancel()">
+    إلغاء
+  </button>
+</div>

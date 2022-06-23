@@ -1,0 +1,178 @@
+<div fxLayout="row wrap" class="screen">
+  <div fxFlex.gt-sm="100" fxFlex="100">
+    <mat-card>
+      <mat-card-content>
+        <ng-template mat-tab-label> إغلاق جلسة منتهية </ng-template>
+
+        <form [formGroup]="form">
+          <!-- <section class="screen-content row" fxLayout="row wrap" fxFlexAlign="center">
+            <div fxFlex.gt-sm="100" fxFlex="100" class="p-10">
+              <span class="section-head">بيانات الجلسة :</span>
+            </div> -->
+          <div fxLayout="row wrap" fxFlexAlign="center" class="row title p-r-10 p-l-10 p-t-2 p-b-2 m-b-10 ">
+            <div fxFlex.gt-sm="100" fxFlex="100">
+              <span>
+                <mat-icon class="icon-title">dvr</mat-icon>
+              </span>
+              &nbsp;
+              <span class="section-head">بيانات الجلسة :</span>
+            </div>
+          </div>
+          <div fxLayout="row wrap" fxFlexAlign="center" class="p-10">
+            <div fxFlex.gt-sm="50" fxFlex="100" class="p-10">
+              <b>القضية</b> : {{ caseSubject }}
+            </div>
+            <!-- <div fxFlex.gt-sm="50" fxFlex="100" class="p-10">
+              <b>رقم الجلسة</b> : {{ hearing.hearingNumber }}
+            </div> -->
+            <div fxFlex.gt-sm="50" fxFlex="100" class="p-10">
+              <b>تاريخ الجلسة</b>
+              :{{hearing?.hearingDate | date : 'yyyy-MM-dd'}}
+              {{hearing?.hearingDate | arDayOfWeek}}
+              {{hearing?.hearingDateHigri }}
+            </div>
+            <div fxFlex.gt-sm="50" fxFlex="100" class="p-10">
+              <b>وقت الجلسة</b> : {{hearing?.hearingTime}}
+            </div>
+            <div fxFlex.gt-sm="50" fxFlex="100" class="p-10">
+              <b>حالة الجلسة</b> : {{hearing?.status?.name}}
+            </div>
+            <div fxFlex.gt-sm="50" fxFlex="100" class="p-10">
+              <b>محكمة/لجنة</b> : {{ hearing.court?.name }}
+            </div>
+            <div fxFlex.gt-sm="50" fxFlex="100" class="p-10">
+              <b>الدائرة</b> : {{ hearing.circleNumber }}
+            </div>
+            <div fxFlex.gt-sm="50" fxFlex="100" class="p-10">
+              <b>نوع الجلسة</b> : {{hearing?.type?.name}}
+            </div>
+            <div fxFlex.gt-sm="100" fxFlex="100" class="p-10">
+              <b>الطلبات</b> : {{hearing?.motions}}
+            </div>
+          </div>
+          <!-- </section> -->
+
+          <!-- <section class="screen-content row" fxLayout="row wrap" fxFlexAlign="center"> -->
+          <!-- <div fxFlex.gt-sm="100" fxFlex="100" class="p-10">
+              <span class="section-head">بيانات ملخص الجلسة :</span>
+            </div> -->
+          <div fxLayout="row wrap" fxFlexAlign="center" class="row title p-r-10 p-l-10 p-t-2 p-b-2 m-b-10 ">
+            <div fxFlex.gt-sm="100" fxFlex="100">
+              <span>
+                <mat-icon class="icon-title">beenhere</mat-icon>
+              </span>
+              &nbsp;
+              <span class="section-head">بيانات ملخص الجلسة :</span>
+            </div>
+          </div>
+          <div fxLayout="row wrap" fxFlexAlign="center" class="p-10">
+            <div fxFlex.gt-sm="100" fxFlex="100" class="p-10">
+              <mat-form-field>
+                <textarea matInput [value]="form.controls['summary'].value | replaceLineBreaks" formControlName="summary" placeholder="ملخص الجلسة" rows="3" maxlength="255"
+                  required #summary></textarea>
+                <!-- <mat-hint>عدد الاحرف يجب ان لا يزيد عن 255 حرف</mat-hint> -->
+                <mat-hint>255/{{summary.value?.length || 0}}</mat-hint>
+                <mat-error *ngIf="form.controls['summary'].hasError('required')">
+                  ملخص الجلسة مطلوب
+                </mat-error>
+              </mat-form-field>
+            </div>
+
+            <div fxFlex.gt-sm="100" fxFlex="100" class="p-10">
+              <mat-form-field>
+                <textarea matInput [value]="form.controls['sessionMinutes'].value | replaceLineBreaks" formControlName="sessionMinutes" placeholder="محضر الجلسة" rows="2"
+                  maxlength="2000" #sessionMinutes></textarea>
+                <!-- <mat-hint>عدد الاحرف يجب ان لا يزيد عن 2000 حرف</mat-hint> -->
+                <mat-hint>2000/{{sessionMinutes.value?.length || 0}}</mat-hint>
+              </mat-form-field>
+            </div>
+            <div fxFlex.gt-sm="100" fxFlex="100" class="p-10">
+              <strong>مرفقات الجلسة <span class="mat-placeholder-required">*</span></strong>
+              <ng-template mat-tab-label>
+                الملفات المرفقة &nbsp;
+                <span *ngIf="filesCount" class="label label-info" style="font-family: Arial">{{ filesCount }}</span>
+              </ng-template>
+              <br />
+              <app-attachments [groupName]="GroupNames.Hearing" (set-attachments-list)="onHearingAttachment($event)"
+                [attachmentsToUpdate]="attachments">
+              </app-attachments>
+              <span style="color: #e53935;" *ngIf="!hasRequiredAttachment">
+                يلزم إضافة ملف ضبط الجلسة لإغلاق الجلسة
+              </span>
+            </div>
+          </div>
+          <!-- </section> -->
+        </form>
+
+        <!--New Hearing-->
+        <form [formGroup]="newHearingForm" *ngIf="withNewHearing">
+          <!-- <section class="screen-content row" fxLayout="row wrap" fxFlexAlign="center">
+            <div fxFlex.gt-sm="100" fxFlex="100" class="p-10">
+              <span class="section-head">بيانات الجلسة القادمة :</span>
+            </div> -->
+          <div fxLayout="row wrap" fxFlexAlign="center" class="row title p-r-10 p-l-10 p-t-2 p-b-2 m-b-10 ">
+            <div fxFlex.gt-sm="100" fxFlex="100">
+              <span>
+                <mat-icon class="icon-title">border_color</mat-icon>
+              </span>
+              &nbsp;
+              <span class="section-head">بيانات الجلسة القادمة :</span>
+            </div>
+          </div>
+          <div fxLayout="row wrap" fxFlexAlign="center" class="p-10">
+            <div fxFlex.gt-sm="33" fxFlex="100" class="p-10">
+              <mat-form-field>
+                <mat-select matInput formControlName="type" placeholder="نوع الجلسة القادمة" required>
+                  <mat-option value="">--اختر--</mat-option>
+                  <mat-option *ngFor="let item of hearingType" [value]="item.value">
+                    {{ item.nameAr }}</mat-option>
+                </mat-select>
+                <mat-error *ngIf="form.controls['type'].hasError('required')">
+                  نوع الجلسة القادمة مطلوب
+                </mat-error>
+              </mat-form-field>
+            </div>
+            <div fxFlex.gt-sm="66" fxFlex="100">
+              <date-picker-dual controlName="hearingDate" [placeholder]="'تاريخ الجلسة القادمة'" [required]="true">
+              </date-picker-dual>
+            </div>
+            <div fxFlex.gt-sm="25" fxFlex="100" class="p-10">
+              <span>وقت الجلسة القادمة <span class="mat-placeholder-required">*</span></span>
+              <timepicker formControlName="hearingTime" showMeridian="true" labelMinutes="Minutes"
+                style="direction: ltr"></timepicker>
+            </div>
+            <div fxFlex.gt-sm="100" fxFlex="100" class="p-10">
+              <mat-form-field>
+                <textarea matInput [value]="form.controls['motions'].value | replaceLineBreaks" formControlName="motions" placeholder="طلبات الجلسة القادمة" rows="3" maxlength="255"
+                  required #motions></textarea>
+                <!-- <mat-hint>عدد الاحرف يجب ان لا يزيد عن 255 حرف</mat-hint> -->
+                <mat-hint>255/{{motions.value?.length || 0}}</mat-hint>
+                <mat-error *ngIf="newHearingForm.controls['motions'].hasError('required')">
+                  طلبات الجلسة القادمة مطلوب
+                </mat-error>
+              </mat-form-field>
+            </div>
+          </div>
+          <!-- </section> -->
+        </form>
+
+        <section class="screen-actions">
+          <div class="button-row">
+            <button mat-raised-button type="button" color="primary" (click)="onSubmit(HearingStatus.Closed)"
+              [disabled]="!form.valid || (withNewHearing && !newHearingForm.valid) || !hasRequiredAttachment">
+              <span>إغلاق الجلسة</span>
+            </button>
+            <button mat-raised-button type="button" (click)="location.back()">
+              إلغاء
+            </button>
+          </div>
+        </section>
+
+        <!-- <div *ngIf="hearing.st<atus?.id == HearingStatus.Closed" fxFlex.gt-sm="100" fxFlex="100">
+          <app-hearing-summary-view [caseSubject]="caseSubject" [hearing]="hearing" [attachmentsToUpdate]="attachments">
+          </app-hearing-summary-view>
+        </div> -->
+      </mat-card-content>
+    </mat-card>
+  </div>
+</div>

@@ -1,0 +1,34 @@
+<fieldset *ngIf="request">
+  <h2 class="heading">بيانات طلب نواقص</h2>
+
+  <div fxLayout="row wrap" fxFlexAlign="center" class="entity-details p-10">
+    <div fxLayout="column" fxFlex="100">
+      <span>نص الطلب</span>
+      <span>{{request.request.note}}</span>
+    </div>
+  </div>
+</fieldset>
+
+<section class="screen-actions" *ngIf="!readOnly">
+  <button mat-raised-button color="primary" type="button" (click)="ReplyConsultationSupportingDocument(RequestStatus.Returned)"
+    *ngIf="((request.request.requestStatus.id==RequestStatus.Modified || request.request.requestStatus.id==RequestStatus.New)&& authService.checkRole(AppRole.DepartmentManager))">
+    إعادة الصياغة
+  </button>
+  <button mat-raised-button color="primary" type="button" (click)="ReplyConsultationSupportingDocument(RequestStatus.Returned)"
+  *ngIf="((request.request.requestStatus.id==RequestStatus.Modified || request.request.requestStatus.id==RequestStatus.New|| request.request.requestStatus.id==RequestStatus.Accepted)&& authService.checkRole(AppRole.GeneralSupervisor))">
+  إعادة الصياغة
+  </button>
+  <button mat-raised-button color="primary" type="submit" (click)="ReplyConsultationSupportingDocument(RequestStatus.Accepted)"
+    *ngIf="((request.request.requestStatus.id==RequestStatus.Modified || request.request.requestStatus.id==RequestStatus.New)&& authService.checkRole(AppRole.DepartmentManager))">
+    <span>قبول الطلب</span>
+  </button>
+  <button mat-raised-button color="primary" type="submit" (click)="ReplyConsultationSupportingDocument(RequestStatus.Approved)"
+    *ngIf="((request.request.requestStatus.id==RequestStatus.Modified || request.request.requestStatus.id==RequestStatus.New|| request.request.requestStatus.id==RequestStatus.Accepted)&& authService.checkRole(AppRole.GeneralSupervisor))">
+    <span>اعتماد الطلب</span>
+  </button>
+  <button mat-raised-button color="primary" type="button" (click)="ReplyConsultationSupportingDocument(RequestStatus.Rejected)"
+    *ngIf="((request.request.requestStatus.id==RequestStatus.Modified || request.request.requestStatus.id==RequestStatus.New|| request.request.requestStatus.id==RequestStatus.Accepted)&& authService.checkRole(AppRole.GeneralSupervisor))">
+    رفض
+  </button>
+
+</section>

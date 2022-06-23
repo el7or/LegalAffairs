@@ -1,0 +1,3 @@
+.screen .entity-details div button ::ng-deep span:first-of-type{
+  color: white !important;
+}

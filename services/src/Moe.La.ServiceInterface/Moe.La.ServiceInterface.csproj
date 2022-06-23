@@ -1,0 +1,22 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>net5.0</TargetFramework>
+    <Description>This project responsible for providing the business logic to the client applications along with validating the data models.</Description>
+    <Company>Smart Fingers</Company>
+    <Authors>Smart Fingers</Authors>
+    <ProjectGuid>038B335C-1FB0-4039-8F8C-372423A47D82</ProjectGuid>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="FluentValidation" Version="10.2.1" />
+    <PackageReference Include="Hangfire" Version="1.7.23" />
+    <PackageReference Include="Microsoft.AspNetCore.Hosting.Abstractions" Version="2.2.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Http.Abstractions" Version="2.2.0" />
+    <PackageReference Include="StackExchange.Redis" Version="2.2.4" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Moe.La.Common\Moe.La.Common.csproj" />
+    <ProjectReference Include="..\Moe.La.Core\Moe.La.Core.csproj" />
+    <ProjectReference Include="..\Moe.La.Infrastructure\Moe.La.Infrastructure.csproj" />
+    <ProjectReference Include="..\Moe.La.Integration\Moe.La.Integration.csproj" />
+  </ItemGroup>
+</Project>

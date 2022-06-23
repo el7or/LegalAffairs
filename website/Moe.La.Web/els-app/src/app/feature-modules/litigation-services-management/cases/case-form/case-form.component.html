@@ -1,0 +1,303 @@
+<mat-card>
+  <mat-card-content>
+    <section class="screen">
+
+      <form class="basic-form" (submit)="onSubmit()" [formGroup]="form">
+
+        <section class="screen-content row" fxLayout="row wrap" fxFlexAlign="center">
+
+          <ng-container *ngIf="!caseId || form.get('raselRef')?.value !== null">
+            <div fxFlex.gt-sm="50" fxFlex="100" class="p-10">
+              <mat-form-field>
+                <input required matInput formControlName="raselRef" placeholder="رقم القيد في راسل" autocomplete="off"
+                  maxlength="30" digitsOnly />
+                <mat-error *ngIf="form.controls['raselRef'].hasError('required')"> رقم القيد في راسل مطلوب</mat-error>
+              </mat-form-field>
+            </div>
+
+            <div fxFlex.gt-sm="50" fxFlex="100" class="p-10">
+              <mat-form-field>
+                <input required matInput formControlName="raselUnifiedNo" placeholder="الرقم الموحد في راسل"
+                  autocomplete="off" maxlength="30" digitsOnly />
+                <mat-error *ngIf="form.controls['raselUnifiedNo'].hasError('required')"> الرقم الموحد في راسل مطلوب
+                </mat-error>
+              </mat-form-field>
+            </div>
+          </ng-container>
+
+          <div fxFlex.gt-sm="50" fxFlex="100" class="p-10">
+            <mat-form-field>
+              <mat-select required matInput formControlName="caseSource" placeholder="مصدر القضية"
+                (selectionChange)="onChangeCaseSource($event.value)">
+                <mat-option value="">--اختر--</mat-option>
+                <mat-option *ngFor="let caseSource of caseSources" [value]="caseSource.value">
+                  {{ caseSource.nameAr }}</mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
+           
+          <div fxFlex.gt-sm="50" fxFlex="100" class="p-10">
+            <mat-form-field>
+              <input required matInput formControlName="caseSourceNumber" [placeholder]="caseSourceNumberPlaceholder"
+                autocomplete="off" maxlength="30" digitsOnly />
+              <mat-error *ngIf="form.controls['caseSourceNumber'].hasError('required')"> {{caseSourceNumberPlaceholder}}
+                مطلوب
+              </mat-error>
+            </mat-form-field>
+          </div>
+
+          <ng-container *ngIf="form.get('caseSource')?.value==CaseSource.Najiz">
+            <div fxFlex.gt-sm="50" fxFlex="100" class="p-10">
+              <mat-form-field>
+                <input required matInput formControlName="najizRef" placeholder="رقم المعاملة" autocomplete="off"
+                  maxlength="30" digitsOnly />
+                <mat-error *ngIf="form.controls['najizRef'].hasError('required')"> رقم المعاملة مطلوب
+                </mat-error>
+              </mat-form-field>
+            </div>
+
+            <div fxFlex.gt-sm="50" fxFlex="100" class="p-10">
+              <mat-form-field>
+                <input required matInput formControlName="najizId" placeholder="رقم الطلب في ناجز" autocomplete="off"
+                  maxlength="30" digitsOnly />
+                <mat-error *ngIf="form.controls['najizId'].hasError('required')"> رقم الطلب في ناجز مطلوب</mat-error>
+              </mat-form-field>
+            </div>
+          </ng-container>
+
+          <ng-container *ngIf="form.get('caseSource')?.value==CaseSource.Moeen">
+            <div fxFlex.gt-sm="50" fxFlex="100" class="p-10">
+              <mat-form-field>
+                <input required matInput formControlName="moeenRef" placeholder="رقم المعاملة" autocomplete="off"
+                  maxlength="30" digitsOnly />
+                <mat-error *ngIf="form.controls['moeenRef'].hasError('required')"> رقم المعاملة مطلوب
+                </mat-error>
+              </mat-form-field>
+            </div>
+          </ng-container>
+
+          <div fxFlex.gt-sm="50" fxFlex="100" class="p-10">
+            <mat-form-field>
+              <mat-select required formControlName="branchId" placeholder="الفرع المحال إليه القضية">
+                <mat-option value="">--اختر--</mat-option>
+                <mat-option *ngFor="let branch of branches" [value]="branch.id">
+                  {{ branch.name }}</mat-option>
+              </mat-select>
+              <mat-error *ngIf="form.controls['branchId'].hasError('required')"> الفرع المحال
+              إليه
+                القضية مطلوب</mat-error>
+            </mat-form-field>
+          </div>
+
+          <div fxFlex.gt-sm="50" fxFlex="100" class="p-10">
+            <mat-form-field>
+              <mat-select required formControlName="legalStatus" placeholder="صفة الوزارة القانونية"
+                [disabled]="caseDetails?.relatedCaseId!=null">
+                <mat-option value="">--اختر--</mat-option>
+                <mat-option *ngFor="let legalState of ministryLegalStatus" [value]="legalState.value">
+                  {{ legalState.nameAr }}</mat-option>
+              </mat-select>
+              <mat-error *ngIf="form.controls['legalStatus'].hasError('required')"> صفة الوزارة القانونية مطلوب
+              </mat-error>
+            </mat-form-field>
+          </div>
+
+          <div fxFlex.gt-sm="50" fxFlex="100" class="p-10">
+            <mat-form-field>
+              <mat-select formControlName="status" placeholder="حالة القضية">
+                <mat-option value="">--اختر--</mat-option>
+                <mat-option *ngFor="let status of caseStatus" [value]="status.value">
+                  {{ status.nameAr }}</mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
+
+          <div fxFlex.gt-sm="50" fxFlex="100" class="p-10">
+            <mat-form-field>
+              <mat-select required formControlName="litigationType" placeholder="درجة الترافع"
+                [disabled]="caseDetails?.relatedCaseId!=null"
+                (selectionChange)="onlitigationTypeChange(form.get('caseSource').value,$event.value)">
+                <mat-option value="">--اختر--</mat-option>
+                <mat-option *ngFor="let litigationType of litigationTypes" [value]="litigationType.value">
+                  {{ litigationType.nameAr }}</mat-option>
+              </mat-select>
+              <mat-error *ngIf="form.controls['litigationType'].hasError('required')"> درجة الترافع مطلوب
+              </mat-error>
+            </mat-form-field>
+          </div>
+
+          <div fxFlex.gt-sm="50" fxFlex="100" class="p-10">
+            <mat-form-field>
+              <input matInput formControlName="referenceCaseNo" placeholder="رقم القضية المرجعية" autocomplete="off"
+                maxlength="30" digitsOnly (blur)="onReferenceCaseNoBlure()" />
+            </mat-form-field>
+          </div>
+
+          <div fxFlex.gt-sm="50" fxFlex="100">
+            <date-picker-dual controlName="startDate" [placeholder]="'تاريخ بداية القضية'" [required]="true">
+            </date-picker-dual>
+          </div>
+
+          <div fxFlex.gt-sm="50" fxFlex="100" class="p-10">
+            <mat-form-field>
+              <mat-select required formControlName="courtId" placeholder="محكمة/لجنة">
+                <mat-option value="">--اختر--</mat-option>
+                <mat-option *ngFor="let court of courts" [value]="court.id">
+                  {{ court.name }}</mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
+
+          <div fxFlex.gt-sm="50" fxFlex="100" class="p-10">
+            <mat-form-field>
+              <input matInput formControlName="circleNumber" placeholder="الدائرة" autocomplete="off" maxlength="2"
+                digitsOnly required />
+              <mat-error *ngIf="form.controls['circleNumber'].hasError('required')">
+                رقم الدائرة مطلوب
+              </mat-error>
+              <!-- <mat-error
+                *ngIf="form.controls['circleNumber'].errors?.max||form.controls['circleNumber'].errors?.min||form.controls['circleNumber'].errors?.pattern">
+                رقم الدائرة غير صحيح.
+              </mat-error> -->
+            </mat-form-field>
+
+          </div>
+
+          <div fxFlex.gt-sm="50" fxFlex="100" class="p-10">
+            <mat-form-field>
+              <input required matInput formControlName="subject" placeholder="عنوان الدعوى" autocomplete="off"
+                lettersOnly />
+              <mat-error *ngIf="form.controls['subject'].hasError('required')">
+                عنوان الدعوى مطلوب
+              </mat-error>
+            </mat-form-field>
+          </div>
+
+          <!-- <div fxFlex.gt-sm="50" fxFlex="100" class="p-10">
+            <mat-form-field>
+              <mat-select required formControlName="caseTypeId" placeholder="نوع القضية">
+                <mat-option *ngFor="let caseType of caseTypes" [value]="caseType.id">
+                  {{ caseType.name }}</mat-option>
+              </mat-select>
+              <mat-error *ngIf="form.controls['caseTypeId'].hasError('required')"> نوع القضية مطلوب</mat-error>
+            </mat-form-field>
+          </div> -->
+
+          <div fxFlex.gt-sm="50" fxFlex="100" class="p-10">
+            <mat-form-field>
+              <input required matInput formControlName="caseDescription" placeholder="وصف الدعوى" autocomplete="off"
+                lettersOnly>
+              <mat-error *ngIf="form.controls['caseDescription'].hasError('required')">
+                وصف الدعوى مطلوب
+              </mat-error>
+              <!-- <mat-error *ngIf="form.controls['caseDescription'].hasError('pattern')">
+                وصف الدعوى غير صحيح
+              </mat-error> -->
+            </mat-form-field>
+          </div>
+
+          <div fxFlex.gt-sm="50" fxFlex="100" class="p-10">
+            <mat-form-field>
+              <input matInput formControlName="notes" placeholder="ملاحظات " autocomplete="off"
+                lettersOnly>
+            </mat-form-field>
+          </div>
+          <!-- <div fxFlex.gt-sm="50" fxFlex="100" class="p-10">
+            <mat-form-field>
+              <input matInput formControlName="orderDescription" placeholder="وصف الدعوى" autocomplete="off" />
+            </mat-form-field>
+          </div> -->
+
+          <ng-container *ngIf="caseId">
+
+            <!-- <div fxFlex.gt-sm="50" fxFlex="100" class="p-10">
+              <mat-form-field>
+                <input matInput formControlName="fileNo" placeholder="رقم الملف" autocomplete="off" />
+              </mat-form-field>
+            </div> -->
+
+            <div fxFlex.gt-sm="50" fxFlex="100" class="p-10">
+              <mat-form-field>
+                <input matInput formControlName="judgeName" placeholder="اسم القاضي" autocomplete="off" lettersOnly />
+              </mat-form-field>
+            </div>
+
+            <div *ngIf="form.get('pronouncingJudgmentDate')?.value" fxFlex.gt-sm="50" fxFlex="100">
+              <date-picker-dual controlName="receivingJudgmentDate" [placeholder]="'موعد استلام الحكم'">
+              </date-picker-dual>
+            </div>
+
+          </ng-container>
+
+          <div fxFlex.gt-sm="100" fxFlex="100" class="p-10">
+            <span class="section-head">أسانيد الدعوى</span>
+            <button type="button" mat-raised-button color="primary" class="float-left" (click)="updateCaseGrounds()">
+               إضافة
+            </button>
+
+            <section class="responsive-table screen-table">
+              <ng-container>
+                <table mat-table [dataSource]="caseGroundsDataSource" formArrayName="caseGrounds"
+                  class="mat-elevation-z0">
+
+                  <ng-container matColumnDef="text">
+                    <th mat-header-cell *matHeaderCellDef> سند الدعوي </th>
+                    <td mat-cell *matCellDef="let row; let index = index" [formGroupName]="index">
+                      <mat-form-field>
+                        <input matInput formControlName="text" placeholder="" autocomplete="off" maxlength="100"
+                          lettersOnly />
+                        <mat-error *ngIf="row.controls['text'].hasError('unique')">
+                          سند الدعوى مكرر</mat-error>
+                      </mat-form-field>
+                    </td>
+                  </ng-container>
+
+                  <ng-container matColumnDef="actions">
+                    <th mat-header-cell *matHeaderCellDef></th>
+                    <td mat-cell *matCellDef="let row; let index = index">
+                      <button type="button" mat-raised-button color="warn" style="margin: 12px;"
+                        (click)="deleteCaseGrounds(index)" matTooltip="حذف" matTooltipPosition="above">
+                        <mat-icon>clear</mat-icon>
+                      </button>
+                    </td>
+                  </ng-container>
+
+                  <tr mat-header-row *matHeaderRowDef="caseGroundsDisplayedColumns"></tr>
+                  <tr mat-row *matRowDef="let row;let groundsIndex = index; columns: caseGroundsDisplayedColumns;"></tr>
+                </table>
+              </ng-container>
+            </section>
+          </div>
+
+          <div fxFlex.gt-sm="100" fxFlex="100" class="p-10">
+            <strong>مرفقات القضية:</strong>
+            &nbsp;
+            <span *ngIf="filesCount" class="label label-warning" style="font-family:Arial">{{filesCount}}</span>
+
+            <app-attachments [groupName]="GroupNames.Case" (set-attachments-list)="onCaseAttachment($event)"
+              [attachmentsToUpdate]="attachments">
+            </app-attachments>
+          </div>
+          <div fxFlex.gt-sm="100" fxFlex="100" class="p-10" *ngIf="form.get('isManual')?.value==true">
+            <span class="section-head">اطراف القضية</span>
+            <span style="color: red;font-size: 1.4em;">*</span>
+
+            <app-manual-parties-list [partiesToUpdate]="caseDetails.parties" (set-parties-list)="onCaseParties($event)">
+            </app-manual-parties-list>
+          </div>
+
+        </section>
+        <section class="screen-actions">
+          <div class="button-row">
+            <button mat-raised-button color="primary" type="submit"
+              [disabled]="!form.valid || (form.get('isManual')?.value==true && parties?.length == 0)">حفظ</button>
+            <button mat-raised-button type="button" (click)="location.back()">
+              إلغاء
+            </button>
+          </div>
+        </section>
+      </form>
+
+    </section>
+  </mat-card-content>
+</mat-card>

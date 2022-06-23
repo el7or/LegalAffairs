@@ -1,0 +1,57 @@
+<h3 mat-dialog-title>
+    إنشاء قضية جديدة
+</h3>
+<div mat-dialog-content>
+
+    <form [formGroup]="form">
+        <div fxLayout="row wrap" fxFlexAlign="center" class="row">
+
+            <div fxFlex.gt-sm="100" fxFlex="100" class="p-10">
+                <mat-form-field>
+                    <input matInput formControlName="caseNumberInSource" placeholder="رقم القضية في المحكمة"
+                        autocomplete="off" digitsOnly required maxlength="30" />
+                    <mat-error *ngIf="form.controls['caseNumberInSource'].hasError('required')">
+                        رقم القضية في المحكمة مطلوب
+                    </mat-error>
+                </mat-form-field>
+            </div>
+        </div>
+        <div fxLayout="row wrap" fxFlexAlign="center" class="row">
+            <div fxFlex.gt-sm="100" fxFlex="100">
+                <date-picker-dual controlName="startDate" [placeholder]="'تاريخ بداية القضية'" [required]="true">
+                </date-picker-dual>
+            </div>
+        </div>
+        <div fxLayout="row wrap" fxFlexAlign="center" class="row">
+            <div fxFlex.gt-sm="100" fxFlex="100" class="p-10">
+                <mat-form-field>
+                    <input matInput formControlName="circleNumber" placeholder="الدائرة" autocomplete="off"
+                        maxlength="2" digitsOnly required />
+                    <mat-error *ngIf="form.controls['circleNumber'].hasError('required')">
+                        رقم الدائرة مطلوب
+                    </mat-error>
+                </mat-form-field>
+            </div>
+        </div>
+        <div fxLayout="row wrap" fxFlexAlign="center" class="row">
+            <div fxFlex.gt-sm="100" fxFlex="100" class="p-10">
+                <mat-form-field>
+                    <mat-select required formControlName="courtId" placeholder="محكمة/لجنة">
+                        <mat-option value="">--اختر--</mat-option>
+                        <mat-option *ngFor="let court of courts" [value]="court.id">
+                            {{ court.name }}</mat-option>
+                    </mat-select>
+                </mat-form-field>
+            </div>
+        </div>
+
+        <section class="screen-actions">
+            <div class="button-row">
+                <button mat-raised-button type="button" color="primary" (click)="onSubmit()" [disabled]="!form.valid">
+                    <span>حفظ</span>
+                </button>
+                <button mat-raised-button type="button" (click)="onCancel()">إلغاء</button>
+            </div>
+        </section>
+    </form>
+</div>

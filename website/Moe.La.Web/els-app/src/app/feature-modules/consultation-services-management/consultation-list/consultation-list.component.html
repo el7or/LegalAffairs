@@ -1,0 +1,193 @@
+<mat-card>
+  <mat-card-content>
+    <section class="screen">
+
+      <section class="screen-table responsive-table extendable">
+        <div fxLayout="row" fxLayoutAlign="space-between stretch">
+          <div class="filter-results" fxFlex="15" fxLayout="row" fxLayoutAlign="center center">
+            <button mat-flat-button (click)="onShowFilter()">
+              <span *ngIf="!showFilter">
+                تصفية النتائج
+              </span>
+              <span *ngIf="showFilter">
+                اخفاء التصفية
+              </span>
+            </button>
+          </div>
+          <div class="free-search" fxFlex="25" fxLayout="row" fxLayoutAlign="center center">
+            <mat-form-field appearance="outline" [hideRequiredMarker]="true" floatLabel="always">
+              <span matPrefix>
+                <mat-icon>search</mat-icon>
+              </span>
+              <input matInput placeholder="بحث" [(ngModel)]="searchText" name="searchText" (keyup.enter)="onSearch()"
+                autocomplete="off">
+            </mat-form-field>
+          </div>
+          <mat-paginator #paginator [length]="totalItems" [pageIndex]="queryObject.page - 1" showFirstLastButtons
+            [pageSize]="queryObject.pageSize" (page)="onPageChange($event.pageIndex)" hidePageSize="true" fxFlex="60">
+          </mat-paginator>
+        </div>
+        <div *ngIf="showFilter" fxLayout="row wrap">
+          <div fxFlex.gt-sm="100" fxFlex="100">
+            <form class="basic-form" [formGroup]="searchForm">
+              <div class="row filter-container" fxLayout="row wrap" fxFlexAlign="center">
+                <div fxFlex.gt-sm="32" fxFlex="100" class="p-10">
+                  <mat-form-field>
+                    <mat-select formControlName="departmentId" placeholder="الإدارة"
+                      (selectionChange)="populateWorkItemTypes($event.value)">
+                      <mat-option value="">--اختر--</mat-option>
+                      <mat-option *ngFor="let item of departments" [value]="item.id">
+                        {{ item.name }}
+                      </mat-option>
+                    </mat-select>
+                  </mat-form-field>
+                </div>
+                <div fxFlex.gt-sm="32" fxFlex="100" class="p-10">
+                  <mat-form-field>
+                    <mat-select formControlName="workItemTypeId" placeholder="نوع المعاملة"
+                      (selectionChange)="populateUsers($event.value)">
+                      <mat-option value="">--اختر--</mat-option>
+                      <mat-option *ngFor="let item of workItemTypes" [value]="item.id">
+                        {{ item.name}}
+                      </mat-option>
+                    </mat-select>
+                  </mat-form-field>
+                </div>
+                <div fxFlex.gt-sm="32" fxFlex="100" class="p-10">
+                  <mat-form-field>
+                    <input placeholder="الموظف" matInput formControlName="assignedTo" [matAutocomplete]="auto"
+                      (keyup)="filterUsers()">
+                    <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayFn">
+                      <mat-option *ngFor="let item of filteredUsers" [value]="item">
+                        {{optionUserName(item)}}
+                      </mat-option>
+                    </mat-autocomplete>
+                  </mat-form-field>
+                </div>
+                <div fxFlex.gt-sm="50" fxFlex="100">
+                  <date-picker-dual controlName="dateFrom" [placeholder]="'تاريخ المعاملة من'"></date-picker-dual>
+                </div>
+
+                <div fxFlex.gt-sm="50" fxFlex="100">
+                  <date-picker-dual controlName="dateTo" [placeholder]="'تاريخ المعاملة إلى'"></date-picker-dual>
+                </div>
+                <div fxFlex.gt-sm="32" fxFlex="100" class="p-10">
+                  <mat-form-field>
+                    <mat-select formControlName="status" placeholder="حالة النموذج">
+                      <mat-option value="">--اختر--</mat-option>
+                      <mat-option *ngFor="let item of consultationStatus" [value]="item.value">
+                        {{ item.nameAr}}
+                      </mat-option>
+                    </mat-select>
+                  </mat-form-field>
+                </div>
+                <div fxFlex="100" class="p-10">
+                  <button class="m-b-10 m-r-5" color="accent" type="submit" mat-raised-button (click)="onFilter()">
+                    تصفية
+                  </button>
+                  <button class="m-b-10" type="button" mat-raised-button (click)="onClearFilter()">
+                    مسح التصفية
+                  </button>
+                </div>
+
+              </div>
+            </form>
+          </div>
+        </div>
+
+        <table mat-table [dataSource]="dataSource" multiTemplateDataRows class="mat-elevation-z0" matSort
+          matSortActive="moamalaNumber" matSortDirection="desc" matSortDisableClear>
+          <ng-container matColumnDef="position">
+            <th mat-header-cell *matHeaderCellDef style="width:100px;">#</th>
+            <td mat-cell *matCellDef="let element; let i = dataIndex">
+              {{(i + 1 + queryObject.pageSize * ((queryObject.page || 1) -1))}}
+            </td>
+          </ng-container>
+          <ng-container matColumnDef="moamalaNumber">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>رقم المعاملة</th>
+            <td mat-cell *matCellDef="let element">
+              {{ element.moamalaNumber }}
+            </td>
+          </ng-container>
+          <ng-container matColumnDef="moamalaDate">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>تاريخ المعاملة</th>
+            <td mat-cell *matCellDef="let element">
+              {{element.moamalaDate | date : 'yyyy-MM-dd'}}
+              {{element.moamalaDate |arDayOfWeek}}
+              {{ element.moamalaDateOnHijri }}
+            </td>
+          </ng-container>
+          <ng-container matColumnDef="workItemType">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>نوع المعاملة</th>
+            <td mat-cell *matCellDef="let element">
+              {{ element.workItemType?.name }}
+            </td>
+          </ng-container>
+          <ng-container matColumnDef="subject">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>عنوان المعاملة</th>
+            <td mat-cell *matCellDef="let element">
+              {{ element.subject }}
+            </td>
+          </ng-container>
+          <ng-container matColumnDef="user">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>الموظف</th>
+            <td mat-cell *matCellDef="let element">
+              {{ element.user.name }}
+            </td>
+          </ng-container>
+          <ng-container matColumnDef="department">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>الإدارة</th>
+            <td mat-cell *matCellDef="let element">
+              <span *ngIf="element.department">{{ element.department?.name }}</span>
+              <span *ngIf="!element.department">لا يوجد إدارة</span>
+            </td>
+          </ng-container>
+          <ng-container matColumnDef="status">
+            <th mat-header-cell *matHeaderCellDef>حالة النموذج</th>
+            <td mat-cell *matCellDef="let element">
+              {{ element.status?.name }}
+            </td>
+          </ng-container>
+          <ng-container matColumnDef="actions">
+            <th mat-header-cell *matHeaderCellDef></th>
+            <td mat-cell *matCellDef="let element">
+              <button mat-icon-button [matMenuTriggerFor]="menu" aria-label="Example icon-button with a menu">
+                <mat-icon>more_vert</mat-icon>
+              </button>
+              <mat-menu #menu="matMenu">
+                <button mat-menu-item color="primary" routerLinkActive="router-link-active" matTooltip="تفاصيل النموذج"
+                  matTooltipPosition="above">
+                   تفاصيل النموذج
+                </button>
+                <button type="button" mat-menu-item *ngIf="(
+                   element.status.id==ConsultationStatus.Draft || element.status.id==ConsultationStatus.Returned)
+                   && element.user?.id == authService.currentUser?.id
+                   && element?.workItemType.name !== 'قضية' && element?.workItemType.name !== 'تحقيق' "
+                  (click)="onEditConsultation(element.consultationId,element.workItemType?.name)">
+                  <span>تعديل</span>
+                </button>
+                <button type="button" mat-menu-item>
+                  <span>طباعة</span>
+                </button>
+                <button type="button" [routerLink]="['/consultation/review', element.consultationId]" mat-menu-item>
+                   مراجعة النموذج
+                </button>
+              </mat-menu>
+            </td>
+          </ng-container>
+
+          <tr mat-header-row *matHeaderRowDef="columnsToDisplay"></tr>
+          <tr mat-row *matRowDef="let element; columns: columnsToDisplay"></tr>
+
+          <tr class="mat-row" *matNoDataRow>
+            <td class="mat-cell" colspan="7" style="text-align: center;">لا يوجد نتائج للبيانات.</td>
+          </tr>
+        </table>
+
+        <mat-paginator #paginator [length]="totalItems" [pageIndex]="queryObject.page - 1" showFirstLastButtons
+          [pageSize]="queryObject.pageSize" (page)="onPageChange($event.pageIndex)" hidePageSize="true">
+        </mat-paginator>
+      </section>
+    </section>
+  </mat-card-content>
+</mat-card>

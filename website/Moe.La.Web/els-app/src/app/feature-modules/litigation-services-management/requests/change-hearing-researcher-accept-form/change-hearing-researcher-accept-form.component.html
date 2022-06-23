@@ -1,0 +1,35 @@
+<h3 mat-dialog-title>
+الموافقة على طلب تغيير المكلف بحضور الجلسة
+</h3>
+
+<div mat-dialog-content>
+  <form [formGroup]="form">
+    <div fxLayout="row wrap" fxFlexAlign="center" class="row">
+      <div fxFlex.gt-sm="100" fxFlex="100" class="p-10">
+        <mat-form-field>
+          <mat-select matInput formControlName="newResearcherId" placeholder="الباحث" required>
+            <mat-option value="">--اختر--</mat-option>
+            <mat-option *ngFor="let researcher of researchers" [value]="researcher.id">
+              {{ researcher.name }}</mat-option>
+          </mat-select>
+          <mat-error *ngIf="form.controls['newResearcherId'].hasError('required')"> الباحث مطلوب</mat-error>
+        </mat-form-field>
+      </div>
+      <div fxFlex.gt-sm="100" fxFlex="100" class="p-10">
+        <mat-form-field>
+          <textarea matInput formControlName="replyNote" [value]="form.controls['replyNote'].value | replaceLineBreaks" placeholder="الملاحظات" rows="3"
+            maxlength="400" #replyNote></textarea>
+          <!-- <mat-hint>عدد الاحرف يجب ان لا يزيد عن 400 حرف</mat-hint> -->
+          <mat-hint>400/{{replyNote.value?.length || 0}}</mat-hint>
+        </mat-form-field>
+      </div>
+    </div>
+
+  </form>
+</div>
+
+<div mat-dialog-actions>
+  <button mat-raised-button type="button" (click)="onSubmit()" color="primary" [disabled]="!form.valid">موافق</button>
+  &nbsp;
+  <button mat-raised-button type="button" (click)="onCancel()">إلغاء</button>
+</div>

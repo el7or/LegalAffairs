@@ -1,0 +1,321 @@
+<mat-card>
+  <mat-card-content>
+
+    <section class="screen">
+
+      <section class="screen-header">
+        <div fxLayout="row" fxFlex="70">
+        </div>
+        <div fxFlex="30" fxLayoutAlign="end center">
+          <button mat-stroked-button color="primary" [matMenuTriggerFor]="menu">
+            تصدير
+            <mat-icon>expand_more</mat-icon>
+          </button>
+          <mat-menu #menu="matMenu">
+            <button mat-menu-item (click)="onExportExcel()">
+              <mat-icon>description</mat-icon>
+              ملف اكسل
+            </button>
+            <button mat-menu-item (click)="onPrint()">
+              <mat-icon>picture_as_pdf</mat-icon>
+              ملف PDF
+            </button>
+          </mat-menu>
+        </div>
+      </section>
+
+      <section class="screen-table responsive-table extendable">
+        <div fxLayout="row wrap" fxLayoutAlign="space-between center">
+          <div fxLayout="row" fxFlex.gt-sm="50" fxFlex="100">
+            <div class="filter-results">
+              <button type="button" mat-flat-button (click)="onShowFilter()">
+                <span *ngIf="!showFilter">
+                  تصفية النتائج
+                </span>
+                <span *ngIf="showFilter">
+                  اخفاء التصفية
+                </span>
+              </button>
+            </div>
+            <div class="free-search">
+              <mat-form-field appearance="outline" [hideRequiredMarker]="true" floatLabel="always">
+                <span matPrefix>
+                  <mat-icon>search</mat-icon>
+                </span>
+                <input matInput placeholder="بحث" [(ngModel)]="searchText" name="searchText" (keyup.enter)="onSearch()"
+                  matTooltip="اكتب النص واضغط Enter للبحث" matTooltipPosition="above" autocomplete="off">
+              </mat-form-field>
+            </div>
+
+          </div>
+          <div fxFlex.gt-sm="50" fxFlex="100" fxHide.sm fxHide.xs>
+            <mat-paginator #paginator [length]="totalItems" [pageIndex]="queryObject.page - 1" showFirstLastButtons
+              [pageSize]="queryObject.pageSize" (page)="onPageChange($event.pageIndex)" hidePageSize="true">
+            </mat-paginator>
+          </div>
+        </div>
+
+        <div *ngIf="showFilter" fxLayout="row wrap">
+          <div fxFlex.gt-sm="100" fxFlex="100">
+            <form class="filter-form" [formGroup]="searchForm" (submit)="onFilter()">
+              <div class="filter-container p-10" fxLayout="row wrap">
+
+                <div fxFlex.gt-sm="50" fxFlex="100">
+                  <date-picker-dual controlName="startDateFrom" [placeholder]="'تاريخ القضية من'"></date-picker-dual>
+                </div>
+
+                <div fxFlex.gt-sm="50" fxFlex="100">
+                  <date-picker-dual controlName="startDateTo" [placeholder]="'تاريخ القضية إلى'"></date-picker-dual>
+                </div>
+
+                <div fxFlex.gt-sm="50" fxFlex="100" class="p-10">
+                  <mat-form-field>
+                    <mat-select formControlName="legalStatus" placeholder="صفة الوزارة">
+                      <mat-option value="">--اختر--</mat-option>
+                      <mat-option value="1">مدعى عليها</mat-option>
+                      <mat-option value="2">مدعية</mat-option>
+                    </mat-select>
+                  </mat-form-field>
+                </div>
+                <div fxFlex.gt-sm="50" fxFlex="100" class="p-10">
+                  <mat-form-field>
+                    <mat-select formControlName="caseSource" placeholder="مصدر القضية">
+                      <mat-option value="">--اختر--</mat-option>
+                      <mat-option value="1">ناجز</mat-option>
+                      <mat-option value="2">معين</mat-option>
+                      <mat-option value="3">لجنة شبه قضائية</mat-option>
+                    </mat-select>
+                  </mat-form-field>
+                </div>
+                <div fxFlex.gt-sm="50" fxFlex="100" class="p-10">
+                  <mat-form-field>
+                    <mat-select formControlName="litigationType" placeholder="درجة الترافع">
+                      <mat-option value="">--اختر--</mat-option>
+                      <mat-option value="1">ابتدائي</mat-option>
+                      <mat-option value="2">استئناف </mat-option>
+                      <mat-option value="3">عليا</mat-option>
+                    </mat-select>
+                  </mat-form-field>
+                </div>
+                <div fxFlex.gt-sm="50" fxFlex="100" class="p-10">
+                  <mat-form-field>
+                    <mat-select matInput formControlName="receivedStatus" placeholder="حالة الاستلام">
+                      <mat-option value="">--اختر--</mat-option>
+                      <mat-option value="1">ناجحة</mat-option>
+                      <mat-option value="2">فاشلة</mat-option>
+                    </mat-select>
+                  </mat-form-field>
+                </div>
+                <div fxFlex.gt-sm="50" fxFlex="100" class="p-10">
+                  <mat-checkbox id="isDuplicated" class="amateur" color="primary" formControlName="isDuplicated">
+                    مكررة</mat-checkbox>
+                </div>
+                <div fxFlex="100" class="p-10 screen-actions">
+                  <button class="m-b-10 m-r-5" type="submit" mat-raised-button color="primary">
+                    تصفية
+                  </button>
+                  <button class="m-b-10" type="button" mat-raised-button (click)="onClearFilter()">
+                    مسح التصفية
+                  </button>
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+
+        <table mat-table [dataSource]="dataSource" multiTemplateDataRows class="mat-elevation-z0" matSort
+          matSortActive="createdOn" matSortDirection="asc" matSortDisableClear>
+          <ng-container matColumnDef="position">
+            <th mat-header-cell *matHeaderCellDef>#</th>
+            <td mat-cell *matCellDef="let element; let i = dataIndex" class="nowrap">
+              <div>
+                {{(i + 1 + queryObject.pageSize * ((queryObject.page || 1) -1))}}
+                <button mat-icon-button (click)="onClickRow(i)">
+                  <mat-icon>
+                    {{ expandedIndexes.includes(i) ? 'keyboard_arrow_down': 'keyboard_arrow_left'}}
+                  </mat-icon>
+                </button>
+              </div>
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="id">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>رقم القضية</th>
+            <td mat-cell *matCellDef="let element">
+              {{ element.id}}
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="receivedDate">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>تاريخ استلام النظام</th>
+            <td mat-cell *matCellDef="let element" class="nowrap">
+              {{element.receivedDate | date : 'yyyy-MM-dd'}}
+              {{element.receivedDate |arDayOfWeek}}
+              {{ element.receivedDateHigri }}
+              &nbsp; {{ element.receivedTime }}
+            </td>
+          </ng-container>
+          <ng-container matColumnDef="receivedStatus">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>حالة الاستلام</th>
+            <td mat-cell *matCellDef="let element">
+              {{ element.receivedStatus }}
+            </td>
+          </ng-container>
+          <ng-container matColumnDef="caseSource">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>
+              المصدر
+            </th>
+            <td mat-cell *matCellDef="let element">
+              {{ element.caseSource.name }}
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="court">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>محكمة/لجنة</th>
+            <td mat-cell *matCellDef="let element">
+              {{ element.court }}
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="circleNumber">
+            <th mat-header-cell *matHeaderCellDef>الدائرة</th>
+            <td mat-cell *matCellDef="let element">
+              {{ element.circleNumber }}
+            </td>
+          </ng-container>
+
+          <!-- Expanded Content Column - The detail row is made up of this one column that spans across all columns -->
+          <ng-container matColumnDef="caseDetails">
+            <td mat-cell *matCellDef="let element" class="borderless-td" [attr.colspan]="columnsToDisplay.length">
+
+              <div fxLayout="row wrap" fxFlexAlign="center" class="p-10 filter-container">
+
+                <ng-container *ngIf="element.caseSource.id == CaseSource.Najiz">
+                  <div fxLayout="column" fxFlex.gt-sm="25" fxFlex="100">
+                    <span>رقم المعاملة في ناجز</span>
+                    <span>
+                      {{ element.najizRef }}
+                    </span>
+                  </div>
+                  <div fxLayout="column" fxFlex.gt-sm="25" fxFlex="100">
+                    <span>رقم القضية في ناجز</span>
+                    <span>
+                      {{ element.caseSourceNumber }}
+                    </span>
+                  </div>
+                  <div fxLayout="column" fxFlex.gt-sm="25" fxFlex="100">
+                    <span>رقم الطلب في ناجز</span>
+                    <span>
+                      {{ element.najizId }}
+                    </span>
+                  </div>
+                </ng-container>
+
+                <ng-container *ngIf="element.caseSource.id == CaseSource.Moeen">
+                  <div fxLayout="column" fxFlex.gt-sm="25" fxFlex="100">
+                    <span>رقم المعاملة في معين</span>
+                    <span>
+                      {{ element.moeenRef }}
+                    </span>
+                  </div>
+                  <div fxLayout="column" fxFlex.gt-sm="25" fxFlex="100">
+                    <span>رقم الدعوى في معين</span>
+                    <span>
+                      {{ element.caseSourceNumber }}
+                    </span>
+                  </div>
+                </ng-container>
+
+                <ng-container *ngIf="element.caseSource.id == CaseSource.QuasiJudicialCommittee">
+                  <div fxLayout="column" fxFlex.gt-sm="25" fxFlex="100">
+                    <span>رقم القيد في راسل</span>
+                    <span>
+                      {{ element.raselRef }}
+                    </span>
+                  </div>
+                  <div fxLayout="column" fxFlex.gt-sm="25" fxFlex="100">
+                    <span>الرقم الموحد في راسل</span>
+                    <span>
+                      {{ element.raselUnifiedNo }}
+                    </span>
+                  </div>
+                  <div fxLayout="column" fxFlex.gt-sm="25" fxFlex="100">
+                    <span>رقم القضية في اللجنة</span>
+                    <span>
+                      {{ element.caseSourceNumber }}
+                    </span>
+                  </div>
+                </ng-container>
+
+                <div fxLayout="column" fxFlex.gt-sm="25" fxFlex="100">
+                  <span>تاريخ بداية القضية</span>
+                  <span>
+                    {{element.startDate | date : 'yyyy-MM-dd'}}
+                    {{element.startDate |arDayOfWeek}}
+                    {{ element.startDateHigri }}
+                  </span>
+                </div>
+
+                <div *ngIf="element.branch" fxLayout="column" fxFlex.gt-sm="25" fxFlex="100">
+                  <span>الفرع إليها</span>
+                  <span>
+                    {{ element.branch }}
+                  </span>
+                </div>
+
+                <div fxLayout="column" fxFlex.gt-sm="25" fxFlex="100">
+                  <span>صفة الوزارة القانونية</span>
+                  <span>
+                    {{ element.legalStatus }}
+                  </span>
+                </div>
+
+                <div fxLayout="column" fxFlex.gt-sm="25" fxFlex="100">
+                  <span>درجة الترافع</span>
+                  <span>
+                    {{ element.litigationType }}
+                  </span>
+                </div>
+                <div fxLayout="column" fxFlex.gt-sm="25" fxFlex="100">
+                  <span>مكررة ام لا:</span>
+                  <span>
+                    {{element.isDuplicated ? 'مكررة' : 'غير مكررة'}}
+                  </span>
+                </div> 
+
+                <div fxLayout="column" fxFlex="100">
+                  <span>موضوع الدعوى</span>
+
+                  <span *ngIf="element.subject!=null">
+                    {{ element.caseDescription | sliceWords : 5 : element }}
+                    <a mat-button color="primary" *ngIf="element.isWithViewMore"
+                      (click)="element.showViewMore = !element.showViewMore;">
+                      <span *ngIf="element.showViewMore">المزيد</span>
+                      <span *ngIf="!element.showViewMore">أقل</span>
+                    </a>
+                  </span>
+                </div>
+              </div>
+            </td>
+          </ng-container>
+
+          <tr mat-header-row *matHeaderRowDef="columnsToDisplay"></tr>
+          <tr mat-row *matRowDef="let element; columns: columnsToDisplay"></tr>
+          <tr mat-row *matRowDef="let element; let i = dataIndex; columns: expandedDetail"
+            [class.shrink-row]="expandedIndexes.length == 0 || !expandedIndexes.includes(i)" class="expanded-row"></tr>
+          <tr class="mat-row" *matNoDataRow>
+            <td class="mat-cell" colspan="8" style="text-align: center;">لا يوجد نتائج للبيانات.</td>
+          </tr>
+        </table>
+
+        <mat-paginator #paginator [length]="totalItems" [pageIndex]="queryObject.page - 1" showFirstLastButtons
+          [pageSize]="queryObject.pageSize" (page)="onPageChange($event.pageIndex)" hidePageSize="true">
+        </mat-paginator>
+      </section>
+
+      <section class="section-actions">
+      </section>
+
+    </section>
+  </mat-card-content>
+</mat-card>

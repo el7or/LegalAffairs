@@ -1,0 +1,47 @@
+trigger:
+- dev
+- master
+
+pool:
+  name: ubuntu-18.04
+  #name: windows-2019
+  demands: java
+
+workspace:
+  clean: all
+
+steps:
+- task: GitVersion@5
+  displayName: GitVersion
+  inputs:
+    preferBundledVersion: false
+    configFilePath: 'GitVersion.yml'
+    updateAssemblyInfo: false
+  enabled: true
+
+- task: NodeTool@0
+  inputs:
+    versionSpec: '14.x'
+  displayName: 'Install Node.js'
+
+- script: |
+    cd '$(System.DefaultWorkingDirectory)/Moe.La.Web/els-app'
+    npm install -g @angular/cli
+    npm install
+    ng build --prod
+  displayName: 'npm install and build'
+
+- task: ArchiveFiles@2
+  displayName: 'Archive files'
+  inputs:
+    rootFolderOrFile: '$(System.DefaultWorkingDirectory)/Moe.La.Web/els-app/dist/MoeLegalAffairs'
+    includeRootFolder: false
+    archiveType: 'zip'
+    archiveFile: '$(Build.ArtifactStagingDirectory)/LegalAffairs.zip'
+    replaceExistingArchive: true
+
+- task: PublishBuildArtifacts@1
+  inputs:
+    PathtoPublish: '$(Build.ArtifactStagingDirectory)/LegalAffairs.zip'
+    ArtifactName: 'drop'
+    publishLocation: 'Container'

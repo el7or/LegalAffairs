@@ -1,0 +1,50 @@
+<div fxLayout="row wrap" class="screen">
+    <div fxFlex.gt-sm="100" fxFlex="100" style="margin-bottom: 1em;">
+        <mat-card *ngIf="requestFull">
+            <mat-card-content>
+                <app-request-details [request]='requestFull.request'></app-request-details>
+            </mat-card-content>
+        </mat-card>
+    </div>
+
+    <div fxFlex.gt-sm="100" fxFlex="100">
+        <mat-card>
+            <mat-card-content>
+                <form (submit)="onSubmit()" [formGroup]="form">
+
+                    <div fxLayout="row wrap" fxFlexAlign="center" class="row">
+                        <div fxFlex.gt-sm="100" fxFlex="100" class="p-10">
+                            <!-- <strong> نص الطلب</strong> -->
+                            <!-- <ckeditor formControlName="note" [editor]="Editor" maxlength="400" [config]="config">
+                            </ckeditor> -->
+                            <mat-form-field>
+                                <textarea matInput formControlName="note" [value]="form.controls['note'].value | replaceLineBreaks" placeholder="نص الطلب" rows="3"
+                                    maxlength="400" #note></textarea>
+                                <!-- <mat-hint>عدد الاحرف يجب ان لا يزيد عن 400 حرف</mat-hint> -->
+                                <mat-hint>400/{{note.value?.length || 0}}</mat-hint>
+                                <mat-error
+                                    *ngIf="form.controls['note'].hasError('required') && form.controls['note'].touched"
+                                    class="text-danger "> الرجاء ادخال نص الطلب</mat-error>
+                                <mat-error
+                                    *ngIf="form.controls['note'].hasError('maxlength') && form.controls['note'].touched"
+                                    class="text-danger "> يجب الا يزيد نص الطلب عن 400 حرف</mat-error>
+                            </mat-form-field>
+                        </div>
+
+                        <section class="screen-actions">
+                            <div class="button-row">
+                                <button mat-raised-button color="primary" type="submit" [disabled]="!form.valid">
+                                    <span>حفظ</span>
+                                </button>
+                                <button mat-raised-button type="button" [routerLink]="['/requests']">
+                                    إلغاء
+                                </button>
+                            </div>
+                        </section>
+                    </div>
+
+                </form>
+            </mat-card-content>
+        </mat-card>
+    </div>
+</div>

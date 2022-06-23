@@ -1,0 +1,112 @@
+trigger:
+- dev
+- master
+
+pool:
+  name: ubuntu-18.04
+  demands: java
+
+variables:
+  solution: '**/*.sln'
+  buildConfiguration: 'Release'
+  buildProjects: '**/*.csproj'
+  testProjects: '**/*[Uu]nit[Tt]ests/*.csproj'
+  enableCodeScanning: 'true'
+
+workspace:
+  clean: all
+
+steps:
+- task: GitVersion@5
+  displayName: GitVersion
+  inputs:
+    preferBundledVersion: false
+    configFilePath: 'GitVersion.yml'
+    updateAssemblyInfo: true
+  enabled: true
+
+# - task: UseDotNet@2
+#   displayName: 'Use .NET Core sdk'
+#   inputs:
+#     packageType: 'sdk'
+#     version: '3.1.x'
+#     installationPath: $(Agent.ToolsDirectory)/dotnet
+ 
+- task: DotNetCoreCLI@2
+  displayName: Restore
+  inputs:
+    command: restore
+    projects: '$(buildProjects)'
+    feedsToUse: 'config'
+    nugetConfigPath: 'NuGet.config'
+    externalFeedCredentials: 'Nuget-Feed'
+
+- task: SonarQubePrepare@4
+  displayName: 'Prepare analysis on SonarQube'
+  inputs:
+    SonarQube: 'SonarQube-LegalAffairs'
+    projectKey: 'LegalAffairs'
+    projectName: 'LegalAffairs-Services'
+    projectVersion: '$(GitVersion.MajorMinorPatch)'
+    extraProperties: |
+      sonar.cs.vstest.reportsPaths=$(Common.TestResultsDirectory)/*.trx
+      sonar.coverageReportPaths=$(Common.TestResultsDirectory)/CoverageReport/SonarQube.xml
+  condition: and(succeeded(), eq('${{ variables.enableCodeScanning }}', 'true'))
+
+- task: DotNetCoreCLI@2
+  displayName: Build
+  inputs:
+    projects: '$(solution)'
+    arguments: '--no-restore --configuration $(buildConfiguration) /p:Version=$(GitVersion.NuGetVersion)'
+
+- task: DotNetCoreCLI@2
+  displayName: Test
+  inputs:
+    command: test
+    projects: '$(testProjects)'
+    arguments: '--no-restore --no-build --configuration $(buildConfiguration) --logger trx --collect:"XPlat Code Coverage"'
+    publishTestResults: true
+
+- task: CopyFiles@2
+  displayName: 'Copy Coverage Files'
+  inputs:
+    SourceFolder: '$(Agent.TempDirectory)'
+    Contents: '**'
+    TargetFolder: '$(Common.TestResultsDirectory)'
+
+- task: reportgenerator@4
+  displayName: 'Generate Coverage Report'
+  inputs:
+    reports: '$(Common.TestResultsDirectory)/*/coverage.cobertura.xml'
+    targetdir: '$(Common.TestResultsDirectory)/CoverageReport'
+    reporttypes: 'Cobertura;SonarQube'
+    assemblyfilters: '-*Tests*'
+
+- task: PublishCodeCoverageResults@1
+  displayName: 'Publish Code Coverage Results'
+  inputs:
+    codeCoverageTool: 'Cobertura'
+    summaryFileLocation: '$(Common.TestResultsDirectory)/CoverageReport/Cobertura.xml'
+
+- task: SonarQubeAnalyze@4
+  displayName: 'Run Code Analysis'
+  condition: and(succeeded(), eq('${{ variables.enableCodeScanning }}', 'true'))
+
+- task: SonarQubePublish@4
+  displayName: 'Publish Quality Gate Result'
+  condition: and(succeeded(), eq('${{ variables.enableCodeScanning }}', 'true'))
+  
+- task: DotNetCoreCLI@2
+  displayName: Publish
+  inputs:
+    command: publish
+    publishWebProjects: True
+    arguments: '--no-restore --no-build --configuration $(buildConfiguration) --output $(build.artifactstagingdirectory)'
+    zipAfterPublish: True
+    workingDirectory: '$(System.DefaultWorkingDirectory)'
+
+- task: PublishBuildArtifacts@1
+  displayName: 'Publish Artifact'
+  inputs:
+    PathtoPublish: '$(build.artifactstagingdirectory)'
+  condition: succeededOrFailed()

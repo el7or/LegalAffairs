@@ -1,0 +1,79 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="Moe.La.Core.Entities.Hearing">
+    <Position X="7.75" Y="5.25" Width="2" />
+    <TypeIdentifier>
+      <HashCode>AQDAFAAEEECAACEAAAZIBAAAIgIAAABAIQABABAACAE=</HashCode>
+      <FileName>Entities\Hearing.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Property Name="Case" />
+      <Property Name="AssignedTo" />
+      <Property Name="Status" />
+      <Property Name="Type" />
+      <Property Name="Court" />
+    </ShowAsAssociation>
+    <ShowAsCollectionAssociation>
+      <Property Name="CaseSupportingDocumentRequests" />
+      <Property Name="HearingLegalMemoReviewRequests" />
+      <Property Name="Attachments" />
+    </ShowAsCollectionAssociation>
+  </Class>
+  <Class Name="Moe.La.Core.Entities.AppUser" Collapsed="true">
+    <Position X="12.25" Y="4" Width="2" />
+    <TypeIdentifier>
+      <HashCode>CAQAEGgAABIQIIAAAABCABAAAgACAAgAIAAAAQAJCQk=</HashCode>
+      <FileName>Entities\AppUser.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Moe.La.Core.Entities.HearingAttachment">
+    <Position X="12.25" Y="10.25" Width="1.75" />
+    <TypeIdentifier>
+      <HashCode>AABCAAAAAAEAAAAAAAAAAAAAAAgAAAAEAAAAAAAAAAA=</HashCode>
+      <FileName>Entities\Attachments\HearingAttachment.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Moe.La.Core.Entities.Case" Collapsed="true">
+    <Position X="4.25" Y="5" Width="2.25" />
+    <TypeIdentifier>
+      <HashCode>AgJFlSAEAUCAIAEEAOBTUQAAEAAMAAtAIiAQkNDQgAE=</HashCode>
+      <FileName>Entities\Case.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Moe.La.Core.Entities.Court">
+    <Position X="7.5" Y="1.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAICEAAAAAAAAAAAAAAgAAQAAAACAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Entities\Lookups\Court.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Moe.La.Core.Entities.AddingLegalMemoToHearingRequest">
+    <Position X="2.75" Y="9" Width="2" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAgAAAEAQAAAAAAAAAAAAAgAgCAIAAAAAAAAAAA=</HashCode>
+      <FileName>Entities\Requests\AddingLegalMemoToHearingRequest.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Moe.La.Core.Entities.CaseSupportingDocumentRequest">
+    <Position X="11.25" Y="5.5" Width="2.25" />
+    <TypeIdentifier>
+      <HashCode>AAACAAACAAEAAAAAAAAgQAAAAAgAgCALAgACAQAIAAA=</HashCode>
+      <FileName>Entities\Requests\CaseSupportingDocumentRequest.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Enum Name="Moe.La.Core.Enums.HearingTypes">
+    <Position X="7" Y="11" Width="1.75" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAEAAAAAAAAAAAAAAAAQAAAAAAAAAAAAA=</HashCode>
+      <FileName>Enums\HearingStatuses.cs</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="Moe.La.Core.Enums.HearingStatuses">
+    <Position X="5.5" Y="6.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAQAAAAAAEAAAAAAAAAAAACAAAA=</HashCode>
+      <FileName>Enums\HearingStatuses.cs</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>
